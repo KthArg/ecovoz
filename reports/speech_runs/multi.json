@@ -18,9 +18,9 @@
   "val_corpus": "all",
   "parameters": 23239939,
   "best": {
-    "epoch": 3,
-    "cer": 0.06782596146908146,
-    "wer": 0.27718193446816886
+    "epoch": 50,
+    "cer": 0.04053322750559203,
+    "wer": 0.17544032273934862
   },
   "history": [
     {
@@ -61,6 +61,617 @@
       },
       "lr": 0.0004,
       "seconds": 304.1
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.43754071827240537,
+      "val_loss": 0.22993317654826767,
+      "val_wer": 0.2794450457542064,
+      "val_cer": 0.06732087452197129,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la aergía"
+      },
+      "lr": 0.0004,
+      "seconds": 397.4
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4145061627599313,
+      "val_loss": 0.22608956893735133,
+      "val_wer": 0.2724589196103513,
+      "val_cer": 0.06501190562089616,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 488.5
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.4005685009268997,
+      "val_loss": 0.21332399032394048,
+      "val_wer": 0.25701072517957296,
+      "val_cer": 0.06169276282560069,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 579.7
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.3844923237476037,
+      "val_loss": 0.2098530503928594,
+      "val_wer": 0.2616353438945193,
+      "val_cer": 0.06124179233710946,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 670.6
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.37252801604351937,
+      "val_loss": 0.2060172139315751,
+      "val_wer": 0.25622355603660335,
+      "val_cer": 0.05936575510498593,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 761.4
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.36074244231422065,
+      "val_loss": 0.21032664635443338,
+      "val_wer": 0.25553478303650495,
+      "val_cer": 0.06095317122447507,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0004,
+      "seconds": 852.0
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.36098324175275576,
+      "val_loss": 0.2071661380787263,
+      "val_wer": 0.2487454491783922,
+      "val_cer": 0.0588426293383361,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0004,
+      "seconds": 943.0
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.34774798311944194,
+      "val_loss": 0.20222102056678262,
+      "val_wer": 0.24402243432057463,
+      "val_cer": 0.05644346633956274,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0004,
+      "seconds": 1033.9
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.33721843548644764,
+      "val_loss": 0.19797692050480223,
+      "val_wer": 0.2362491390337499,
+      "val_cer": 0.05561368064073887,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 1125.2
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.33788103046454815,
+      "val_loss": 0.20215264060624188,
+      "val_wer": 0.24589196103512742,
+      "val_cer": 0.05705678620391082,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0004,
+      "seconds": 1215.7
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.33243500053250974,
+      "val_loss": 0.19035458267747613,
+      "val_wer": 0.2306405588900915,
+      "val_cer": 0.054170575077566924,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0004,
+      "seconds": 1305.7
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.3313784835704111,
+      "val_loss": 0.19751179420799522,
+      "val_wer": 0.24549837646364261,
+      "val_cer": 0.05629915578324554,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0004,
+      "seconds": 1396.5
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.3337968005318441,
+      "val_loss": 0.1967771650035681,
+      "val_wer": 0.24077536160582505,
+      "val_cer": 0.05662385453495923,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 1486.9
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.3266097394363385,
+      "val_loss": 0.19233962728105072,
+      "val_wer": 0.23634753517662108,
+      "val_cer": 0.054459196190201314,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 1577.4
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.3220187672233612,
+      "val_loss": 0.18812466194243554,
+      "val_wer": 0.2323132933189019,
+      "val_cer": 0.05303412944656902,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0004,
+      "seconds": 1667.7
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.31419623066324087,
+      "val_loss": 0.1875550146146107,
+      "val_wer": 0.22158811374594115,
+      "val_cer": 0.05162710152247637,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 1758.0
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.31521889373602163,
+      "val_loss": 0.19239150397774857,
+      "val_wer": 0.22788546688969794,
+      "val_cer": 0.05326863410058446,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la aergía"
+      },
+      "lr": 0.0004,
+      "seconds": 1848.6
+    },
+    {
+      "epoch": 21,
+      "train_loss": 0.31315357247457265,
+      "val_loss": 0.19427685802412195,
+      "val_wer": 0.22611433631801633,
+      "val_cer": 0.052763547153474276,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la aerguía"
+      },
+      "lr": 0.0004,
+      "seconds": 1938.7
+    },
+    {
+      "epoch": 22,
+      "train_loss": 0.313211815725012,
+      "val_loss": 0.19082057327538357,
+      "val_wer": 0.23113253960444752,
+      "val_cer": 0.05294393534887077,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 2029.0
+    },
+    {
+      "epoch": 23,
+      "train_loss": 0.30994455138552374,
+      "val_loss": 0.19251561272859843,
+      "val_wer": 0.22424480960346355,
+      "val_cer": 0.05240277076268129,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la aerguía"
+      },
+      "lr": 0.0004,
+      "seconds": 2119.2
+    },
+    {
+      "epoch": 24,
+      "train_loss": 0.3080815994179003,
+      "val_loss": 0.19512740482965385,
+      "val_wer": 0.22473679031781954,
+      "val_cer": 0.05240277076268129,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0004,
+      "seconds": 2209.2
+    },
+    {
+      "epoch": 25,
+      "train_loss": 0.3093142502096757,
+      "val_loss": 0.18710817945098013,
+      "val_wer": 0.22326084817475156,
+      "val_cer": 0.051158092214445484,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la aergía"
+      },
+      "lr": 0.0004,
+      "seconds": 2299.7
+    },
+    {
+      "epoch": 26,
+      "train_loss": 0.3071003306552532,
+      "val_loss": 0.18668728749587338,
+      "val_wer": 0.22631112860375874,
+      "val_cer": 0.05213218846958655,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.00039999808591838925,
+      "seconds": 2390.9
+    },
+    {
+      "epoch": 27,
+      "train_loss": 0.30169522700722884,
+      "val_loss": 0.192714037738597,
+      "val_wer": 0.22670471317524354,
+      "val_cer": 0.052078072010967605,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0003982026633451518,
+      "seconds": 2481.8
+    },
+    {
+      "epoch": 28,
+      "train_loss": 0.3032716949867538,
+      "val_loss": 0.19483358538704307,
+      "val_wer": 0.2331004624618715,
+      "val_cer": 0.05465762320513746,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0003930737016503047,
+      "seconds": 2572.6
+    },
+    {
+      "epoch": 29,
+      "train_loss": 0.30457343163407263,
+      "val_loss": 0.18461455696706458,
+      "val_wer": 0.21912821017416118,
+      "val_cer": 0.050761238184573204,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0003847152140438237,
+      "seconds": 2663.1
+    },
+    {
+      "epoch": 30,
+      "train_loss": 0.3037850416356036,
+      "val_loss": 0.1847671707786223,
+      "val_wer": 0.22070254846010037,
+      "val_cer": 0.05101378165812829,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.00037326463902132977,
+      "seconds": 2753.7
+    },
+    {
+      "epoch": 31,
+      "train_loss": 0.2979013032759332,
+      "val_loss": 0.18784008884753944,
+      "val_wer": 0.21902981403128996,
+      "val_cer": 0.051140053394905835,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0003588926272898528,
+      "seconds": 2844.7
+    },
+    {
+      "epoch": 32,
+      "train_loss": 0.2903644446589275,
+      "val_loss": 0.184998710320193,
+      "val_wer": 0.2174554757453508,
+      "val_cer": 0.049841258388051084,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "í la ergía"
+      },
+      "lr": 0.00034186184340857296,
+      "seconds": 2935.2
+    },
+    {
+      "epoch": 33,
+      "train_loss": 0.28477694083151395,
+      "val_loss": 0.20161189498339746,
+      "val_wer": 0.22513037488930435,
+      "val_cer": 0.05263727541669673,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "í la erguía"
+      },
+      "lr": 0.0003224646252031515,
+      "seconds": 3027.1
+    },
+    {
+      "epoch": 34,
+      "train_loss": 0.27864925685772673,
+      "val_loss": 0.1873768790796956,
+      "val_wer": 0.21962019088851717,
+      "val_cer": 0.04996753012482863,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0003010697673539718,
+      "seconds": 3117.5
+    },
+    {
+      "epoch": 35,
+      "train_loss": 0.2698790974126684,
+      "val_loss": 0.18079451121398304,
+      "val_wer": 0.21007576503001082,
+      "val_cer": 0.04856050220073598,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0002780140188725416,
+      "seconds": 3207.6
+    },
+    {
+      "epoch": 36,
+      "train_loss": 0.2659865761788434,
+      "val_loss": 0.17796677600756913,
+      "val_wer": 0.2134212338876316,
+      "val_cer": 0.04832599754672054,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0002536918700076395,
+      "seconds": 3297.3
+    },
+    {
+      "epoch": 37,
+      "train_loss": 0.2579769591781378,
+      "val_loss": 0.17269201753903624,
+      "val_wer": 0.2000393584571485,
+      "val_cer": 0.045800562811169634,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0002284785548284622,
+      "seconds": 3387.4
+    },
+    {
+      "epoch": 38,
+      "train_loss": 0.2464465636898264,
+      "val_loss": 0.1713735191900355,
+      "val_wer": 0.19974417002853487,
+      "val_cer": 0.0456021357962335,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.00020284505890224682,
+      "seconds": 3477.5
+    },
+    {
+      "epoch": 39,
+      "train_loss": 0.2439025297123782,
+      "val_loss": 0.16497811968707282,
+      "val_wer": 0.1969890780281413,
+      "val_cer": 0.044736272458330326,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.00017727225006381166,
+      "seconds": 3568.1
+    },
+    {
+      "epoch": 40,
+      "train_loss": 0.23342350289884978,
+      "val_loss": 0.16632480664539445,
+      "val_wer": 0.18990455574141493,
+      "val_cer": 0.042986506962984346,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.00015211698254601064,
+      "seconds": 3658.1
+    },
+    {
+      "epoch": 41,
+      "train_loss": 0.22714748064659993,
+      "val_loss": 0.15943368901482796,
+      "val_wer": 0.19187247859883894,
+      "val_cer": 0.04354571036871347,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0001278523004890415,
+      "seconds": 3748.4
+    },
+    {
+      "epoch": 42,
+      "train_loss": 0.22227844891567708,
+      "val_loss": 0.16223958347283834,
+      "val_wer": 0.18400078716914298,
+      "val_cer": 0.04253553647449311,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.0001048947134583089,
+      "seconds": 3838.7
+    },
+    {
+      "epoch": 43,
+      "train_loss": 0.2156281227742758,
+      "val_loss": 0.1595317884047736,
+      "val_wer": 0.18331201416904458,
+      "val_cer": 0.04156144021935205,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 8.3638294393836e-05,
+      "seconds": 3928.7
+    },
+    {
+      "epoch": 44,
+      "train_loss": 0.21061673309864076,
+      "val_loss": 0.1572532364898198,
+      "val_wer": 0.18400078716914298,
+      "val_cer": 0.04125478028717801,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 6.444791524596668e-05,
+      "seconds": 4018.9
+    },
+    {
+      "epoch": 45,
+      "train_loss": 0.20593661491060494,
+      "val_loss": 0.15883813033962574,
+      "val_wer": 0.180556922168651,
+      "val_cer": 0.04112850855040046,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 4.7652983853636036e-05,
+      "seconds": 4109.3
+    },
+    {
+      "epoch": 46,
+      "train_loss": 0.20315029941190957,
+      "val_loss": 0.15860299568619085,
+      "val_wer": 0.1773098494539014,
+      "val_cer": 0.04078577097914712,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 3.3541789573316786e-05,
+      "seconds": 4199.9
+    },
+    {
+      "epoch": 47,
+      "train_loss": 0.19910209448968927,
+      "val_loss": 0.15769019375301027,
+      "val_wer": 0.1773098494539014,
+      "val_cer": 0.04087596507684537,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 2.235655471739028e-05,
+      "seconds": 4290.5
+    },
+    {
+      "epoch": 48,
+      "train_loss": 0.195580015929529,
+      "val_loss": 0.1577332054232147,
+      "val_wer": 0.17612909573944702,
+      "val_cer": 0.040713615700988526,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 1.4299646188485975e-05,
+      "seconds": 4380.6
+    },
+    {
+      "epoch": 49,
+      "train_loss": 0.19945951043635843,
+      "val_loss": 0.15719472781448104,
+      "val_wer": 0.177113057168159,
+      "val_cer": 0.04065949924236958,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 9.483493635236458e-06,
+      "seconds": 4471.2
+    },
+    {
+      "epoch": 50,
+      "train_loss": 0.19440516636352442,
+      "val_loss": 0.15736702425428586,
+      "val_wer": 0.17544032273934862,
+      "val_cer": 0.04053322750559203,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 8.000000000000001e-06,
+      "seconds": 4562.7
     }
   ]
 }
