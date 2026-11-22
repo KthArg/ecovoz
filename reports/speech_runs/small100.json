@@ -1,0 +1,167 @@
+{
+  "experiment": "small100",
+  "options": {
+    "model": {
+      "rnn_units": 256,
+      "rnn_layers": 3,
+      "dropout": 0.1
+    },
+    "train": "openslr",
+    "limit": 100,
+    "epochs": 150,
+    "lr": 0.001
+  },
+  "train_clips": 100,
+  "val_clips": 300,
+  "val_corpus": "openslr",
+  "parameters": 4137219,
+  "best": {
+    "epoch": 50,
+    "cer": 0.4608022805945836,
+    "wer": 0.9932069063119162
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 8.16800048828125,
+      "val_loss": 3.524436492919922,
+      "val_wer": 1.0,
+      "val_cer": 1.0,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": ""
+      },
+      "lr": 0.00055,
+      "seconds": 12.1
+    },
+    {
+      "epoch": 5,
+      "train_loss": 3.0334307861328127,
+      "val_loss": 3.00307435353597,
+      "val_wer": 1.0,
+      "val_cer": 1.0,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": ""
+      },
+      "lr": 0.001,
+      "seconds": 16.0
+    },
+    {
+      "epoch": 10,
+      "train_loss": 2.92072021484375,
+      "val_loss": 2.886215171813965,
+      "val_wer": 1.0,
+      "val_cer": 1.0,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": ""
+      },
+      "lr": 0.001,
+      "seconds": 20.6
+    },
+    {
+      "epoch": 15,
+      "train_loss": 2.88221435546875,
+      "val_loss": 2.877100385030111,
+      "val_wer": 1.0,
+      "val_cer": 1.0,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": ""
+      },
+      "lr": 0.001,
+      "seconds": 25.2
+    },
+    {
+      "epoch": 20,
+      "train_loss": 2.8054464721679686,
+      "val_loss": 2.8114909744262695,
+      "val_wer": 1.0,
+      "val_cer": 0.9991855019344329,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": ""
+      },
+      "lr": 0.001,
+      "seconds": 29.7
+    },
+    {
+      "epoch": 25,
+      "train_loss": 2.2892745971679687,
+      "val_loss": 2.297896321614583,
+      "val_wer": 0.9957543164449476,
+      "val_cer": 0.7527998371003869,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "pas t"
+      },
+      "lr": 0.001,
+      "seconds": 34.4
+    },
+    {
+      "epoch": 30,
+      "train_loss": 1.5730381774902344,
+      "val_loss": 1.9443858591715495,
+      "val_wer": 0.9985847721483159,
+      "val_cer": 0.5495825697413969,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qientaman catio"
+      },
+      "lr": 0.001,
+      "seconds": 39.2
+    },
+    {
+      "epoch": 35,
+      "train_loss": 0.9356221771240234,
+      "val_loss": 1.9311309878031413,
+      "val_wer": 0.9731106708180017,
+      "val_cer": 0.49781103644878844,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "quienda ma an patio"
+      },
+      "lr": 0.001,
+      "seconds": 44.2
+    },
+    {
+      "epoch": 40,
+      "train_loss": 0.3600569152832031,
+      "val_loss": 2.3120950190226237,
+      "val_wer": 0.9770733088027173,
+      "val_cer": 0.4833027896558746,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "quintra maran partio"
+      },
+      "lr": 0.001,
+      "seconds": 49.1
+    },
+    {
+      "epoch": 45,
+      "train_loss": 0.11642127990722656,
+      "val_loss": 2.7493093744913737,
+      "val_wer": 1.0365128785734503,
+      "val_cer": 0.47424149867644066,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui inta ma an partio"
+      },
+      "lr": 0.001,
+      "seconds": 54.2
+    },
+    {
+      "epoch": 50,
+      "train_loss": 0.0428803300857544,
+      "val_loss": 3.0223638661702474,
+      "val_wer": 0.9932069063119162,
+      "val_cer": 0.4608022805945836,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "quieintar ma an partio"
+      },
+      "lr": 0.001,
+      "seconds": 59.2
+    },
+    {
