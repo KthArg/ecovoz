@@ -45,7 +45,11 @@ class Services:
     def __init__(self, device: str) -> None:
         self.device = str(get_device(device))
         self.classifier = lru_cache(maxsize=None)(lambda arch: VisionClassifier(arch, self.device))
-        for arch in ARCHITECTURES:
+        # El ZIP de entrega omite ResNet-50 por el límite de 80 MB; el repositorio trae ambos.
+        self.architectures = [arch for arch in ARCHITECTURES if (MODELS / f"{arch}.pt").exists()]
+        if not self.architectures:
+            raise SystemExit(f"No hay modelos de visión en {MODELS}")
+        for arch in self.architectures:
             self.classifier(arch)
         self.transcriber = Transcriber(self.device)
 
@@ -53,7 +57,9 @@ class Services:
 def build_interface(services: Services) -> gr.Blocks:
     settings_path = MODELS / "vision.json"
     settings = read_json(settings_path) if settings_path.exists() else {}
-    default_arch = settings.get("default", "resnet50")
+    default_arch = settings.get("default")
+    if default_arch not in services.architectures:
+        default_arch = services.architectures[0]
 
     def classify_image(image, arch, threshold):
         if image is None:
@@ -115,7 +121,7 @@ def build_interface(services: Services) -> gr.Blocks:
         )
         return text, result.greedy, detail
 
-    model_choices = [(MODEL_NAMES[arch], arch) for arch in ARCHITECTURES]
+    model_choices = [(MODEL_NAMES[arch], arch) for arch in services.architectures]
 
     with gr.Blocks(title="EcoVoz", analytics_enabled=False) as demo:
         gr.Markdown(
