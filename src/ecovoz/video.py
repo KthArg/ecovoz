@@ -41,7 +41,7 @@ def annotate(image: np.ndarray, label: str, confidence: float, min_confidence: f
     cv2.rectangle(image, (0, 0), (image.shape[1], 46), color, -1)
     cv2.putText(image, text, (12, 32), cv2.FONT_HERSHEY_SIMPLEX, 0.95, (255, 255, 255), 2, cv2.LINE_AA)
     if note:
-        position = (image.shape[1] - 170, 30)
+        position = (image.shape[1] - 290, 30)
         cv2.putText(image, note, position, cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
     return image
 

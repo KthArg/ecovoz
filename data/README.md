@@ -41,7 +41,7 @@ Los conteos por clase y partición están en `reports/data_images.json`.
 | Fuente | <https://gitlab.com/ejimenezdelgado/tux-100h>, dataset de la clase 12 | <https://www.openslr.org/72/>, [73](https://www.openslr.org/73/) y [74](https://www.openslr.org/74/) |
 | Contenido | un locutor leyendo libros en español | voluntarios de Colombia, Perú y Puerto Rico leyendo frases |
 | Selección | 12 000 de 39 658 audios, al azar con semilla 42 | todos los audios (solo hay voces de mujer en Puerto Rico) |
-| Licencia | el repositorio no declara licencia; se usa como material del curso y **no se redistribuye aquí** | CC BY-SA 4.0, Google LLC (Guevara-Rukoz et al., 2020) |
+| Licencia | el repositorio no declara licencia; se usa como material del curso y **sus audios no se redistribuyen aquí** (el manifiesto solo conserva identificadores y transcripciones) | CC BY-SA 4.0, Google LLC (Guevara-Rukoz et al., 2020) |
 | Etiquetado | transcripción incluida en `metadata.csv` | transcripción incluida en `line_index` |
 
 **Preprocesamiento.**

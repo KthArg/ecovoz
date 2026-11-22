@@ -88,15 +88,18 @@ def build_interface(services: Services) -> gr.Blocks:
         if image is None:
             return None, "", None
         now = time.perf_counter()
-        smoother, previous = state if state and state[0] == arch else ((arch, Smoother()), None)
+        if state and state[0] == arch:
+            _, smoother, previous = state
+        else:
+            smoother, previous = Smoother(), None
         result = services.classifier(arch).predict(image)
-        smoothed = smoother[1].update(result.probabilities)
+        smoothed = smoother.update(result.probabilities)
         label = result.classes[int(smoothed.argmax())]
         note = f"Inferencia **{result.milliseconds:.1f} ms**"
         if previous:
             note += f" | **{1 / max(now - previous, 1e-6):.1f}** cuadros/s"
         shown = annotate(image, label, float(smoothed.max()), threshold)
-        return shown, note, (smoother, now)
+        return shown, note, (arch, smoother, now)
 
     def transcribe(audio, decoding):
         if audio is None:
@@ -152,7 +155,7 @@ def build_interface(services: Services) -> gr.Blocks:
                     if videos:
                         gr.Examples([str(path) for path in videos], inputs=video, label="Video de ejemplo")
                 with gr.Column():
-                    screen = gr.Image(label="Resultado", format="jpeg", height=420, elem_id="video-output")
+                    screen = gr.Image(label="Resultado", show_label=False, format="jpeg", height=420, elem_id="video-output")
                     video_status = gr.Markdown()
             playing = play.click(
                 play_video, [video, arch, threshold, momentum], [screen, video_status], show_progress="hidden"
@@ -163,7 +166,7 @@ def build_interface(services: Services) -> gr.Blocks:
             with gr.Row():
                 camera = gr.Image(sources=["webcam"], streaming=True, type="numpy", label="Cámara", height=360)
                 with gr.Column():
-                    live = gr.Image(label="Resultado", format="jpeg", height=360)
+                    live = gr.Image(label="Resultado", show_label=False, buttons=[], format="jpeg", height=420)
                     live_status = gr.Markdown()
             live_state = gr.State()
             camera.stream(

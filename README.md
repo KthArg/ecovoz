@@ -95,7 +95,7 @@ docs/GUIA_DEFENSA.md   explicación de cada parte y preguntas probables
 
 ## Licencias y autoría
 
-- **Datos:** TrashNet (MIT), RealWaste (CC BY-NC-SA 4.0), OpenSLR 72/73/74 (CC BY-SA 4.0) y TUX del curso (sin licencia declarada, no se redistribuye). Detalle en [data/README.md](data/README.md).
+- **Datos:** TrashNet (MIT), RealWaste (CC BY-NC-SA 4.0), OpenSLR 72/73/74 (CC BY-SA 4.0) y TUX del curso (sin licencia declarada, sus audios no se redistribuyen). Detalle en [data/README.md](data/README.md).
 - **Modelos base:** ResNet-50 y MobileNetV3-Large de torchvision (BSD-3) con pesos de ImageNet. La arquitectura de voz se basa en el [ejemplo CTC de Keras](https://keras.io/examples/audio/ctc_asr/) (Apache-2.0) visto en clase, reescrito en PyTorch.
 - **Pesos de visión:** derivan de RealWaste, por lo que son solo para uso no comercial.
 - **IA generativa:** el proyecto (diseño, código, experimentos, análisis, paper y presentación) se desarrolló con Claude de Anthropic mediante Claude Code. También se declara en el paper.

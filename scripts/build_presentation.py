@@ -390,6 +390,9 @@ def build() -> None:
     footer = f"{REPOSITORY}  |  Uso de IA generativa (Claude) declarado en el paper"
     add_text(slide, footer, 0.9, 6.45, 9.6, 0.4, 13, LIGHT)
 
+    properties = deck.deck.core_properties
+    properties.author = properties.last_modified_by = "Equipo EcoVoz"
+    properties.title, properties.comments = "EcoVoz", ""
     target = ROOT / "presentation" / "EcoVoz.pptx"
     deck.deck.save(target)
     print(f"{len(deck.deck.slides)} diapositivas en {target}")
