@@ -1,0 +1,7 @@
+\begin{abstract}
+Se presenta EcoVoz, una aplicación local que clasifica residuos en imágenes y video y transcribe voz en español. Para visión se compararon ResNet-50 y MobileNetV3-Large con cuatro estrategias de transfer learning sobre \ImgTotal{} imágenes de seis clases, particionadas por grupos de fotos casi idénticas. En prueba alcanzaron \ResAcc\,\% y \MobAcc\,\% de accuracy, una diferencia que no es estadísticamente significativa, y la red móvil es unas cinco veces más liviana. Para voz se entrenó un DeepSpeech2 con pérdida CTC. Con solo 100 audios el CER de validación en locutores nuevos fue de \ExpScratchCer\,\% y bajó a \ExpTransferCer\,\% al partir de un modelo preentrenado. El modelo final, con \AudioTrain{} audios de entrenamiento, obtuvo en prueba un WER de \SlrWer\,\% y un CER de \SlrCer\,\% con locutores y frases no vistos, y \TuxWer\,\% y \TuxCer\,\% con frases nuevas de un locutor conocido. En el equipo de la demostración el video se procesa a \VideoFps{} cuadros por segundo con GPU y \VideoFpsCpu{} sin ella, y un audio se transcribe en menos de medio segundo (percentil 95), por encima de los requisitos de tiempo casi real.
+\end{abstract}
+
+\begin{IEEEkeywords}
+transfer learning, clasificación de residuos, reconocimiento automático del habla, CTC, DeepSpeech2, aplicación multimodal
+\end{IEEEkeywords}

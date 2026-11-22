@@ -181,7 +181,7 @@ def vision_figures(report: dict, runs: dict) -> None:
 
 def speech_figures(report: dict, runs: dict) -> None:
     figure, axes = plt.subplots(2, 2, figsize=(WIDE, 3.3))
-    for axis, name in zip(axes[0], ("small100_aug", "multi"), strict=True):
+    for axis, name in zip(axes[0], ("small100", "multi"), strict=True):
         history = runs[name]["history"]
         epochs = [item["epoch"] for item in history]
         axis.plot(epochs, [item["train_loss"] for item in history], color=BLUE, label="Entrenamiento")
@@ -377,7 +377,7 @@ def macros(data_images, data_audio, vision, speech, speech_runs, latency) -> Non
         "EceAfter": percent(best["ece_after"]),
         "RejectCoverage": percent(best["rejection"][2]["coverage"]),
         "RejectAcc": percent(best["rejection"][2]["accuracy"]),
-        "McP": "<0,001" if p_value < 0.001 else "=" + number(p_value, 3),
+        "McP": "< 0,001" if p_value < 0.001 else "= " + number(p_value, 3),
         "McA": str(vision["mcnemar"]["only_resnet50_right"]),
         "McB": str(vision["mcnemar"]["only_mobilenet_right"]),
         "SlrWer": percent(test["beam_lm"]["openslr"]["wer"]),
@@ -402,8 +402,10 @@ def macros(data_images, data_audio, vision, speech, speech_runs, latency) -> Non
     prefixes = ("Scratch", "Aug", "Tux", "Transfer", "Multi")
     for name, key in zip(prefixes, EXPERIMENT, strict=True):
         scores = speech["experiments_val_greedy"][key]["openslr"]
-        values[f"{name}Wer"] = percent(scores["wer"])
-        values[f"{name}Cer"] = percent(scores["cer"])
+        for key_name, metric in ((f"Exp{name}Wer", "wer"), (f"Exp{name}Cer", "cer")):
+            if key_name in values:
+                raise ValueError(f"Macro repetida: {key_name}")
+            values[key_name] = percent(scores[metric])
     text = "".join(f"\\newcommand{{\\{name}}}{{{value}}}\n" for name, value in values.items())
     (GENERATED / "numbers.tex").write_text(text, encoding="utf-8")
 

@@ -1,0 +1,128 @@
+\section{Resultados y análisis}\label{sec:resultados}
+
+\begin{table}[t]
+\centering
+\caption{F1 macro de validación por estrategia (\%). En negrita, la elegida}
+\label{tab:strategies}
+\input{generated/tab_strategies}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.72\textwidth]{confusion_matrices.pdf}
+\caption{Matrices de confusión en prueba. El color indica la proporción respecto a la clase real.}
+\label{fig:confusion}
+\end{figure*}
+
+\begin{table*}[t]
+\centering
+\caption{Precisión (P), recall (R) y F1 por clase en prueba (\%)}
+\label{tab:perclass}
+\input{generated/tab_per_class}
+\end{table*}
+
+\subsection{Estrategias de transfer learning}
+
+La Tabla~\ref{tab:strategies} muestra que congelar todo el extractor es la peor opción en ambas redes. Las características de ImageNet no bastan para materiales que se distinguen por brillo, transparencia o textura, y ajustar el extractor mejora el F1 macro entre 3,8 y 8,8 puntos. Las tres estrategias con ajuste quedan muy cerca entre sí. El efecto del aumento depende de la arquitectura: en MobileNet mejora el resultado, mientras que en ResNet-50 el ajuste parcial sin aumento quedó arriba. Se respetó esa elección porque el criterio se fijó de antemano. La consecuencia es que el ResNet elegido probablemente tolere menos los cambios de cámara.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{vision_curves.pdf}
+\caption{Curvas de la estrategia elegida para cada arquitectura.}
+\label{fig:vision-curves}
+\end{figure}
+
+En la Fig.~\ref{fig:vision-curves} el salto de la época 5 corresponde al inicio del ajuste fino. El ResNet sin aumento llega a un F1 de 1 en entrenamiento en pocas épocas, aunque su validación se mantiene estable. Con aumento, la brecha de MobileNet es menor.
+
+\begin{table}[t]
+\centering
+\caption{Clasificadores en la partición de prueba}
+\label{tab:vision}
+\input{generated/tab_vision}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.80\textwidth]{speech_curves.pdf}
+\caption{Entrenamiento CTC. Arriba: pérdida con 100 audios y del modelo final. Abajo: error en validación.}
+\label{fig:speech-curves}
+\end{figure*}
+
+\begin{table*}[t]
+\centering
+\caption{Experimentos CTC sobre la misma validación, con decodificación voraz (\%). $N$: audios de entrenamiento}
+\label{tab:experiments}
+\input{generated/tab_experiments}
+\end{table*}
+
+\subsection{Comparación de modelos en prueba}
+
+MobileNetV3-Large acertó \MobAcc\,\% y ResNet-50 \ResAcc\,\% (Tabla~\ref{tab:vision}). De los desacuerdos, en \McA{} imágenes solo acertó ResNet y en \McB{} solo MobileNet. La prueba de McNemar da $p$ \McP, así que \emph{no se puede afirmar que una red sea más precisa que la otra}. Se eligió MobileNet para la aplicación por su mejor F1 en validación, su tamaño y su latencia en CPU. Ambas rinden algo menos en RealWaste, donde los objetos están sucios o deformados, pero la brecha con TrashNet es de pocos puntos.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.94\columnwidth]{vision_errors.pdf}
+\caption{Errores de MobileNetV3-L con mayor confianza (real $\to$ predicción).}
+\label{fig:errors}
+\end{figure}
+
+\begin{table*}[t]
+\centering
+\caption{Aciertos y fallos con locutores nuevos, tomados de posiciones fijas del ranking por WER (\%)}
+\label{tab:examples}
+\small
+\input{generated/tab_examples}
+\end{table*}
+
+\subsection{Análisis de errores visuales}
+Según la Tabla~\ref{tab:perclass} y la Fig.~\ref{fig:confusion}, la clase más difícil para MobileNet es el plástico, por su recall: se confunde con metal (superficies brillantes), vidrio (transparencia), papel (empaques blancos arrugados) y cartón (envases impresos). En ResNet, la clase no reciclable tiene el menor recall. Es la menos numerosa y la más heterogénea, pues se define por exclusión y no por un material.
+
+La Fig.~\ref{fig:errors} muestra los errores de mayor confianza. Varios son ambiguos incluso para una persona: envases de material mixto, tapas metálicas dentro de la clase plástico o plástico verde transparente que parece vidrio. Un umbral de confianza no elimina estos casos, pero sí ayuda. La calibración, con temperatura \BestTemp{}, redujo el error esperado de calibración de \EceBefore\,\% a \EceAfter\,\%. Con un umbral de 0,7 el modelo responde en el \RejectCoverage\,\% de las imágenes de prueba y acierta el \RejectAcc\,\% de ellas.
+
+\begin{table}[t]
+\centering
+\caption{Modelo final en prueba, por decodificador (\%)}
+\label{tab:speech}
+\resizebox{\columnwidth}{!}{\input{generated/tab_speech}}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Prueba por grupo, con beam search y modelo de lenguaje (\%)}
+\label{tab:speakers}
+\input{generated/tab_speakers}
+\end{table}
+
+\subsection{Voz: qué se logra con 100 audios}
+
+Desde cero, los 100 audios producen memorización: la pérdida de entrenamiento cae por debajo de 0,001 y la de validación sube desde su mínimo (Fig.~\ref{fig:speech-curves}). El CER se estanca en \ExpScratchCer\,\% y el WER en \ExpScratchWer\,\%, que supera el 100\,\% por las inserciones (Tabla~\ref{tab:experiments}). La curva también muestra la fase inicial típica de CTC: durante unas 20 épocas la red solo emite blancos y el CER es de 100\,\%.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.92\columnwidth]{speech_distribution.pdf}
+\caption{Distribución acumulada del WER por enunciado en prueba.}
+\label{fig:distribution}
+\end{figure}
+
+El aumento de datos retrasa la salida de esa fase y frena la memorización, pero \emph{no} mejora el CER (\ExpAugCer\,\%). Con tan pocos ejemplos falta variedad de palabras y voces, y deformar los mismos audios no la crea. El preentrenamiento sí cambia el resultado. El modelo de TUX, por sí solo, falla con voces nuevas (CER de \ExpTuxCer\,\%), pero al ajustarlo con los mismos 100 audios el CER baja a \ExpTransferCer\,\%: la red ya conoce la relación entre sonidos y letras del español y solo debe adaptarse a las voces. Con todo el corpus baja a \ExpMultiCer\,\%.
+
+\begin{table}[t]
+\centering
+\caption{Latencia de punta a punta en el equipo de la demostración}
+\label{tab:latency}
+\input{generated/tab_latency}
+\end{table}
+
+\subsection{Modelo de voz final}
+
+En prueba, con locutores y frases no vistos, el WER es de \SlrWer\,\% (IC 95\,\%: \SlrWerLow{} a \SlrWerHigh) y el CER de \SlrCer\,\%. La búsqueda por haz sin modelo de lenguaje casi no cambia la salida voraz, porque la red concentra la probabilidad en un camino. Al agregar el modelo de lenguaje, el WER baja desde \SlrWerGreedy\,\% (Tabla~\ref{tab:speech}). La mejora es mayor en WER que en CER: el n-grama corrige letras y espacios sueltos que bastan para arruinar una palabra.
+
+Con el locutor de TUX el WER es de \TuxWer\,\%. La diferencia con los locutores nuevos confirma que reportar solo una partición por frase habría dado una imagen demasiado optimista. También hay diferencias marcadas entre voces (Tabla~\ref{tab:speakers}), pero cada grupo tiene un único locutor de prueba, por lo que reflejan a esa persona y no a un país o sexo. La Fig.~\ref{fig:distribution} muestra la distribución completa del error.
+
+En la Tabla~\ref{tab:examples} los fallos son en su mayoría fonéticamente plausibles. Los errores de carácter más frecuentes son espacios omitidos o insertados, la \emph{s} omitida (se aspira en parte del español latinoamericano), la \emph{h} muda, las confusiones entre \emph{b} y \emph{v}, que suenan igual, y las tildes. Los peores casos unen varias palabras cuando el habla es rápida. Los extranjerismos, como ``facebook'', fallan porque su escritura no sigue la pronunciación del español.
+
+\subsection{Video y tiempo casi real}
+
+La latencia incluye preprocesamiento, inferencia y, según el caso, decodificación del video, dibujo o beam search (Tabla~\ref{tab:latency}). Todas las combinaciones superan los umbrales de 5 cuadros por segundo y 5\,s por audio, incluso sin GPU. El percentil 95 de audio es de \AudioLat\,s en GPU y \AudioLatCpu\,s en CPU. En GPU ambas redes se parecen porque domina el preprocesamiento. En CPU, MobileNet es más de tres veces más rápida por imagen. Estas cifras no incluyen el envío de cada cuadro al navegador.
+
+El video de prueba es un montaje propio de doce fotos de prueba con movimiento, giro y cambios de luz simulados, 62 cuadros por foto. MobileNet acertó el \VideoAcc\,\% de los cuadros. Los fallos se concentran en tres fotos que el modelo ya clasificaba mal como imagen fija. El movimiento solo añadió parpadeos aislados, que el suavizado reduce en la pantalla. Con doce objetos esta cifra es una demostración y no una estimación de desempeño.

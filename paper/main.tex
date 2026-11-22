@@ -1,8 +1,15 @@
 % Paper de EcoVoz. Las cifras, tablas y figuras salen de scripts/make_report.py.
 % Compilar:  tectonic main.tex   (o subir la carpeta a Overleaf junto con ../reports/figures)
 \documentclass[conference]{IEEEtran}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\else
+  \usepackage{fontspec}
+  \setmainfont{texgyretermes}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+    ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\fi
 \usepackage[spanish,es-tabla,es-noshorthands]{babel}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
@@ -24,6 +31,7 @@
 \IfFileExists{carnes.tex}{\input{carnes}}{}
 
 \begin{document}
+\renewcommand{\IEEEkeywordsname}{Palabras clave}
 
 \title{EcoVoz: clasificación visual de residuos y reconocimiento de voz en español con CTC en una aplicación multimodal}
 

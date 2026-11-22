@@ -7,7 +7,7 @@ Los duplicados exactos se eliminaron por hash de píxeles. Como ambos conjuntos 
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.94\textwidth]{dataset_examples.pdf}
+\includegraphics[width=0.76\textwidth]{dataset_examples.pdf}
 \caption{Ejemplos de entrenamiento por clase y fuente. El fondo y la condición de los objetos cambian entre los dos conjuntos.}
 \label{fig:examples}
 \end{figure*}
@@ -63,7 +63,7 @@ Se entrenaron cinco experimentos, todos seleccionados por CER de validación:
 \end{enumerate}
 El aumento combina cambio de velocidad ($\pm$12\,\%), ruido con SNR de 10 a 35\,dB y SpecAugment~\cite{specaugment}. Se usó AdamW con calentamiento, meseta y descenso coseno, recorte de gradiente en 5 y precisión mixta, calculando CTC en 32 bits.
 
-El modelo de lenguaje es un 6-grama de caracteres interpolado, contado solo con textos de entrenamiento. Los valores $\alpha=\Alpha$ y $\beta=\Beta$ se eligieron en validación.
+El modelo de lenguaje es un 6-grama de caracteres interpolado, contado solo con textos de entrenamiento. Los valores $\alpha$ = \Alpha{} y $\beta$ = \Beta{} se eligieron en validación.
 
 \subsection{Aplicación}
 La Fig.~\ref{fig:architecture} resume la aplicación, hecha con Gradio~\cite{gradio}. Tiene pestañas para imagen (archivo, cámara o portapapeles), video cuadro a cuadro, cámara en vivo, audio (micrófono o archivo) y resultados. En video se clasifican todos los cuadros y solo la etiqueta mostrada se suaviza con una media móvil exponencial. Si la confianza calibrada no alcanza el umbral, la aplicación responde que no está segura. Los audios de más de 10\,s se cortan en la pausa más silenciosa cercana al límite. Los modelos se guardan en 16 bits y nada se envía a Internet.
