@@ -1,0 +1,10 @@
+.venv/
+data/*
+!data/README.md
+!data/manifests/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+runs/
+paper/carnes.tex
+tools/

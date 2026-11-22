@@ -1,0 +1,49 @@
+{
+  "exact_duplicates": 3,
+  "label_conflicts": 3,
+  "total": 6108,
+  "threshold": 0.88,
+  "groups": 5611,
+  "largest_group": 64,
+  "images_in_groups": 765,
+  "per_split": {
+    "train": {
+      "cardboard": 604,
+      "glass": 642,
+      "metal": 837,
+      "paper": 766,
+      "plastic": 980,
+      "trash": 441
+    },
+    "val": {
+      "cardboard": 130,
+      "glass": 138,
+      "metal": 181,
+      "paper": 164,
+      "plastic": 211,
+      "trash": 96
+    },
+    "test": {
+      "cardboard": 130,
+      "glass": 138,
+      "metal": 181,
+      "paper": 164,
+      "plastic": 210,
+      "trash": 95
+    }
+  },
+  "per_source": {
+    "train": {
+      "trashnet": 1761,
+      "realwaste": 2509
+    },
+    "val": {
+      "trashnet": 380,
+      "realwaste": 540
+    },
+    "test": {
+      "trashnet": 380,
+      "realwaste": 538
+    }
+  }
+}
