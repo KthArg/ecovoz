@@ -8,3 +8,4 @@ __pycache__/
 runs/
 paper/carnes.tex
 tools/
+!data/subset/

@@ -1,0 +1,101 @@
+path,id,source,speaker,raw_text,text,split,seconds
+audio/train/cof_09697_01420033061.wav,cof_09697_01420033061,es_co_female,cof_09697,Según mis datos este viernes nueve de Septiembre hay lluvia de estrellas,según mis datos este viernes nueve de septiembre hay lluvia de estrellas,train,11.647
+audio/train/cof_02436_02009716827.wav,cof_02436_02009716827,es_co_female,cof_02436,Mis últimos viajes han sido muy estresantes y en este viaje me quiero relajar,mis últimos viajes han sido muy estresantes y en este viaje me quiero relajar,train,6.725
+audio/train/pef_02484_00143452158.wav,pef_02484_00143452158,es_pe_female,pef_02484,¿Cuáles son las principales diferencias?,cuáles son las principales diferencias,train,2.140
+audio/train/pef_01208_00620876976.wav,pef_01208_00620876976,es_pe_female,pef_01208,La bicicleta urbana se ha convertido en uno de los medios de transporte mejores de la ciudad,la bicicleta urbana se ha convertido en uno de los medios de transporte mejores de la ciudad,train,7.210
+audio/train/com_09334_00785542427.wav,com_09334_00785542427,es_co_male,com_09334,Tiene el tiempo contado,tiene el tiempo contado,train,1.500
+audio/train/com_02436_00535023891.wav,com_02436_00535023891,es_co_male,com_02436,Te voy a mandar el menú de canales a tu correo electrónico.,te voy a mandar el menú de canales a tu correo electrónico,train,3.853
+audio/train/cof_09334_01372299330.wav,cof_09334_01372299330,es_co_female,cof_09334,¿Me puedes recomendar una compañía de teléfono que funcione bien en todo el país?,me puedes recomendar una compañía de teléfono que funcione bien en todo el país,train,4.300
+audio/train/cof_08421_01666863057.wav,cof_08421_01666863057,es_co_female,cof_08421,¿Es la crueldad innata al ser humano?,es la crueldad innata al ser humano,train,4.000
+audio/train/pem_04310_00418529460.wav,pem_04310_00418529460,es_pe_male,pem_04310,Vamos a usar la app de la embajada de Egipto que es para gente que no sabe nada de árabe,vamos a usar la app de la embajada de egipto que es para gente que no sabe nada de árabe,train,6.538
+audio/train/cof_03034_00543032345.wav,cof_03034_00543032345,es_co_female,cof_03034,Lo interesante de su educación es que ella no quería ser historiadora quería ser cocinera,lo interesante de su educación es que ella no quería ser historiadora quería ser cocinera,train,5.589
+audio/train/cof_03034_00118065061.wav,cof_03034_00118065061,es_co_female,cof_03034,¿Puedo aprender a hacer cerámica en tutoriales de Youtube?,puedo aprender a hacer cerámica en tutoriales de youtube,train,4.345
+audio/train/cof_08784_01309460622.wav,cof_08784_01309460622,es_co_female,cof_08784,Por las tardes se escucha música en la Plaza.,por las tardes se escucha música en la plaza,train,4.054
+audio/train/com_08784_01642441049.wav,com_08784_01642441049,es_co_male,com_08784,La granizada destruyó toda la plantación de lechuga,la granizada destruyó toda la plantación de lechuga,train,6.603
+audio/train/com_09697_01127685978.wav,com_09697_01127685978,es_co_male,com_09697,No supo descifrar las huellas,no supo descifrar las huellas,train,1.940
+audio/train/prf_04310_02087181946.wav,prf_04310_02087181946,es_pr_female,prf_04310,La pronunciación del francés es difícil,la pronunciación del francés es difícil,train,4.622
+audio/train/cof_02484_00485791184.wav,cof_02484_00485791184,es_co_female,cof_02484,Los sandwiches están fríos,los sandwiches están fríos,train,5.330
+audio/train/com_07049_01348564113.wav,com_07049_01348564113,es_co_male,com_07049,¿Quieres que te mande las reseñas de diferentes medios?,quieres que te mande las reseñas de diferentes medios,train,2.620
+audio/train/pem_03397_01949827006.wav,pem_03397_01949827006,es_pe_male,pem_03397,¿Cuáles son las principales diferencias?,cuáles son las principales diferencias,train,1.980
+audio/train/com_09334_00103571788.wav,com_09334_00103571788,es_co_male,com_09334,Los franceses tienen la mayor variedad de quesos del planeta,los franceses tienen la mayor variedad de quesos del planeta,train,4.660
+audio/train/pem_07505_00043885697.wav,pem_07505_00043885697,es_pe_male,pem_07505,Nunca has sido constante en tu vida,nunca has sido constante en tu vida,train,3.920
+audio/train/pef_02484_01758652107.wav,pef_02484_01758652107,es_pe_female,pef_02484,¿En qué calle está la casa?,en qué calle está la casa,train,1.560
+audio/train/cof_00610_01899727337.wav,cof_00610_01899727337,es_co_female,cof_00610,Te aconsejo que te cubres de pies a cabeza,te aconsejo que te cubres de pies a cabeza,train,2.260
+audio/train/com_03349_00415272936.wav,com_03349_00415272936,es_co_male,com_03349,No supo descifrar las huellas,no supo descifrar las huellas,train,4.406
+audio/train/pem_04310_00624490010.wav,pem_04310_00624490010,es_pe_male,pem_04310,Toda ésta información la puede encontrar en la página web de la secretaría de deportes,toda ésta información la puede encontrar en la página web de la secretaría de deportes,train,5.410
+audio/train/pef_08784_00181164976.wav,pef_08784_00181164976,es_pe_female,pef_08784,Estoy buscando un restaurante de cocina tradicional,estoy buscando un restaurante de cocina tradicional,train,5.886
+audio/train/pef_02484_01669919980.wav,pef_02484_01669919980,es_pe_female,pef_02484,El Llano en Llamas es un clásico de Juan Rulfo,el llano en llamas es un clásico de juan rulfo,train,3.460
+audio/train/com_03034_01053579835.wav,com_03034_01053579835,es_co_male,com_03034,La piel de los elefantes es las más dura que existe,la piel de los elefantes es las más dura que existe,train,5.434
+audio/train/com_08784_00788309265.wav,com_08784_00788309265,es_co_male,com_08784,Desafortunadamente todas las vías de comunicación están cortadas,desafortunadamente todas las vías de comunicación están cortadas,train,6.794
+audio/train/pef_07508_01164891856.wav,pef_07508_01164891856,es_pe_female,pef_07508,Resérvame tres boletos por favor para la función de las nueve menos cuarto,resérvame tres boletos por favor para la función de las nueve menos cuarto,train,5.403
+audio/train/cof_09334_01288755590.wav,cof_09334_01288755590,es_co_female,cof_09334,¿Qué es lo más importante de este mundo?,qué es lo más importante de este mundo,train,2.620
+audio/train/cof_08784_00999025143.wav,cof_08784_00999025143,es_co_female,cof_08784,Esa palabra viene del latín tardio,esa palabra viene del latín tardio,train,3.531
+audio/train/pem_01208_01270291517.wav,pem_01208_01270291517,es_pe_male,pem_01208,La mermelada de zarzamora es muy fácil de hacer,la mermelada de zarzamora es muy fácil de hacer,train,5.289
+audio/train/cof_08784_01983846861.wav,cof_08784_01983846861,es_co_female,cof_08784,Ayer solamente jugó setenta y dos minutos y metió un gol,ayer solamente jugó setenta y dos minutos y metió un gol,train,5.985
+audio/train/pem_00295_00369589831.wav,pem_00295_00369589831,es_pe_male,pem_00295,Su negocio es uno de los más reconocidos en este país,su negocio es uno de los más reconocidos en este país,train,5.374
+audio/train/pef_08784_01159343343.wav,pef_08784_01159343343,es_pe_female,pef_08784,Ojalá pudiéramos invitar a ésta reunion con la señora Arias a varios pintores,ojalá pudiéramos invitar a ésta reunion con la señora arias a varios pintores,train,6.549
+audio/train/pef_02121_01669483729.wav,pef_02121_01669483729,es_pe_female,pef_02121,"Tengo un problemón, se me acaba de reventar una llanta",tengo un problemón se me acaba de reventar una llanta,train,4.698
+audio/train/cof_03349_01137866823.wav,cof_03349_01137866823,es_co_female,cof_03349,¿Cuáles son las principales diferencias?,cuáles son las principales diferencias,train,4.345
+audio/train/pem_08421_00340768254.wav,pem_08421_00340768254,es_pe_male,pem_08421,Ahora puedes encontrar jamón serrano en todas partes.,ahora puedes encontrar jamón serrano en todas partes,train,3.740
+audio/train/com_01523_00483493677.wav,com_01523_00483493677,es_co_male,com_01523,¿Sabes qué equipos están clasificados y cuáles no para el mundial de Rusia del dos mil dieciocho?,sabes qué equipos están clasificados y cuáles no para el mundial de rusia del dos mil dieciocho,train,4.761
+audio/train/pem_01208_00984529089.wav,pem_01208_00984529089,es_pe_male,pem_01208,"Ayer llovió mucho, y llegue tarde a mi reunión",ayer llovió mucho y llegue tarde a mi reunión,train,6.081
+audio/train/cof_07508_01449382303.wav,cof_07508_01449382303,es_co_female,cof_07508,"Esos departamentos no aceptan mascotas, puedes creerlo",esos departamentos no aceptan mascotas puedes creerlo,train,5.885
+audio/train/pef_03349_01525158526.wav,pef_03349_01525158526,es_pe_female,pef_03349,La ciudad es bellísima y tan alegre,la ciudad es bellísima y tan alegre,train,2.700
+audio/train/pem_00295_01089118121.wav,pem_00295_01089118121,es_pe_male,pem_00295,El pijama de rayas es azul,el pijama de rayas es azul,train,3.811
+audio/train/com_06136_02054311298.wav,com_06136_02054311298,es_co_male,com_06136,¿Me puedes recomendar alguna dieta que sea más rápida en sus resultados?,me puedes recomendar alguna dieta que sea más rápida en sus resultados,train,3.840
+audio/train/cof_07049_00931695058.wav,cof_07049_00931695058,es_co_female,cof_07049,Voy a invitar a mis cinco profesores y dos compañeros de la universidad.,voy a invitar a mis cinco profesores y dos compañeros de la universidad,train,4.285
+audio/train/cof_03349_01645649469.wav,cof_03349_01645649469,es_co_female,cof_03349,Voy a Europa a pasar mi cumpleaños.,voy a europa a pasar mi cumpleaños,train,6.066
+audio/train/com_09334_01884261450.wav,com_09334_01884261450,es_co_male,com_09334,Leí una nota donde recomiendan que los ciclistas usen casco.,leí una nota donde recomiendan que los ciclistas usen casco,train,9.053
+audio/train/pef_03349_00321014196.wav,pef_03349_00321014196,es_pe_female,pef_03349,Tocar el xilófono es mi hobby favorito,tocar el xilófono es mi hobby favorito,train,2.420
+audio/train/cof_07508_01725797680.wav,cof_07508_01725797680,es_co_female,cof_07508,¿Tengo que pasar por alguna prueba?,tengo que pasar por alguna prueba,train,4.735
+audio/train/com_09697_01227410026.wav,com_09697_01227410026,es_co_male,com_09697,Los sandwiches están fríos,los sandwiches están fríos,train,1.960
+audio/train/cof_09334_00993765369.wav,cof_09334_00993765369,es_co_female,cof_09334,La obscuridad del pozo era obscena por naturaleza,la obscuridad del pozo era obscena por naturaleza,train,4.435
+audio/train/pem_01208_01289073842.wav,pem_01208_01289073842,es_pe_male,pem_01208,Desafortunadamente todas las vías de comunicación están cortadas,desafortunadamente todas las vías de comunicación están cortadas,train,4.740
+audio/train/pef_02484_01696802140.wav,pef_02484_01696802140,es_pe_female,pef_02484,La mermelada de zanahoria es muy fácil de hacer,la mermelada de zanahoria es muy fácil de hacer,train,5.420
+audio/train/pem_07505_01733952011.wav,pem_07505_01733952011,es_pe_male,pem_07505,¿Hay alguna teoría de que los crucigramas puedan ayudar a la vida sentimental?,hay alguna teoría de que los crucigramas puedan ayudar a la vida sentimental,train,6.585
+audio/train/pem_00295_01812051795.wav,pem_00295_01812051795,es_pe_male,pem_00295,Buscando tutoriales de entrenamiento,buscando tutoriales de entrenamiento,train,5.422
+audio/train/com_03349_01189026185.wav,com_03349_01189026185,es_co_male,com_03349,El caballo está amarrado,el caballo está amarrado,train,3.974
+audio/train/pem_00610_00941535493.wav,pem_00610_00941535493,es_pe_male,pem_00610,Los hamsters comen zanahorias,los hamsters comen zanahorias,train,5.111
+audio/train/pef_09697_01526158256.wav,pef_09697_01526158256,es_pe_female,pef_09697,Es importante que manejes bien la letra e,es importante que manejes bien la letra e,train,6.398
+audio/train/com_08421_01841849199.wav,com_08421_01841849199,es_co_male,com_08421,¿Hay clases de cerámica cerca de mi casa?,hay clases de cerámica cerca de mi casa,train,3.726
+audio/train/pef_02436_00368227828.wav,pef_02436_00368227828,es_pe_female,pef_02436,Los hámsters comen zanahorias,los hámsters comen zanahorias,train,4.645
+audio/train/cof_07049_01426932793.wav,cof_07049_01426932793,es_co_female,cof_07049,Quiero saber alguna información curiosa sobre Frida Kahlo.,quiero saber alguna información curiosa sobre frida kahlo,train,3.700
+audio/train/com_03397_01232769354.wav,com_03397_01232769354,es_co_male,com_03397,Los niños tienen mucha imaginación,los niños tienen mucha imaginación,train,4.233
+audio/train/pef_01208_00608209209.wav,pef_01208_00608209209,es_pe_female,pef_01208,¿Te gustan los chocolates?,te gustan los chocolates,train,3.977
+audio/train/com_03349_01521555795.wav,com_03349_01521555795,es_co_male,com_03349,El único tipo de música que me gusta es el pop.,el único tipo de música que me gusta es el pop,train,3.591
+audio/train/pem_08421_01184151019.wav,pem_08421_01184151019,es_pe_male,pem_08421,¿Me puedes enviar links de paginas web en donde pueda ampliar mi cultura general?,me puedes enviar links de paginas web en donde pueda ampliar mi cultura general,train,7.215
+audio/train/pem_01208_01203760586.wav,pem_01208_01203760586,es_pe_male,pem_01208,Por las tardes se escucha música en la Plaza.,por las tardes se escucha música en la plaza,train,4.254
+audio/train/pef_02436_00984111255.wav,pef_02436_00984111255,es_pe_female,pef_02436,Tiene el tiempo contado,tiene el tiempo contado,train,3.842
+audio/train/com_08784_01932426206.wav,com_08784_01932426206,es_co_male,com_08784,Bogotá tiene muchísimos parques donde hay conciertos gratuitos,bogotá tiene muchísimos parques donde hay conciertos gratuitos,train,7.105
+audio/train/pef_06136_01731485590.wav,pef_06136_01731485590,es_pe_female,pef_06136,La computadora Dell que te recomiendo tiene novecientos gigas de memoria,la computadora dell que te recomiendo tiene novecientos gigas de memoria,train,4.940
+audio/train/cof_03397_02081495400.wav,cof_03397_02081495400,es_co_female,cof_03397,Este entrenador es muy famoso,este entrenador es muy famoso,train,5.100
+audio/train/com_09334_02111679641.wav,com_09334_02111679641,es_co_male,com_09334,La granizada destruyó toda la plantación de lechuga,la granizada destruyó toda la plantación de lechuga,train,4.521
+audio/train/cof_03034_00586445058.wav,cof_03034_00586445058,es_co_female,cof_03034,El jeroglífico tiene un pez amarillo,el jeroglífico tiene un pez amarillo,train,5.459
+audio/train/pef_05223_00914898086.wav,pef_05223_00914898086,es_pe_female,pef_05223,Voy a llevar a mi sobrino a Disneyworld y quería saber los horarios del parque para planearlo todo muy bien,voy a llevar a mi sobrino a disneyworld y quería saber los horarios del parque para planearlo todo muy bien,train,8.535
+audio/train/pem_03034_00829242953.wav,pem_03034_00829242953,es_pe_male,pem_03034,El caballo está amarrado,el caballo está amarrado,train,3.607
+audio/train/pef_02436_00533477986.wav,pef_02436_00533477986,es_pe_female,pef_02436,¿A qué hora quieres ir al cine?,a qué hora quieres ir al cine,train,4.185
+audio/train/cof_07049_00204332274.wav,cof_07049_00204332274,es_co_female,cof_07049,La nave encalló en los arrecifes,la nave encalló en los arrecifes,train,2.540
+audio/train/com_08421_02132921902.wav,com_08421_02132921902,es_co_male,com_08421,Picasso huyó de España cuando sucedió el golpe de estado.,picasso huyó de españa cuando sucedió el golpe de estado,train,4.480
+audio/train/pef_05223_00681879410.wav,pef_05223_00681879410,es_pe_female,pef_05223,¿Quién subió mejor el video?,quién subió mejor el video,train,2.813
+audio/train/com_08784_00299016004.wav,com_08784_00299016004,es_co_male,com_08784,Quiero transferir dinero vía Paypal,quiero transferir dinero vía paypal,train,4.831
+audio/train/prf_03397_02023362677.wav,prf_03397_02023362677,es_pr_female,prf_03397,La película es en inglés pero esta doblada en español de España,la película es en inglés pero esta doblada en español de españa,train,3.386
+audio/train/pem_02436_01648913745.wav,pem_02436_01648913745,es_pe_male,pem_02436,¿Cuántas personas vas a invitar a la cena?,cuántas personas vas a invitar a la cena,train,3.686
+audio/train/pem_08421_00212702934.wav,pem_08421_00212702934,es_pe_male,pem_08421,Siempre he querido ir a Montevideo.,siempre he querido ir a montevideo,train,4.926
+audio/train/com_02436_01338072514.wav,com_02436_01338072514,es_co_male,com_02436,Quiero saber alguna información curiosa sobre la reina de Inglaterra.,quiero saber alguna información curiosa sobre la reina de inglaterra,train,4.506
+audio/train/pef_02121_01801959173.wav,pef_02121_01801959173,es_pe_female,pef_02121,Los zapatos se estropean con la lluvia torrencial de ayer,los zapatos se estropean con la lluvia torrencial de ayer,train,4.686
+audio/train/com_02436_00571564358.wav,com_02436_00571564358,es_co_male,com_02436,"¿Qué otros programas hay, para más temprano?",qué otros programas hay para más temprano,train,2.269
+audio/train/pef_01208_01035529938.wav,pef_01208_01035529938,es_pe_female,pef_01208,No te entiendo nada,no te entiendo nada,train,3.178
+audio/train/pef_02121_00954100232.wav,pef_02121_00954100232,es_pe_female,pef_02121,"Me han dicho que el director es medio intenso con los actores, que los procesos son bastante largos",me han dicho que el director es medio intenso con los actores que los procesos son bastante largos,train,6.886
+audio/train/pem_04310_01991367623.wav,pem_04310_01991367623,es_pe_male,pem_04310,Los sandwiches están fríos,los sandwiches están fríos,train,3.255
+audio/train/pem_03034_00433969911.wav,pem_03034_00433969911,es_pe_male,pem_03034,Está muy cansado,está muy cansado,train,3.922
+audio/train/pem_00295_01134089975.wav,pem_00295_01134089975,es_pe_male,pem_00295,Los zapatos se estropearon con la lluvia torrencial de ayer,los zapatos se estropearon con la lluvia torrencial de ayer,train,4.881
+audio/train/com_08784_01860495167.wav,com_08784_01860495167,es_co_male,com_08784,He dejado de comer porque tengo miedo de engordar más,he dejado de comer porque tengo miedo de engordar más,train,6.985
+audio/train/com_02436_00207228206.wav,com_02436_00207228206,es_co_male,com_02436,Busca dónde puedo comprar vino espumoso italiano a buen precio.,busca dónde puedo comprar vino espumoso italiano a buen precio,train,3.260
+audio/train/prf_03397_00634999381.wav,prf_03397_00634999381,es_pr_female,prf_03397,Este entrenador es muy famoso,este entrenador es muy famoso,train,3.571
+audio/train/cof_08784_00644291119.wav,cof_08784_00644291119,es_co_female,cof_08784,¿Las ruedas van en la parte de atrás o en la parte de adelante?,las ruedas van en la parte de atrás o en la parte de adelante,train,5.910
+audio/train/cof_03349_01995490661.wav,cof_03349_01995490661,es_co_female,cof_03349,¿Has surfeado alguna vez?,has surfeado alguna vez,train,5.002
+audio/train/cof_09697_00946034591.wav,cof_09697_00946034591,es_co_female,cof_09697,En mi base de datos tengo veintitrés diferentes recomendaciones para pasar un día en el campo,en mi base de datos tengo veintitrés diferentes recomendaciones para pasar un día en el campo,train,10.533
+audio/train/com_03034_00359508017.wav,com_03034_00359508017,es_co_male,com_03034,"Para abrir los poros de la piel lo mejor es ir a un sauna, a un vapor",para abrir los poros de la piel lo mejor es ir a un sauna a un vapor,train,5.891
+audio/train/com_03349_00503313664.wav,com_03349_00503313664,es_co_male,com_03349,La tienda de jabones y perfumes finos tiene regalos para el día de las madres.,la tienda de jabones y perfumes finos tiene regalos para el día de las madres,train,5.289
+audio/train/pem_04310_00538458672.wav,pem_04310_00538458672,es_pe_male,pem_04310,El pijama de rayas es azul,el pijama de rayas es azul,train,3.918
+audio/train/cof_05223_01781367479.wav,cof_05223_01781367479,es_co_female,cof_05223,¿Quiere que se lo mande por mail o por WhatsApp?,quiere que se lo mande por mail o por whatsapp,train,3.931
