@@ -1,0 +1,15 @@
+{
+  "default": "mobilenet_v3_large",
+  "temperature": {
+    "resnet50": 0.7604446411132812,
+    "mobilenet_v3_large": 0.7373920679092407
+  },
+  "classes": [
+    "cardboard",
+    "glass",
+    "metal",
+    "paper",
+    "plastic",
+    "trash"
+  ]
+}

@@ -22,7 +22,7 @@ from ecovoz.vision.model import build_model
 BOOTSTRAP = 2000
 
 
-@torch.inference_mode()
+@torch.no_grad()
 def collect_logits(model, dataset: WasteDataset, device: torch.device) -> tuple[torch.Tensor, np.ndarray]:
     outputs = [model(images.to(device)).float().cpu() for images, _ in DataLoader(dataset, batch_size=64)]
     return torch.cat(outputs), np.array(dataset.labels)

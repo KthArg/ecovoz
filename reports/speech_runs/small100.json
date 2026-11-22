@@ -16,9 +16,9 @@
   "val_corpus": "openslr",
   "parameters": 4137219,
   "best": {
-    "epoch": 50,
-    "cer": 0.4608022805945836,
-    "wer": 0.9932069063119162
+    "epoch": 75,
+    "cer": 0.4519446141315414,
+    "wer": 0.9875459949051797
   },
   "history": [
     {
@@ -165,3 +165,108 @@
       "seconds": 59.2
     },
     {
+      "epoch": 55,
+      "train_loss": 0.01647940754890442,
+      "val_loss": 3.385680122375488,
+      "val_wer": 1.020945372204925,
+      "val_cer": 0.46543473834249643,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta na an patio"
+      },
+      "lr": 0.001,
+      "seconds": 65.7
+    },
+    {
+      "epoch": 60,
+      "train_loss": 0.011265926361083985,
+      "val_loss": 3.4916437911987304,
+      "val_wer": 1.016133597509199,
+      "val_cer": 0.4601405009163103,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an patio"
+      },
+      "lr": 0.001,
+      "seconds": 70.5
+    },
+    {
+      "epoch": 65,
+      "train_loss": 0.004839367866516113,
+      "val_loss": 3.5927976989746093,
+      "val_wer": 0.9971695442966317,
+      "val_cer": 0.454133577682753,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "quienta a an partio"
+      },
+      "lr": 0.001,
+      "seconds": 75.5
+    },
+    {
+      "epoch": 70,
+      "train_loss": 0.0022464823722839356,
+      "val_loss": 3.6916974194844565,
+      "val_wer": 1.008208321539768,
+      "val_cer": 0.45336998574628384,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui inta ma an patio"
+      },
+      "lr": 0.001,
+      "seconds": 80.5
+    },
+    {
+      "epoch": 75,
+      "train_loss": 0.0017152473330497742,
+      "val_loss": 3.777709223429362,
+      "val_wer": 0.9875459949051797,
+      "val_cer": 0.4519446141315414,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "quieinta a an patio"
+      },
+      "lr": 0.001,
+      "seconds": 87.3
+    },
+    {
+      "epoch": 80,
+      "train_loss": 0.0013797502219676972,
+      "val_loss": 3.8509354146321613,
+      "val_wer": 1.0107557316727993,
+      "val_cer": 0.4528100183262065,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.000992951796070377,
+      "seconds": 93.7
+    },
+    {
+      "epoch": 85,
+      "train_loss": 0.0010815301537513732,
+      "val_loss": 3.907852700551351,
+      "val_wer": 1.0198131899235776,
+      "val_cer": 0.454133577682753,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.0009646656233752895,
+      "seconds": 99.8
+    },
+    {
+      "epoch": 90,
+      "train_loss": 0.0009544823318719864,
+      "val_loss": 3.962755387624105,
+      "val_wer": 1.022360600056609,
+      "val_cer": 0.4537772347790674,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.0009159697281294826,
+      "seconds": 104.6
+    }
+  ]
+}
