@@ -1,0 +1,47 @@
+{
+  "downloaded": 22967,
+  "dropped_by_text": 0,
+  "dropped_to_avoid_leakage": 2077,
+  "dropped_by_duration": 376,
+  "splits": {
+    "train": {
+      "clips": 18779,
+      "hours": 20.58,
+      "speakers": 67,
+      "per_source": {
+        "es_co_female": 1875,
+        "es_co_male": 1989,
+        "es_pe_female": 1995,
+        "es_pe_male": 2188,
+        "es_pr_female": 300,
+        "tux": 10432
+      }
+    },
+    "val": {
+      "clips": 883,
+      "hours": 1.025,
+      "speakers": 6,
+      "per_source": {
+        "es_co_female": 60,
+        "es_co_male": 60,
+        "es_pe_female": 60,
+        "es_pe_male": 60,
+        "es_pr_female": 60,
+        "tux": 583
+      }
+    },
+    "test": {
+      "clips": 852,
+      "hours": 0.908,
+      "speakers": 6,
+      "per_source": {
+        "es_co_female": 60,
+        "es_co_male": 60,
+        "es_pe_female": 38,
+        "es_pe_male": 60,
+        "es_pr_female": 60,
+        "tux": 574
+      }
+    }
+  }
+}
