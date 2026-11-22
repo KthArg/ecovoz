@@ -1,7 +1,7 @@
 @echo off
 rem Prepara el entorno la primera vez y abre EcoVoz.
 cd /d "%~dp0"
-if exist .venv\Scripts\python.exe goto run
+if exist .venv\listo goto run
 python -m venv .venv || goto error
 where nvidia-smi >nul 2>nul
 if not errorlevel 1 (
@@ -9,6 +9,7 @@ if not errorlevel 1 (
 )
 .venv\Scripts\python -m pip install -r requirements.txt || goto error
 .venv\Scripts\python -m pip install -e . --no-deps || goto error
+type nul > .venv\listo
 
 :run
 .venv\Scripts\python app.py --open %*
