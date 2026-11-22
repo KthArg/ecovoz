@@ -16,9 +16,9 @@
   "val_corpus": "openslr",
   "parameters": 4137219,
   "best": {
-    "epoch": 75,
-    "cer": 0.4519446141315414,
-    "wer": 0.9875459949051797
+    "epoch": 120,
+    "cer": 0.45021380574221137,
+    "wer": 1.014435324087178
   },
   "history": [
     {
@@ -267,6 +267,162 @@
       },
       "lr": 0.0009159697281294826,
       "seconds": 104.6
+    },
+    {
+      "epoch": 95,
+      "train_loss": 0.0008649519830942154,
+      "val_loss": 4.027030906677246,
+      "val_wer": 1.0217945089159355,
+      "val_cer": 0.4544899205864386,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.0008490500457989976,
+      "seconds": 109.5
+    },
+    {
+      "epoch": 100,
+      "train_loss": 0.0008388199657201767,
+      "val_loss": 4.064244321187338,
+      "val_wer": 1.014435324087178,
+      "val_cer": 0.4525045815516188,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.0007669105689430436,
+      "seconds": 114.2
+    },
+    {
+      "epoch": 105,
+      "train_loss": 0.0006024897843599319,
+      "val_loss": 4.10963331858317,
+      "val_wer": 1.0285876026040193,
+      "val_cer": 0.45209733251883527,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an patio"
+      },
+      "lr": 0.0006732384994236083,
+      "seconds": 119.0
+    },
+    {
+      "epoch": 110,
+      "train_loss": 0.0006224036589264869,
+      "val_loss": 4.13660514831543,
+      "val_wer": 1.0311350127370507,
+      "val_cer": 0.45230095703522705,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "quienta a an patio"
+      },
+      "lr": 0.0005722387316759707,
+      "seconds": 123.6
+    },
+    {
+      "epoch": 115,
+      "train_loss": 0.0004962056502699852,
+      "val_loss": 4.168076680501302,
+      "val_wer": 1.025757146900651,
+      "val_cer": 0.45240276929342293,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.0004684450970070007,
+      "seconds": 128.3
+    },
+    {
+      "epoch": 120,
+      "train_loss": 0.0004934567585587502,
+      "val_loss": 4.154796714782715,
+      "val_wer": 1.014435324087178,
+      "val_cer": 0.45021380574221137,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.0003665168420744905,
+      "seconds": 133.0
+    },
+    {
+      "epoch": 125,
+      "train_loss": 0.000492311529815197,
+      "val_loss": 4.1720753733317055,
+      "val_wer": 1.0181149165015568,
+      "val_cer": 0.4517409896151497,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.00027102947753131917,
+      "seconds": 137.7
+    },
+    {
+      "epoch": 130,
+      "train_loss": 0.00047834482043981555,
+      "val_loss": 4.174085172017415,
+      "val_wer": 1.0127370506651572,
+      "val_cer": 0.4518428018733455,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.00018626938553886,
+      "seconds": 142.2
+    },
+    {
+      "epoch": 135,
+      "train_loss": 0.00047850366681814196,
+      "val_loss": 4.191751505533854,
+      "val_wer": 1.0169827342202094,
+      "val_cer": 0.4518428018733455,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 0.00011604140612019908,
+      "seconds": 147.0
+    },
+    {
+      "epoch": 140,
+      "train_loss": 0.0005042913183569909,
+      "val_loss": 4.197034912109375,
+      "val_wer": 1.0220775544862724,
+      "val_cer": 0.45230095703522705,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 6.349803970981345e-05,
+      "seconds": 151.7
+    },
+    {
+      "epoch": 145,
+      "train_loss": 0.0004166953265666962,
+      "val_loss": 4.199181569417318,
+      "val_wer": 1.0212284177752617,
+      "val_cer": 0.4519446141315414,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 3.099793291563379e-05,
+      "seconds": 156.5
+    },
+    {
+      "epoch": 150,
+      "train_loss": 0.0005573031678795814,
+      "val_loss": 4.202134145100912,
+      "val_wer": 1.0232097367676196,
+      "val_cer": 0.4519955202606394,
+      "example": {
+        "reference": "quién ganará el partido",
+        "hypothesis": "qui enta a an partio"
+      },
+      "lr": 2e-05,
+      "seconds": 161.3
     }
   ]
 }
