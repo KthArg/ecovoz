@@ -1,0 +1,65 @@
+{
+  "experiment": "tux",
+  "options": {
+    "model": {
+      "rnn_units": 512,
+      "rnn_layers": 5,
+      "dropout": 0.2
+    },
+    "train": "tux",
+    "select": "tux",
+    "epochs": 35,
+    "lr": 0.0004,
+    "augment": true
+  },
+  "train_clips": 10432,
+  "val_clips": 583,
+  "val_corpus": "tux",
+  "parameters": 23239939,
+  "best": {
+    "epoch": 3,
+    "cer": 0.12111645060348682,
+    "wer": 0.569683257918552
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 2.4563821429855253,
+      "val_loss": 1.1248386998119322,
+      "val_wer": 0.9766214177978884,
+      "val_cer": 0.3968484577559231,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "laea"
+      },
+      "lr": 0.00022000000000000003,
+      "seconds": 60.2
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.2419641412840299,
+      "val_loss": 0.5070434884387061,
+      "val_wer": 0.6805429864253394,
+      "val_cer": 0.16478542691104156,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "ila hertía"
+      },
+      "lr": 0.0004,
+      "seconds": 107.4
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.8740867193491181,
+      "val_loss": 0.3649267553260764,
+      "val_wer": 0.569683257918552,
+      "val_cer": 0.12111645060348682,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la harlía"
+      },
+      "lr": 0.0004,
+      "seconds": 154.6
+    }
+  ]
+}
