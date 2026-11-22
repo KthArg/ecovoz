@@ -1,0 +1,30 @@
+\section{Marco teórico}\label{sec:teoria}
+
+\subsection{Transfer learning}
+Las primeras capas de una red convolucional aprenden bordes y texturas útiles para casi cualquier tarea visual, y las últimas se especializan en las clases de origen~\cite{yosinski}. Por eso es posible reutilizar una red entrenada con ImageNet~\cite{imagenet}, reemplazar su cabeza y entrenar solo una parte. Congelar más capas reduce el sobreajuste con pocos datos, y descongelarlas permite adaptar las características al dominio nuevo.
+
+ResNet-50~\cite{resnet} aprende residuos $\mathcal{F}(x)$ y produce $\mathcal{F}(x)+x$, lo que permite entrenar redes profundas sin que el gradiente se degrade. MobileNetV3~\cite{mobilenet} usa convoluciones separables en profundidad, bloques residuales invertidos y atención por canal para reducir operaciones y parámetros.
+
+\subsection{Connectionist Temporal Classification}
+Sea $y^t_k$ la probabilidad del símbolo $k$ en el paso $t$, con un alfabeto ampliado con el blanco $\epsilon$. Un camino $\pi$ asigna un símbolo a cada paso, y la función $\mathcal{B}$ lo reduce a texto uniendo repeticiones y eliminando blancos. CTC~\cite{ctc} define la probabilidad de una transcripción $\ell$ como la suma sobre todos sus caminos:
+\begin{equation}
+p(\ell\mid x)=\sum_{\pi:\,\mathcal{B}(\pi)=\ell}\ \prod_{t=1}^{T} y^t_{\pi_t}.
+\end{equation}
+La suma se calcula con programación dinámica en $O(T|\ell|)$ y la pérdida es $-\ln p(\ell\mid x)$. Así se entrena sin etiquetar en qué instante suena cada letra. El blanco permite representar letras dobles: para producir ``ll'' hace falta al menos un $\epsilon$ entre ambas.
+
+\subsection{Decodificación}
+La decodificación voraz toma el símbolo más probable de cada paso. Es rápida, pero ignora que varios caminos suman para un mismo texto. La búsqueda por haz sobre prefijos~\cite{beam} suma esos caminos y admite un modelo de lenguaje, con el criterio
+\begin{equation}
+\hat{\ell}=\arg\max_{\ell}\ \ln p(\ell\mid x)+\alpha\ln p_{LM}(\ell)+\beta|\ell|,
+\end{equation}
+donde $\alpha$ pondera el lenguaje y $\beta$ compensa su preferencia por textos cortos.
+
+\subsection{DeepSpeech2}
+DeepSpeech2~\cite{ds2} convierte un espectrograma en probabilidades de caracteres con convoluciones 2D, que capturan patrones locales de tiempo y frecuencia y reducen la resolución, seguidas de capas recurrentes bidireccionales, que aportan contexto en ambos sentidos. Es la arquitectura estudiada en el curso~\cite{keras-ctc}.
+
+\subsection{Métricas}
+En clasificación se usan accuracy, precisión, recall y F1. El F1 macro promedia las clases sin ponderar, de modo que una clase minoritaria pesa igual que las demás. En voz se usa la distancia de edición entre referencia e hipótesis:
+\begin{equation}
+\mathrm{WER}=\frac{S+D+I}{N},
+\end{equation}
+donde $S$, $D$ e $I$ son sustituciones, borrados e inserciones de palabras y $N$ las palabras de referencia. El CER es equivalente sobre caracteres. WER castiga una palabra completa por una sola letra equivocada, por lo que suele ser bastante mayor.

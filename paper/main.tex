@@ -1,0 +1,47 @@
+% Paper de EcoVoz. Las cifras, tablas y figuras salen de scripts/make_report.py.
+% Compilar:  tectonic main.tex   (o subir la carpeta a Overleaf junto con ../reports/figures)
+\documentclass[conference]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla,es-noshorthands]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{xurl}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{../reports/figures/}{figures/}}
+\input{generated/numbers}
+
+% Carnés: se definen en carnes.tex, que no se publica en el repositorio.
+\newcommand{\carneA}{}
+\newcommand{\carneB}{}
+\newcommand{\carneC}{}
+\IfFileExists{carnes.tex}{\input{carnes}}{}
+
+\begin{document}
+
+\title{EcoVoz: clasificación visual de residuos y reconocimiento de voz en español con CTC en una aplicación multimodal}
+
+\author{
+\IEEEauthorblockN{Anthony Jafeth Arias Robleto\carneA, Randy Espinoza Downing\carneB, Kenneth Jhoan Araya Arguedas\carneC}
+\IEEEauthorblockA{Escuela de Ingeniería en Computación, Instituto Tecnológico de Costa Rica\\
+Campus Tecnológico Local San Carlos\\
+IC-6200 Inteligencia Artificial, II Semestre 2026. Prof. Ing. Efrén Jiménez Delgado}}
+
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/method}
+\input{sections/results}
+\input{sections/conclusions}
+\input{sections/declaration}
+\input{sections/references}
+
+\end{document}

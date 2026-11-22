@@ -1,0 +1,104 @@
+\section{Metodología}\label{sec:metodo}
+
+\subsection{Conjunto de imágenes}
+Se unieron TrashNet~\cite{trashnet} (licencia MIT, fondo blanco) y las seis clases equivalentes de RealWaste~\cite{realwaste} (CC BY-NC-SA 4.0, residuos reales de un centro de recuperación): \ImgTotal{} imágenes etiquetadas por sus autores (Fig.~\ref{fig:examples}). Mezclar ambas fuentes evita depender de un único fondo.
+
+Los duplicados exactos se eliminaron por hash de píxeles. Como ambos conjuntos contienen varias fotos del mismo objeto, una división al azar filtraría información. Se calcularon embeddings de ResNet-50 preentrenada y se unieron en componentes conexas los pares de una misma fuente con similitud coseno de 0,88 o más, umbral elegido al inspeccionar pares reales. Quedaron \ImgGroups{} grupos, con \ImgInGroups{} imágenes en grupos de dos o más. Cada grupo se asignó completo a una partición 70/15/15, estratificada por clase y fuente (Tabla~\ref{tab:images}).
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.94\textwidth]{dataset_examples.pdf}
+\caption{Ejemplos de entrenamiento por clase y fuente. El fondo y la condición de los objetos cambian entre los dos conjuntos.}
+\label{fig:examples}
+\end{figure*}
+
+\begin{table}[t]
+\centering
+\caption{Imágenes por clase y partición}
+\label{tab:images}
+\input{generated/tab_images}
+\end{table}
+
+\subsection{Conjunto de voz}
+Se combinaron dos fuentes. La primera es una muestra aleatoria de 12\,000 audios de TUX~\cite{tux}, el conjunto de la clase del curso, de un solo locutor. La segunda son los corpus latinoamericanos OpenSLR 72, 73 y 74~\cite{openslr} (Colombia, Perú y Puerto Rico, CC BY-SA 4.0). Todo se convirtió a WAV mono de 16\,kHz y 16 bits, se recortó el silencio de los extremos y se conservaron fragmentos de 0,7 a 12\,s. Las transcripciones se normalizaron a minúsculas, sin puntuación y con un alfabeto de 34 símbolos que conserva tildes, \emph{ü} y \emph{ñ}. El resultado son \AudioTotal{} audios y \AudioHours{} horas (Tabla~\ref{tab:audio}).
+
+En OpenSLR una misma frase la leen hasta 94 personas. Se reservó un locutor por país y sexo para validación y otro para prueba, y se retiró del entrenamiento toda frase reservada, sin importar quién la leyera. Por este control y por los demás audios de los locutores reservados se descartaron \AudioLeak{} audios. En TUX la separación es por frase, y por eso sus métricas se reportan aparte: miden frases nuevas, pero no locutores nuevos.
+
+\begin{table}[t]
+\centering
+\caption{Audios por partición}
+\label{tab:audio}
+\input{generated/tab_audio}
+\end{table}
+
+\subsection{Modelos de visión y ajuste fino}
+Se compararon ResNet-50 y MobileNetV3-Large con pesos de ImageNet, la misma partición, semilla, preprocesamiento (lado corto de 256 y recorte de 224 píxeles) y presupuesto de épocas. En ambas se reemplazó la cabeza por una capa de seis salidas con dropout de 0,3. Para justificar la estrategia de ajuste se probaron cuatro:
+\begin{itemize}
+\item \emph{solo cabeza}: extractor congelado;
+\item \emph{últimos bloques, sin aumento}: se liberan \texttt{layer3} y \texttt{layer4} en ResNet o los bloques 11 a 16 en MobileNet;
+\item \emph{últimos bloques, con aumento};
+\item \emph{red completa, con aumento}.
+\end{itemize}
+Las tres últimas entrenan primero la cabeza durante cuatro épocas con tasa $10^{-3}$, para que gradientes aleatorios no destruyan los pesos preentrenados. Luego ajustan el extractor con una tasa menor ($1{,}5\times10^{-4}$ si es parcial, $10^{-4}$ si es completo) que la de la cabeza ($5\times10^{-4}$). Las capas congeladas mantienen fijas sus estadísticas de BatchNorm.
+
+Se usó AdamW, descenso coseno, hasta 30 épocas con parada temprana de paciencia 8, suavizado de etiquetas de 0,05 y pesos de clase proporcionales a la raíz de la frecuencia inversa. El aumento simula una cámara: recorte aleatorio, volteos, rotación, perspectiva, luz, desenfoque y borrado parcial. La estrategia se eligió por F1 macro de validación. La confianza se calibró en validación con \emph{temperature scaling}~\cite{calibration}.
+
+\subsection{Modelo de voz}
+La entrada es un log-mel espectrograma de 80 bandas (ventana de 25\,ms, paso de 10\,ms, Fig.~\ref{fig:spectrogram}), con preénfasis y normalización por enunciado que ignora el relleno del lote. La red sigue el DeepSpeech2 de clase: dos convoluciones de $11\times41$ y $11\times21$ (tiempo por frecuencia) con 32 filtros y pasos $(2,2)$ y $(1,2)$, cinco GRU bidireccionales de 512 unidades, una capa densa y salida log-softmax, para un total de \SpeechParams{} millones de parámetros. La salida tiene 50 pasos por segundo. La implementación es en PyTorch y no en Keras porque TensorFlow no ofrece GPU en Windows nativo.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{spectrogram.pdf}
+\caption{Log-mel normalizado de un audio de prueba.}
+\label{fig:spectrogram}
+\end{figure}
+
+Se entrenaron cinco experimentos, todos seleccionados por CER de validación:
+\begin{enumerate}
+\item 100 audios latinoamericanos desde cero, con una red reducida (tres GRU de 256);
+\item los mismos 100 audios con aumento;
+\item preentrenamiento solo con TUX;
+\item los mismos 100 audios partiendo del preentrenamiento;
+\item modelo final: los \AudioTrain{} audios, partiendo del preentrenamiento.
+\end{enumerate}
+El aumento combina cambio de velocidad ($\pm$12\,\%), ruido con SNR de 10 a 35\,dB y SpecAugment~\cite{specaugment}. Se usó AdamW con calentamiento, meseta y descenso coseno, recorte de gradiente en 5 y precisión mixta, calculando CTC en 32 bits.
+
+El modelo de lenguaje es un 6-grama de caracteres interpolado, contado solo con textos de entrenamiento. Los valores $\alpha=\Alpha$ y $\beta=\Beta$ se eligieron en validación.
+
+\subsection{Aplicación}
+La Fig.~\ref{fig:architecture} resume la aplicación, hecha con Gradio~\cite{gradio}. Tiene pestañas para imagen (archivo, cámara o portapapeles), video cuadro a cuadro, cámara en vivo, audio (micrófono o archivo) y resultados. En video se clasifican todos los cuadros y solo la etiqueta mostrada se suaviza con una media móvil exponencial. Si la confianza calibrada no alcanza el umbral, la aplicación responde que no está segura. Los audios de más de 10\,s se cortan en la pausa más silenciosa cercana al límite. Los modelos se guardan en 16 bits y nada se envía a Internet.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners=2pt, align=center, font=\scriptsize, minimum height=7mm, text width=22mm},
+  flow/.style={-{Latex[length=1.6mm]}}, node distance=4mm]
+\node[box] (image) {Imagen};
+\node[box, right=of image] (video) {Video o cámara};
+\node[box, right=of video] (audio) {Audio};
+\node[box, below=of image] (crop) {Recorte 224 y normalización};
+\node[box, below=of video] (frames) {Cada cuadro};
+\node[box, below=of audio] (mel) {16 kHz y log-mel};
+\node[box, below=of crop, xshift=13mm, text width=35mm] (cnn) {ResNet-50 o MobileNetV3-L};
+\node[box, below=of mel] (ds) {DeepSpeech2};
+\node[box, below=of cnn, text width=35mm] (cal) {Calibración, umbral y suavizado};
+\node[box, below=of ds] (beam) {Beam search + LM};
+\node[box, below=of cal, text width=35mm] (class) {Clase y recipiente};
+\node[box, below=of beam] (text) {Transcripción};
+\draw[flow] (image) -- (crop);
+\draw[flow] (video) -- (frames);
+\draw[flow] (audio) -- (mel);
+\draw[flow] (crop) -- (cnn);
+\draw[flow] (frames) -- (cnn);
+\draw[flow] (mel) -- (ds);
+\draw[flow] (cnn) -- (cal);
+\draw[flow] (ds) -- (beam);
+\draw[flow] (cal) -- (class);
+\draw[flow] (beam) -- (text);
+\end{tikzpicture}
+\caption{Flujo de las tres modalidades dentro de la aplicación.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Protocolo de evaluación y reproducibilidad}
+La prueba no interviene en entrenamiento, selección de estrategia, calibración ni ajuste del decodificador. Los intervalos de 95\,\% se obtienen con bootstrap de 2000 réplicas y los clasificadores se comparan con la prueba exacta de McNemar~\cite{mcnemar}. Se fijó la semilla 42 en Python, NumPy y PyTorch, aunque las operaciones en GPU no son deterministas bit a bit. Los manifiestos identifican cada ejemplo. La latencia se midió en el equipo de la demostración (\HwCpu{}, \HwGpu{}).

@@ -1,0 +1,14 @@
+\section{Introducción}
+
+Separar los residuos en la fuente exige una decisión pequeña que se repite muchas veces: en cuál recipiente va cada objeto. Un asistente que observe el objeto y escuche a la persona puede apoyar esa decisión, pero necesita modelos de dos dominios distintos. La visión por computador dispone de extractores preentrenados que se adaptan con pocas imágenes. El reconocimiento de voz debe, además, resolver la alineación entre una señal larga y un texto corto, cuya correspondencia temporal no se conoce.
+
+Este trabajo presenta \emph{EcoVoz}, una aplicación local que integra tres modalidades: imagen, video clasificado cuadro a cuadro y audio transcrito a texto. Se plantean tres preguntas:
+\begin{enumerate}
+\item ¿cuánto aporta cada nivel de ajuste fino en transfer learning, y se justifica una red grande (ResNet-50) frente a una móvil (MobileNetV3-Large)?
+\item ¿qué puede aprender un modelo CTC con solo 100 audios, y cuánto ayudan el aumento de datos y el preentrenamiento?
+\item ¿alcanza un equipo de escritorio para responder en tiempo casi real con las tres modalidades?
+\end{enumerate}
+
+Los aportes son una comparación de ocho configuraciones de visión sobre una misma partición agrupada por objeto, una serie de cinco experimentos de voz evaluados sobre los mismos locutores no vistos, una medición de latencia de punta a punta en GPU y CPU, y un repositorio que reproduce cada cifra de este documento.
+
+El resto del artículo se organiza así: la Sección~\ref{sec:teoria} resume el marco teórico, la Sección~\ref{sec:metodo} describe datos, modelos, entrenamiento y aplicación, la Sección~\ref{sec:resultados} analiza los resultados y la Sección~\ref{sec:conclusiones} concluye.
