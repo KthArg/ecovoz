@@ -131,7 +131,12 @@ def build_interface(services: Services) -> gr.Blocks:
                     scores = gr.Label(num_top_classes=6, label="Probabilidades")
             examples = sorted((SAMPLES / "images").glob("*.jpg"))
             if examples:
-                gr.Examples([str(path) for path in examples], inputs=image, label="Ejemplos de la partición de prueba")
+                gr.Examples(
+                    [str(path) for path in examples],
+                    inputs=image,
+                    examples_per_page=12,
+                    label="Ejemplos de la partición de prueba",
+                )
             for trigger in (image.change, arch.change, threshold.release):
                 trigger(classify_image, [image, arch, threshold], [scores, verdict], show_progress="hidden")
 
@@ -215,7 +220,7 @@ def main() -> None:
         server_port=args.port,
         inbrowser=args.open,
         share=False,
-        theme=gr.themes.Soft(primary_hue="green"),
+        theme=gr.themes.Soft(primary_hue="green", font=["Segoe UI", "system-ui", "sans-serif"]),
         css=CSS,
         allowed_paths=[str(SAMPLES), str(FIGURES)],
     )

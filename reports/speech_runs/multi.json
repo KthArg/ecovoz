@@ -1,0 +1,66 @@
+{
+  "experiment": "multi",
+  "options": {
+    "model": {
+      "rnn_units": 512,
+      "rnn_layers": 5,
+      "dropout": 0.2
+    },
+    "train": "all",
+    "select": "all",
+    "epochs": 50,
+    "lr": 0.0004,
+    "augment": true,
+    "init": "tux"
+  },
+  "train_clips": 18779,
+  "val_clips": 883,
+  "val_corpus": "all",
+  "parameters": 23239939,
+  "best": {
+    "epoch": 3,
+    "cer": 0.06782596146908146,
+    "wer": 0.27718193446816886
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6026720339208691,
+      "val_loss": 0.256732987385509,
+      "val_wer": 0.28830069861261437,
+      "val_cer": 0.07441013060105346,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la ergía"
+      },
+      "lr": 0.00022028938906752413,
+      "seconds": 109.8
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4931045711799084,
+      "val_loss": 0.25168275833129883,
+      "val_wer": 0.29587720161369674,
+      "val_cer": 0.07460855761598961,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 204.7
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.46718024039485595,
+      "val_loss": 0.22775180450517216,
+      "val_wer": 0.27718193446816886,
+      "val_cer": 0.06782596146908146,
+      "example": {
+        "reference": "y la erguía",
+        "hypothesis": "y la erguía"
+      },
+      "lr": 0.0004,
+      "seconds": 304.1
+    }
+  ]
+}
