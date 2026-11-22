@@ -1,0 +1,86 @@
+[
+  {
+    "from_frame": 0,
+    "to_frame": 62,
+    "label": "cardboard",
+    "source": "trashnet",
+    "original": "dataset-resized/cardboard/cardboard335.jpg"
+  },
+  {
+    "from_frame": 62,
+    "to_frame": 124,
+    "label": "glass",
+    "source": "trashnet",
+    "original": "dataset-resized/glass/glass184.jpg"
+  },
+  {
+    "from_frame": 124,
+    "to_frame": 186,
+    "label": "metal",
+    "source": "trashnet",
+    "original": "dataset-resized/metal/metal10.jpg"
+  },
+  {
+    "from_frame": 186,
+    "to_frame": 248,
+    "label": "paper",
+    "source": "trashnet",
+    "original": "dataset-resized/paper/paper326.jpg"
+  },
+  {
+    "from_frame": 248,
+    "to_frame": 310,
+    "label": "plastic",
+    "source": "trashnet",
+    "original": "dataset-resized/plastic/plastic297.jpg"
+  },
+  {
+    "from_frame": 310,
+    "to_frame": 372,
+    "label": "trash",
+    "source": "trashnet",
+    "original": "dataset-resized/trash/trash22.jpg"
+  },
+  {
+    "from_frame": 372,
+    "to_frame": 434,
+    "label": "cardboard",
+    "source": "realwaste",
+    "original": "realwaste-main/RealWaste/Cardboard/Cardboard_21.jpg"
+  },
+  {
+    "from_frame": 434,
+    "to_frame": 496,
+    "label": "glass",
+    "source": "realwaste",
+    "original": "realwaste-main/RealWaste/Glass/Glass_404.jpg"
+  },
+  {
+    "from_frame": 496,
+    "to_frame": 558,
+    "label": "metal",
+    "source": "realwaste",
+    "original": "realwaste-main/RealWaste/Metal/Metal_178.jpg"
+  },
+  {
+    "from_frame": 558,
+    "to_frame": 620,
+    "label": "paper",
+    "source": "realwaste",
+    "original": "realwaste-main/RealWaste/Paper/Paper_61.jpg"
+  },
+  {
+    "from_frame": 620,
+    "to_frame": 682,
+    "label": "plastic",
+    "source": "realwaste",
+    "original": "realwaste-main/RealWaste/Plastic/Plastic_22.jpg"
+  },
+  {
+    "from_frame": 682,
+    "to_frame": 744,
+    "label": "trash",
+    "source": "realwaste",
+    "original": "realwaste-main/RealWaste/Miscellaneous Trash/Miscellaneous Trash_421.jpg"
+  }
+]

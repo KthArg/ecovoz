@@ -60,8 +60,8 @@ def one_hot(indices):
 
 
 def test_decoders_collapse_repeats_and_respect_blanks():
-    h, o, l, a = text.encode("hola")
-    path = one_hot([h, h, 0, o, l, 0, l, a, a])
+    h, o, ele, a = text.encode("hola")
+    path = one_hot([h, h, 0, o, ele, 0, ele, a, a])
     assert greedy_decode(path) == "holla"
     assert beam_search(path) == "holla"
 
