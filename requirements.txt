@@ -1,0 +1,11 @@
+# Aplicación e inferencia (Python 3.11 o superior; desarrollado con 3.14.2).
+# Para usar GPU NVIDIA instale antes PyTorch con CUDA:
+#   pip install torch==2.14.1 torchvision==0.29.1 --index-url https://download.pytorch.org/whl/cu130
+torch==2.14.1
+torchvision==0.29.1
+numpy==2.5.4
+scipy==1.18.1
+soundfile==0.14.0
+opencv-python-headless==5.1.0.95
+pillow==13.0.0
+gradio==6.32.0

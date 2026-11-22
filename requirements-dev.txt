@@ -1,0 +1,9 @@
+# Entrenamiento, evaluación, figuras y pruebas.
+-r requirements.txt
+scikit-learn==1.9.1
+matplotlib==3.11.2
+jiwer==4.0.0
+pytest==9.2.0
+ruff==0.17.6
+python-pptx==1.0.2
+pypdfium2==5.15.2
