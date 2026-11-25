@@ -41,7 +41,7 @@ La aplicación también funciona solo con CPU (`--device cpu`). Las latencias de
 | Audio | grabar o cargar audio: transcripción, salida CTC sin corregir y latencia |
 | Resultados | métricas y figuras de la evaluación |
 
-En `samples/` hay imágenes, audios y un video de prueba.
+En `samples/` hay imágenes, audios, un video de prueba generado y dos videos grabados por el equipo.
 
 ## Qué se entrenó en este proyecto
 

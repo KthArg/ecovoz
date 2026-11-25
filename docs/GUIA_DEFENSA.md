@@ -94,7 +94,7 @@ TensorFlow no usa GPU en Windows nativo desde la versión 2.11. La arquitectura 
 Log-mel en lugar de la magnitud STFT, longitudes reales en CTC (el notebook usa el largo con relleno), alfabeto con tildes y eñe, aumento de datos, beam search con modelo de lenguaje y partición por locutor y frase. En el notebook el alfabeto es el inglés y pierde las tildes.
 
 **¿El video es propio?**
-El incluido es un montaje que generamos con fotos de prueba en movimiento, no una grabación. Si el equipo graba uno, se carga en la pestaña Video.
+Sí: grabamos con el celular una botella plástica y un cuaderno (`samples/video/propio_*.mp4`). MobileNet acertó todos los cuadros de la botella y dos tercios de los del cuaderno; ResNet, entrenado sin aumento, falló casi todo. También hay un montaje generado con fotos de prueba, que sirve para medir porque se sabe qué objeto hay en cada cuadro. Para evaluar otro video: `python scripts/evaluate_video.py video.mp4 --label plastic`.
 
 **¿Por qué falla con mi objeto o con otro fondo?**
 Los datos tienen fondos lisos y un objeto por foto. Es un clasificador, no un detector: siempre mira el centro del cuadro y no tiene una clase "ningún objeto". Por eso existe el umbral de confianza.

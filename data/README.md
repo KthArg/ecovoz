@@ -64,6 +64,8 @@ Los conteos están en `reports/data_audio.json`.
 
 `samples/video/montaje_prueba.mp4` lo generamos con `scripts/build_samples.py`: doce fotos de la **partición de prueba** (seis clases por dos fuentes) con movimiento de cámara, giro y cambios de luz simulados. Su archivo `.json` trae la etiqueta de cada tramo, lo que permite medir la exactitud por cuadro. Es un montaje y no una grabación con cámara. No sustituye al conjunto de imágenes.
 
+`samples/video/propio_botella.mp4` y `samples/video/propio_cuaderno.mp4` los grabó el equipo con un celular (480x864, 30 cuadros/s, sin audio y sin personas): una botella plástica y un cuaderno, etiquetados como `plastic` y `paper`. No se usaron para entrenar ni para ajustar. Sus resultados están en `reports/own_video/` y se reproducen con `scripts/evaluate_video.py`.
+
 ## Personas y consentimiento
 
 No se recolectaron datos propios de personas. Las voces vienen de corpus públicos, y los identificadores de locutor de OpenSLR son anónimos. La aplicación procesa la cámara y el micrófono localmente y no envía nada a Internet.

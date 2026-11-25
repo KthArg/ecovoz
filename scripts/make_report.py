@@ -359,6 +359,17 @@ def tables(data_images, data_audio, vision, vision_runs, speech, speech_runs, la
     write_table("tab_latency", "llr", ["Tarea", "Equipo", "Mediana / p95"], rows)
 
 
+def own_video_macros() -> dict:
+    """Exactitud por cuadro en los videos grabados por el equipo (scripts/evaluate_video.py)."""
+    values = {}
+    for video, name in (("propio_botella", "Bottle"), ("propio_cuaderno", "Notebook")):
+        for arch, short in (("mobilenet_v3_large", "Mob"), ("resnet50", "Res")):
+            result = read_json(REPORTS / "own_video" / f"{video}_{arch}.json")
+            values[f"Own{name}{short}"] = percent(result["frame_accuracy"])
+            values[f"Own{name}Frames"] = str(result["frames"])
+    return values
+
+
 def macros(data_images, data_audio, vision, speech, speech_runs, latency) -> None:
     resnet, mobile = (vision["models"][arch] for arch in ARCHITECTURES)
     test, slow = speech["test"], latency["devices"]["cpu"]
@@ -402,6 +413,7 @@ def macros(data_images, data_audio, vision, speech, speech_runs, latency) -> Non
         "VideoFps": number(fast["video"][vision["default"]]["fps"]),
         "VideoFpsCpu": number(slow["video"][vision["default"]]["fps"]),
         "VideoAcc": percent(fast["video"][vision["default"]]["frame_accuracy"]),
+        **own_video_macros(),
         "AudioLat": number(fast["audio_ms"]["p95"] / 1000, 2),
         "AudioLatCpu": number(slow["audio_ms"]["p95"] / 1000, 2),
         "HwCpu": tex(latency["hardware"]["cpu"].strip()),

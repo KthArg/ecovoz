@@ -66,7 +66,7 @@ def main() -> None:
         "frame_accuracy": sum(got == want for got, want in scored) / len(scored) if scored else None,
         "frames_with_label": len(scored),
     }
-    write_json(REPORTS / "own_video" / f"{args.video.stem}.json", result)
+    write_json(REPORTS / "own_video" / f"{args.video.stem}_{args.arch}.json", result)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

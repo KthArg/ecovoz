@@ -265,16 +265,30 @@ def build() -> None:
     add_text(slide, "F1 macro en validación (%). El eje empieza en 70.", 0.7, 6.45, 9, 0.4, 12, MUTED)
 
     slide = deck.slide(
-        "La red móvil iguala a la red grande",
+        "En prueba empatan; con video real gana MobileNet",
         f"[Randy, 1:00] En prueba MobileNet obtuvo {percent(mobile['test']['accuracy'])} y ResNet "
         f"{percent(resnet['test']['accuracy'])}. La prueba de McNemar da p={decimal(vision['mcnemar']['p_value'], 3)}: "
-        "la diferencia no es significativa. Elegimos MobileNet porque ganó en validación y pesa cinco veces menos. "
+        "la diferencia no es significativa. Elegimos MobileNet porque ganó en validación y pesa cinco veces "
+        "menos. Y en los videos que grabamos con el celular la diferencia fue enorme: MobileNet, entrenada "
+        "con aumento de datos, acertó casi todo; ResNet, sin aumento, falló casi todo. "
         "El plástico es la clase con más fallos: se confunde con metal y vidrio por el brillo y la transparencia.",
     )
     stat(slide, percent(mobile["test"]["accuracy"]), "MobileNetV3: accuracy en prueba", 0.7, 1.6, 3.7, color=DARK, ink=WHITE)
     stat(slide, percent(resnet["test"]["accuracy"]), "ResNet-50: accuracy en prueba", 0.7, 3.45, 3.7)
     p_value = decimal(vision["mcnemar"]["p_value"], 2)
-    verdict = f"McNemar p = {p_value}: diferencia no significativa.\nMobileNet pesa 5 veces menos."
+    own = {
+        (video, arch): read_json(REPORTS / "own_video" / f"propio_{video}_{arch}.json")["frame_accuracy"]
+        for video in ("botella", "cuaderno")
+        for arch in ARCHITECTURES
+    }
+    verdict = (
+        f"McNemar p = {p_value}: en prueba no hay diferencia.\n"
+        f"Video propio de celular, cuadros correctos:\n"
+        f"MobileNet {percent(own['botella', 'mobilenet_v3_large'])} botella, "
+        f"{percent(own['cuaderno', 'mobilenet_v3_large'])} cuaderno\n"
+        f"ResNet {percent(own['botella', 'resnet50'])} botella, "
+        f"{percent(own['cuaderno', 'resnet50'])} cuaderno"
+    )
     add_text(slide, verdict, 0.7, 5.4, 3.9, 1.2, 15)
     picture(slide, FIGURES / "confusion_matrices.png", 4.7, 1.6, 8.1, 4.9)
 
@@ -338,7 +352,8 @@ def build() -> None:
     slide = deck.slide(
         "Demostración en vivo",
         "[Kenneth, 2:00] Antes de empezar, dejar abierta la aplicación con iniciar.bat. 1) Imagen: un ejemplo y "
-        "luego un objeto real. 2) Video: reproducir el video de prueba y señalar los cuadros por segundo. 3) Audio: "
+        "luego un objeto real. 2) Video: reproducir el video propio de la botella y señalar los cuadros por "
+        "segundo. 3) Audio: "
         "un ejemplo y luego grabar una frase corta y clara. Si la cámara o el micrófono fallan, usar los ejemplos "
         "incluidos.",
         dark=True,

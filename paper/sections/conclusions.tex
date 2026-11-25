@@ -1,11 +1,11 @@
 \section{Conclusiones y trabajos futuros}\label{sec:conclusiones}
 
-Sobre la primera pregunta, ajustar el extractor aporta más que cambiar de una red móvil a una grande. MobileNetV3-Large alcanzó \MobAcc\,\% en prueba sin diferencia significativa con ResNet-50 (\ResAcc\,\%) y con una fracción del tamaño, por lo que la red grande no se justifica en este problema.
+Sobre la primera pregunta, ajustar el extractor aporta más que cambiar de una red móvil a una grande, y el aumento de datos resultó decisivo con videos reales de celular, donde la red entrenada sin él falló casi siempre. MobileNetV3-Large alcanzó \MobAcc\,\% en prueba sin diferencia significativa con ResNet-50 (\ResAcc\,\%) y con una fracción del tamaño, por lo que la red grande no se justifica en este problema.
 
 Sobre la segunda, 100 audios no bastan para que un DeepSpeech2 entrenado desde cero generalice, y el aumento de datos por sí solo no lo remedia. El preentrenamiento reduce el CER a menos de la mitad con los mismos 100 audios. Con un corpus de veinte horas y varios locutores se llega a un WER de \SlrWer\,\% con personas no vistas.
 
 Sobre la tercera, un equipo de escritorio responde en tiempo casi real con las tres modalidades, y también lo hace sin GPU.
 
-El trabajo tiene limitaciones. Las imágenes tienen fondos lisos y un objeto por foto, y el sistema no tiene una clase ``ningún objeto''. La agrupación por similitud reduce la fuga entre fotos de un mismo objeto, pero no la descarta. Solo hay un locutor de prueba por grupo. La voz es leída y no incluye acento costarricense. El video evaluado es un montaje y no una grabación, y la aplicación no se evaluó con usuarios.
+El trabajo tiene limitaciones. Las imágenes tienen fondos lisos y un objeto por foto, y el sistema no tiene una clase ``ningún objeto''. La agrupación por similitud reduce la fuga entre fotos de un mismo objeto, pero no la descarta. Solo hay un locutor de prueba por grupo. La voz es leída y no incluye acento costarricense. Solo se grabaron dos videos propios, y la aplicación no se evaluó con usuarios.
 
 Como trabajos futuros se propone grabar, con consentimiento, un conjunto costarricense de residuos y voz, sustituir la clasificación del cuadro por detección de objetos, probar un codificador Conformer y un modelo de lenguaje de palabras, y reconocer en la voz consultas como ``dónde boto esta botella'' para unir las dos modalidades en una misma respuesta.

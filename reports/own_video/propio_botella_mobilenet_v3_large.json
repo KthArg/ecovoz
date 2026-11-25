@@ -1,0 +1,13 @@
+{
+  "video": "propio_botella.mp4",
+  "model": "mobilenet_v3_large",
+  "device": "cuda",
+  "frames": 184,
+  "fps": 120.24381000958202,
+  "inference_ms_mean": 6.547780978270685,
+  "predicted": {
+    "plástico": 184
+  },
+  "frame_accuracy": 1.0,
+  "frames_with_label": 184
+}
