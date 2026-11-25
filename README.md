@@ -43,6 +43,17 @@ La aplicación también funciona solo con CPU (`--device cpu`). Las latencias de
 
 En `samples/` hay imágenes, audios y un video de prueba.
 
+## Qué se entrenó en este proyecto
+
+| Modelo | Punto de partida | Qué entrenamos |
+|---|---|---|
+| ResNet-50 | pesos de ImageNet (torchvision) | cabeza nueva de 6 clases + `layer3` y `layer4` |
+| MobileNetV3-Large | pesos de ImageNet (torchvision) | cabeza nueva de 6 clases + toda la red |
+| DeepSpeech2 (CTC) | pesos aleatorios | todo: preentrenamiento con TUX y luego todo el corpus |
+| Modelo de lenguaje | nada | 6-grama contado con los textos de entrenamiento |
+
+No se usa ningún modelo de voz externo. Los pesos de ImageNet son el punto de partida que exige el transfer learning.
+
 ## Reproducir el trabajo
 
 ```powershell

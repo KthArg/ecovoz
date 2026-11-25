@@ -197,13 +197,19 @@ def build() -> None:
         "Tres modalidades en una sola aplicación",
         "[Anthony, 0:50] El problema es decidir en qué recipiente va un residuo. La imagen y el video usan el mismo "
         "clasificador, entrenado con transfer learning. El audio usa una red recurrente con pérdida CTC. Todo corre "
-        "en la computadora, sin enviar datos a Internet.",
+        "en la computadora, sin enviar datos a Internet. Ningún modelo es descargado y usado tal cual: "
+        "la visión parte de ImageNet y la ajustamos nosotros, y la red de voz la entrenamos desde cero.",
     )
     modes = (
         ("Imagen", "Cargar, capturar o pegar una foto", "ResNet-50 o MobileNetV3"),
         ("Video", "Cada cuadro, o la cámara en vivo", "El mismo modelo, con suavizado"),
         ("Audio", "Grabar o cargar voz en español", "DeepSpeech2 + CTC"),
     )
+    origin = (
+        "Visión: partimos de pesos de ImageNet y los ajustamos con nuestros datos (transfer learning).  "
+        "Voz: DeepSpeech2 entrenado por nosotros desde pesos aleatorios, sin modelos de voz externos."
+    )
+    add_text(slide, origin, 0.7, 6.55, 12, 0.4, 13, MUTED)
     for index, (name, what, how) in enumerate(modes):
         x = 0.7 + index * 4.1
         add_box(slide, x, 1.8, 3.7, 4.6)

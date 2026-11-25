@@ -100,5 +100,8 @@ La Fig.~\ref{fig:architecture} resume la aplicación, hecha con Gradio~\cite{gra
 \label{fig:architecture}
 \end{figure}
 
+\subsection{Origen de los modelos}
+Ningún modelo se usa tal como viene de Internet. En visión, el único componente externo son los pesos de ImageNet de torchvision, el punto de partida que exige el transfer learning, igual que en el notebook de la clase 11. La capa de salida de seis clases es nueva, de inicialización aleatoria, y se entrenó con nuestros datos junto con los bloques liberados (Sección~\ref{sec:metodo}-C). En ResNet-50, el resto del extractor no cambió. En voz no se usó ningún modelo preentrenado externo: DeepSpeech2 parte de pesos aleatorios y todos sus parámetros, incluido el preentrenamiento con TUX, se entrenaron en este trabajo con pérdida CTC. El modelo de lenguaje y la temperatura de calibración también se calcularon aquí, con entrenamiento y validación.
+
 \subsection{Protocolo de evaluación y reproducibilidad}
 La prueba no interviene en entrenamiento, selección de estrategia, calibración ni ajuste del decodificador. Los intervalos de 95\,\% se obtienen con bootstrap de 2000 réplicas y los clasificadores se comparan con la prueba exacta de McNemar~\cite{mcnemar}. Se fijó la semilla 42 en Python, NumPy y PyTorch, aunque las operaciones en GPU no son deterministas bit a bit. Los manifiestos identifican cada ejemplo. La latencia se midió en el equipo de la demostración (\HwCpu{}, \HwGpu{}).

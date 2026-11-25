@@ -81,7 +81,7 @@ La Fig.~\ref{fig:errors} muestra los errores de mayor confianza. Varios son ambi
 
 \begin{table}[t]
 \centering
-\caption{Modelo final en prueba, por decodificador (\%)}
+\caption{Modelo final en validación y prueba (\%). $^{*}$\,$\alpha$ y $\beta$ se ajustaron con la mitad de la validación}
 \label{tab:speech}
 \resizebox{\columnwidth}{!}{\input{generated/tab_speech}}
 \end{table}
@@ -115,7 +115,7 @@ El aumento de datos retrasa la salida de esa fase y frena la memorización, pero
 
 \subsection{Modelo de voz final}
 
-En prueba, con locutores y frases no vistos, el WER es de \SlrWer\,\% (IC 95\,\%: \SlrWerLow{} a \SlrWerHigh) y el CER de \SlrCer\,\%. La búsqueda por haz sin modelo de lenguaje casi no cambia la salida voraz, porque la red concentra la probabilidad en un camino. Al agregar el modelo de lenguaje, el WER baja desde \SlrWerGreedy\,\% (Tabla~\ref{tab:speech}). La mejora es mayor en WER que en CER: el n-grama corrige letras y espacios sueltos que bastan para arruinar una palabra.
+En validación, que no se usó para entrenar, el modelo final obtiene con locutores nuevos un WER de \ValSlrWer\,\% y un CER de \ValSlrCer\,\% (Tabla~\ref{tab:speech}). Esta cifra es algo optimista porque alfa y beta se eligieron con la mitad de ese conjunto. En prueba, con locutores y frases no vistos, el WER es de \SlrWer\,\% (IC 95\,\%: \SlrWerLow{} a \SlrWerHigh) y el CER de \SlrCer\,\%. La búsqueda por haz sin modelo de lenguaje casi no cambia la salida voraz, porque la red concentra la probabilidad en un camino. Al agregar el modelo de lenguaje, el WER baja desde \SlrWerGreedy\,\% (Tabla~\ref{tab:speech}). La mejora es mayor en WER que en CER: el n-grama corrige letras y espacios sueltos que bastan para arruinar una palabra.
 
 Con el locutor de TUX el WER es de \TuxWer\,\%. La diferencia con los locutores nuevos confirma que reportar solo una partición por frase habría dado una imagen demasiado optimista. También hay diferencias marcadas entre voces (Tabla~\ref{tab:speakers}), pero cada grupo tiene un único locutor de prueba, por lo que reflejan a esa persona y no a un país o sexo. La Fig.~\ref{fig:distribution} muestra la distribución completa del error.
 

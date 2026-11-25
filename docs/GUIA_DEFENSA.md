@@ -82,6 +82,11 @@ EcoVoz tiene dos modelos detrás de una interfaz:
 **¿Cómo saben que no hay fuga?**
 Imágenes por grupo, voz por locutor y por frase. `tests/test_data_splits.py` lo comprueba sobre los manifiestos. La agrupación por similitud reduce la fuga entre fotos del mismo objeto, pero no es perfecta, y lo decimos en el paper.
 
+**¿Los modelos son de ustedes o los bajaron de internet?**
+- Visión: lo único externo son los pesos de ImageNet, el punto de partida que pide el enunciado ("modelos preentrenados") y que usa el notebook de transfer learning de la clase 11. La cabeza de seis clases es nueva y se entrenó con nuestros datos, igual que los bloques liberados: `layer3` y `layer4` en ResNet, toda la red en MobileNet.
+- Voz: nada externo. DeepSpeech2 empieza con pesos aleatorios y lo entrenamos nosotros con CTC: primero con TUX y después con todo el corpus. Lo confirma el log: en la época 1 la red solo emite blancos y el CER es de 100 %.
+- El modelo de lenguaje y la calibración también los calculamos nosotros.
+
 **¿Por qué PyTorch si en clase usaron Keras?**
 TensorFlow no usa GPU en Windows nativo desde la versión 2.11. La arquitectura es la misma de clase.
 

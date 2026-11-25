@@ -315,11 +315,17 @@ def tables(data_images, data_audio, vision, vision_runs, speech, speech_runs, la
         rows.append([tex(label), str(run["train_clips"]), *cells])
     write_table("tab_experiments", "lrrrrr", ["Experimento", "$N$", "WER nuevos", "CER nuevos", "WER TUX", "CER TUX"], rows)
 
-    rows = []
-    for decoder, label in (("greedy", "Voraz"), ("beam_no_lm", "Beam"), ("beam_lm", "Beam + LM")):
-        scores = speech["test"][decoder]
-        rows.append([label, *[percent(scores[group][key]) for group in ("openslr", "tux") for key in ("wer", "cer")]])
-    write_table("tab_speech", "lrrrr", ["Decodificador", "WER nuevos", "CER nuevos", "WER TUX", "CER TUX"], rows)
+    def cells(scores):
+        return [percent(scores[group][key]) for group in ("openslr", "tux") for key in ("wer", "cer")]
+
+    rows = [
+        ["Validación, voraz", *cells(speech["experiments_val_greedy"]["multi"])],
+        [r"Validación, beam + LM$^{*}$", *cells(speech["val_beam_lm"])],
+        [r"\midrule Prueba, voraz", *cells(speech["test"]["greedy"])],
+        ["Prueba, beam", *cells(speech["test"]["beam_no_lm"])],
+        ["Prueba, beam + LM", *cells(speech["test"]["beam_lm"])],
+    ]
+    write_table("tab_speech", "lrrrr", ["Partición y decodificador", "WER nuevos", "CER nuevos", "WER TUX", "CER TUX"], rows)
 
     rows = []
     for key, scores in speech["test"]["beam_lm"].items():
@@ -380,6 +386,8 @@ def macros(data_images, data_audio, vision, speech, speech_runs, latency) -> Non
         "McP": "< 0,001" if p_value < 0.001 else "= " + number(p_value, 3),
         "McA": str(vision["mcnemar"]["only_resnet50_right"]),
         "McB": str(vision["mcnemar"]["only_mobilenet_right"]),
+        "ValSlrWer": percent(speech["val_beam_lm"]["openslr"]["wer"]),
+        "ValSlrCer": percent(speech["val_beam_lm"]["openslr"]["cer"]),
         "SlrWer": percent(test["beam_lm"]["openslr"]["wer"]),
         "SlrCer": percent(test["beam_lm"]["openslr"]["cer"]),
         "SlrWerGreedy": percent(test["greedy"]["openslr"]["wer"]),
