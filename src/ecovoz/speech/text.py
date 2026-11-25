@@ -1,4 +1,4 @@
-"""Alfabeto y normalización de las transcripciones."""
+"""Alphabet and transcript normalization."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import unicodedata
 
 BLANK = 0
 ALPHABET = " abcdefghijklmnopqrstuvwxyzáéíóúüñ"
-VOCAB_SIZE = len(ALPHABET) + 1  # más el blanco de CTC
+VOCAB_SIZE = len(ALPHABET) + 1  # plus the CTC blank
 
 _TO_ID = {char: index + 1 for index, char in enumerate(ALPHABET)}
 _FOREIGN = str.maketrans("àèìòùâêîôûäëïöçãõ", "aeiouaeiouaeiocao")
@@ -15,10 +15,10 @@ _PUNCTUATION = re.compile(r"[^\w\s]|_")
 
 
 def normalize(text: str) -> str | None:
-    """Pasa a minúsculas y quita la puntuación.
+    """Lowercases and removes punctuation.
 
-    Devuelve None si quedan dígitos o letras fuera del alfabeto: no se sabe cómo
-    se pronunciaron, así que ese audio se descarta.
+    Returns None if digits or letters outside the alphabet remain: we cannot know
+    how they were pronounced, so that audio is discarded.
     """
     text = unicodedata.normalize("NFC", text).lower().translate(_FOREIGN)
     text = " ".join(_PUNCTUATION.sub(" ", text).split())
@@ -36,5 +36,5 @@ def decode(ids) -> str:
 
 
 def min_ctc_frames(ids) -> int:
-    """Pasos mínimos para alinear: CTC exige un blanco entre caracteres repetidos."""
+    """Minimum steps to align: CTC requires a blank between repeated characters."""
     return len(ids) + sum(a == b for a, b in zip(ids, ids[1:], strict=False))

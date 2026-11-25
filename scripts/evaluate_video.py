@@ -1,14 +1,14 @@
-"""Evalúa un video propio cuadro a cuadro: velocidad y, si se indica, exactitud.
+"""Evaluates your own video frame by frame: speed and, if given, accuracy.
 
-Uso:
-  python scripts/evaluate_video.py mi_video.mp4
-  python scripts/evaluate_video.py mi_video.mp4 --label plastic
-  python scripts/evaluate_video.py mi_video.mp4 --segments tramos.json
+Usage:
+  python scripts/evaluate_video.py my_video.mp4
+  python scripts/evaluate_video.py my_video.mp4 --label plastic
+  python scripts/evaluate_video.py my_video.mp4 --segments segments.json
 
-`--label` sirve si todo el video muestra un mismo objeto. `--segments` acepta una
-lista como [{"from_frame": 0, "to_frame": 90, "label": "glass"}, ...], con el mismo
-formato de samples/video/montaje_prueba.json. Las clases son: cardboard, glass,
-metal, paper, plastic y trash.
+`--label` is for when the whole video shows a single object. `--segments` takes a
+list such as [{"from_frame": 0, "to_frame": 90, "label": "glass"}, ...], in the same
+format as samples/video/test_montage.json. The classes are: cardboard, glass,
+metal, paper, plastic and trash.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from pathlib import Path
 
 import numpy as np
 
-from ecovoz.config import CLASSES, CLASSES_ES, REPORTS
+from ecovoz.config import CLASSES, REPORTS
 from ecovoz.inference import VisionClassifier
 from ecovoz.utils import write_json
 from ecovoz.video import classify_video
@@ -45,7 +45,7 @@ def main() -> None:
         times.append(frame.milliseconds)
     seconds = time.perf_counter() - started
     if not labels:
-        raise SystemExit("El video no tiene cuadros legibles")
+        raise SystemExit("The video has no readable frames")
 
     def truth(index: int) -> str | None:
         for segment in segments:
@@ -62,7 +62,7 @@ def main() -> None:
         "frames": len(labels),
         "fps": len(labels) / seconds,
         "inference_ms_mean": float(np.mean(times)),
-        "predicted": {CLASSES_ES[name]: count for name, count in Counter(labels).most_common()},
+        "predicted": {name: count for name, count in Counter(labels).most_common()},
         "frame_accuracy": sum(got == want for got, want in scored) / len(scored) if scored else None,
         "frames_with_label": len(scored),
     }

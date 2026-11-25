@@ -1,5 +1,5 @@
-# Aplicación e inferencia (Python 3.11 o superior; desarrollado con 3.14.2).
-# Para usar GPU NVIDIA instale antes PyTorch con CUDA:
+# Application and inference (Python 3.11 or later; developed with 3.14.2).
+# To use an NVIDIA GPU, install PyTorch with CUDA first:
 #   pip install torch==2.14.1 torchvision==0.29.1 --index-url https://download.pytorch.org/whl/cu130
 torch==2.14.1
 torchvision==0.29.1

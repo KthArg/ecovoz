@@ -1,4 +1,4 @@
-# Entrenamiento, evaluación, figuras y pruebas.
+# Training, evaluation, figures and tests.
 -r requirements.txt
 scikit-learn==1.9.1
 matplotlib==3.11.2

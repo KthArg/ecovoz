@@ -68,7 +68,7 @@ def test_decoders_collapse_repeats_and_respect_blanks():
 
 @pytest.mark.parametrize("seed", range(15))
 def test_beam_search_finds_the_most_probable_text(seed):
-    """Compara contra la suma exhaustiva de todos los alineamientos posibles."""
+    """Compares against the exhaustive sum over every possible alignment."""
     symbols = [0, *text.encode("ab")]
     probabilities = np.random.default_rng(seed).dirichlet(np.ones(len(symbols)), size=5)
     log_probs = np.full((5, text.VOCAB_SIZE), -60.0)
@@ -120,7 +120,7 @@ def test_features_do_not_depend_on_padding():
     alone, frames = front(audio, torch.tensor([8000]))
     padded, _ = front(torch.cat([audio, torch.zeros(1, 4000)], 1), torch.tensor([8000]))
     count = int(frames[0])
-    # La última ventana toca el borde, por eso se compara hasta las tramas anteriores.
+    # The last window touches the edge, so the comparison stops at the frames before it.
     assert torch.allclose(alone[..., : count - 3], padded[..., : count - 3], atol=0.02)
 
 

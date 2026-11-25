@@ -1,1 +1,1 @@
-"""Reconocimiento de voz en español con CTC."""
+"""Spanish speech recognition with CTC."""

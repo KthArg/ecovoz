@@ -1,15 +1,15 @@
-"""Entrena las dos arquitecturas con cuatro estrategias de transfer learning.
+"""Trains both architectures with four transfer learning strategies.
 
-La estrategia de cada arquitectura se elige por F1 macro en validación.
-Este script nunca lee la partición de prueba.
+The strategy for each architecture is chosen by macro F1 on validation.
+This script never reads the test split.
 
-Estrategias:
-- head: extractor congelado, solo se entrena la cabeza.
-- partial_noaug: se ajustan los últimos bloques, sin aumento de datos.
-- partial_aug: se ajustan los últimos bloques, con aumento de datos.
-- full_aug: se ajusta toda la red, con tasa de aprendizaje menor en el extractor.
+Strategies:
+- head: frozen feature extractor, only the head is trained.
+- partial_noaug: the last blocks are fine-tuned, without data augmentation.
+- partial_aug: the last blocks are fine-tuned, with data augmentation.
+- full_aug: the whole network is fine-tuned, with a lower learning rate in the extractor.
 
-Uso: python scripts/train_vision.py [--arch A] [--strategy S]
+Usage: python scripts/train_vision.py [--arch A] [--strategy S]
 """
 
 from __future__ import annotations
@@ -160,7 +160,7 @@ def export_best(arch: str) -> None:
     winner = max(runs, key=lambda run: run["best"]["f1"])
     checkpoint = load_checkpoint(RUNS / "vision" / f"{arch}_{winner['strategy']}.pt")
     save_half_precision(checkpoint, MODELS / f"{arch}.pt")
-    print(f"ELEGIDO {arch}: {winner['strategy']} val_f1={winner['best']['f1']:.4f}", flush=True)
+    print(f"CHOSEN {arch}: {winner['strategy']} val_f1={winner['best']['f1']:.4f}", flush=True)
 
 
 def main() -> None:

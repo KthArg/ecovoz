@@ -1,7 +1,7 @@
-"""DeepSpeech2: la arquitectura de la clase 12, escrita en PyTorch.
+"""DeepSpeech2: the architecture from class 12, written in PyTorch.
 
-Dos convoluciones 2D (11x41 y 11x21 en tiempo x frecuencia, 32 filtros), GRU
-bidireccionales apiladas y una capa densa con salida log-softmax para CTC.
+Two 2D convolutions (11x41 and 11x21 in time x frequency, 32 filters), stacked
+bidirectional GRUs and a dense layer with log-softmax output for CTC.
 """
 
 from __future__ import annotations
@@ -52,5 +52,5 @@ class DeepSpeech2(nn.Module):
         lengths = self.output_lengths(frames)
         packed = pack_padded_sequence(x, lengths.cpu(), batch_first=True, enforce_sorted=False)
         x, _ = pad_packed_sequence(self.rnn(packed)[0], batch_first=True, total_length=x.shape[1])
-        # float32 fuera de autocast: CTC es inestable en media precisión.
+        # float32 outside autocast: CTC is unstable in half precision.
         return self.head(x).float().log_softmax(-1), lengths

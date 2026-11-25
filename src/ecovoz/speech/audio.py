@@ -1,4 +1,4 @@
-"""Lectura de audio y conversión a un formato uniforme: mono, 16 kHz, PCM de 16 bits."""
+"""Audio loading and conversion to a uniform format: mono, 16 kHz, 16-bit PCM."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ def load_audio(source) -> np.ndarray:
 
 
 def trim_silence(samples: np.ndarray, top_db: float = 40.0, pad: float = 0.15) -> np.ndarray:
-    """Recorta el silencio inicial y final con la energía por ventanas de 20 ms."""
+    """Trims leading and trailing silence using the energy of 20 ms windows."""
     size = int(0.02 * SAMPLE_RATE)
     count = len(samples) // size
     if count < 2:

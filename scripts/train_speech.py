@@ -1,15 +1,15 @@
-"""Entrena DeepSpeech2 con pérdida CTC y sus experimentos de control.
+"""Trains DeepSpeech2 with CTC loss, along with its control experiments.
 
-Experimentos, en orden:
-- small100:          100 audios latinoamericanos, desde cero, sin aumento.
-- small100_aug:      los mismos 100 audios, con aumento de datos.
-- tux:               preentrenamiento con el dataset de la clase 12 (un locutor).
-- small100_transfer: los mismos 100 audios, partiendo de `tux`.
-- multi:             modelo final: todo el entrenamiento, partiendo de `tux`.
+Experiments, in order:
+- small100:          100 Latin American clips, from scratch, no augmentation.
+- small100_aug:      the same 100 clips, with data augmentation.
+- tux:               pretraining on the class 12 dataset (a single speaker).
+- small100_transfer: the same 100 clips, starting from `tux`.
+- multi:             final model: the whole training set, starting from `tux`.
 
-Se guarda la época con menor CER en validación. Este script nunca lee la prueba.
+The epoch with the lowest validation CER is kept. This script never reads the test split.
 
-Uso: python scripts/train_speech.py [--experiment E]
+Usage: python scripts/train_speech.py [--experiment E]
 """
 
 from __future__ import annotations
@@ -98,13 +98,13 @@ def train(name: str, device: torch.device) -> None:
         if step < warmup:
             return 0.1 + 0.9 * step / warmup
         progress = min(1.0, (step - warmup) / max(1, total_steps - warmup))
-        # Meseta durante la primera mitad y descenso coseno en la segunda.
+        # Plateau during the first half and cosine decay during the second.
         progress = max(0.0, 2 * progress - 1)
         return 0.02 + 0.98 * (1 + math.cos(math.pi * progress)) / 2
 
     schedule = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_scale)
     augment = options.get("augment", False)
-    # Validar cada época no aporta cuando una época son diez lotes.
+    # Validating every epoch adds nothing when an epoch is ten batches.
     every = 5 if small else 1
     history = []
     best = {"cer": float("inf")}

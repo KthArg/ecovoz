@@ -1,11 +1,11 @@
-\section{Conclusiones y trabajos futuros}\label{sec:conclusiones}
+\section{Conclusions and Future Work}\label{sec:conclusiones}
 
-Sobre la primera pregunta, ajustar el extractor aporta más que cambiar de una red móvil a una grande, y el aumento de datos resultó decisivo con videos reales de celular, donde la red entrenada sin él falló casi siempre. MobileNetV3-Large alcanzó \MobAcc\,\% en prueba sin diferencia significativa con ResNet-50 (\ResAcc\,\%) y con una fracción del tamaño, por lo que la red grande no se justifica en este problema.
+Regarding the first question, fine-tuning the feature extractor contributes more than switching from a mobile network to a large one, and data augmentation proved decisive on real phone videos, where the network trained without it failed almost every time. MobileNetV3-Large reached \MobAcc\,\% on the test set, with no significant difference from ResNet-50 (\ResAcc\,\%) and at a fraction of the size, so the large network is not justified for this problem.
 
-Sobre la segunda, 100 audios no bastan para que un DeepSpeech2 entrenado desde cero generalice, y el aumento de datos por sí solo no lo remedia. El preentrenamiento reduce el CER a menos de la mitad con los mismos 100 audios. Con un corpus de veinte horas y varios locutores se llega a un WER de \SlrWer\,\% con personas no vistas.
+Regarding the second, 100 recordings are not enough for a DeepSpeech2 model trained from scratch to generalize, and data augmentation alone does not fix this. Pretraining cuts the CER by more than half with the same 100 recordings. With a twenty-hour, multi-speaker corpus, the WER reaches \SlrWer\,\% on unseen speakers.
 
-Sobre la tercera, un equipo de escritorio responde en tiempo casi real con las tres modalidades, y también lo hace sin GPU.
+Regarding the third, a desktop computer responds in near real time across the three modalities, even without a GPU.
 
-El trabajo tiene limitaciones. Las imágenes tienen fondos lisos y un objeto por foto, y el sistema no tiene una clase ``ningún objeto''. La agrupación por similitud reduce la fuga entre fotos de un mismo objeto, pero no la descarta. Solo hay un locutor de prueba por grupo. La voz es leída y no incluye acento costarricense. Solo se grabaron dos videos propios, y la aplicación no se evaluó con usuarios.
+This work has limitations. The images have plain backgrounds and one object per photo, and the system has no ``no object'' class. Similarity-based grouping reduces leakage between photos of the same object but does not rule it out. There is only one test speaker per group. The speech is read and does not include the Costa Rican accent. Only two videos of our own were recorded, and the application was not evaluated with users.
 
-Como trabajos futuros se propone grabar, con consentimiento, un conjunto costarricense de residuos y voz, sustituir la clasificación del cuadro por detección de objetos, probar un codificador Conformer y un modelo de lenguaje de palabras, y reconocer en la voz consultas como ``dónde boto esta botella'' para unir las dos modalidades en una misma respuesta.
+As future work, we propose recording, with consent, a Costa Rican waste and speech dataset, replacing whole-frame classification with object detection, trying a Conformer encoder and a word-level language model, and recognizing spoken queries such as ``dónde boto esta botella'' (``where do I throw this bottle?'') to combine both modalities into a single answer.

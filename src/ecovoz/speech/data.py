@@ -1,4 +1,4 @@
-"""Manifiesto de audio y lotes agrupados por duración."""
+"""Audio manifest and batches grouped by duration."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ CORPUS_GROUPS = ("all", "openslr", "tux")
 
 def load_rows(split: str, corpus: str = "all") -> list[dict]:
     if corpus not in CORPUS_GROUPS:
-        raise ValueError(f"Corpus desconocido: {corpus}")
+        raise ValueError(f"Unknown corpus: {corpus}")
     rows = [row for row in read_csv(MANIFESTS / "audio.csv") if row["split"] == split]
     if corpus == "all":
         return rows
@@ -49,7 +49,7 @@ def collate(items):
 
 
 class DurationBatches(Sampler):
-    """Lotes de duración parecida, limitados por cantidad y por segundos con relleno."""
+    """Batches of similar duration, limited by count and by padded seconds."""
 
     def __init__(
         self, rows: list[dict], batch_size: int = 32, max_seconds: float = 190.0, shuffle: bool = False

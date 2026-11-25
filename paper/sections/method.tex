@@ -1,90 +1,90 @@
-\section{Metodología}\label{sec:metodo}
+\section{Methodology}\label{sec:metodo}
 
-\subsection{Conjunto de imágenes}
-Se unieron TrashNet~\cite{trashnet} (licencia MIT, fondo blanco) y las seis clases equivalentes de RealWaste~\cite{realwaste} (CC BY-NC-SA 4.0, residuos reales de un centro de recuperación): \ImgTotal{} imágenes etiquetadas por sus autores (Fig.~\ref{fig:examples}). Mezclar ambas fuentes evita depender de un único fondo.
+\subsection{Image Dataset}
+We merged TrashNet~\cite{trashnet} (MIT license, white background) and the six equivalent classes of RealWaste~\cite{realwaste} (CC BY-NC-SA 4.0, real waste from a materials recovery facility): \ImgTotal{} images labeled by their authors (Fig.~\ref{fig:examples}). Mixing both sources avoids depending on a single background.
 
-Los duplicados exactos se eliminaron por hash de píxeles. Como ambos conjuntos contienen varias fotos del mismo objeto, una división al azar filtraría información. Se calcularon embeddings de ResNet-50 preentrenada y se unieron en componentes conexas los pares de una misma fuente con similitud coseno de 0,88 o más, umbral elegido al inspeccionar pares reales. Quedaron \ImgGroups{} grupos, con \ImgInGroups{} imágenes en grupos de dos o más. Cada grupo se asignó completo a una partición 70/15/15, estratificada por clase y fuente (Tabla~\ref{tab:images}).
+Exact duplicates were removed by pixel hash. Since both datasets contain several photos of the same object, a random split would leak information. We computed embeddings with a pretrained ResNet-50 and merged into connected components the same-source pairs with a cosine similarity of 0.88 or higher, a threshold chosen by inspecting real pairs. This yielded \ImgGroups{} groups, with \ImgInGroups{} images in groups of two or more. Each group was assigned as a whole to a 70/15/15 split, stratified by class and source (Table~\ref{tab:images}).
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.76\textwidth]{dataset_examples.pdf}
-\caption{Ejemplos de entrenamiento por clase y fuente. El fondo y la condición de los objetos cambian entre los dos conjuntos.}
+\caption{Training examples by class and source. The background and the condition of the objects differ between the two datasets.}
 \label{fig:examples}
 \end{figure*}
 
 \begin{table}[t]
 \centering
-\caption{Imágenes por clase y partición}
+\caption{Images per class and split}
 \label{tab:images}
 \input{generated/tab_images}
 \end{table}
 
-\subsection{Conjunto de voz}
-Se combinaron dos fuentes. La primera es una muestra aleatoria de 12\,000 audios de TUX~\cite{tux}, el conjunto de la clase del curso, de un solo locutor. La segunda son los corpus latinoamericanos OpenSLR 72, 73 y 74~\cite{openslr} (Colombia, Perú y Puerto Rico, CC BY-SA 4.0). Todo se convirtió a WAV mono de 16\,kHz y 16 bits, se recortó el silencio de los extremos y se conservaron fragmentos de 0,7 a 12\,s. Las transcripciones se normalizaron a minúsculas, sin puntuación y con un alfabeto de 34 símbolos que conserva tildes, \emph{ü} y \emph{ñ}. El resultado son \AudioTotal{} audios y \AudioHours{} horas (Tabla~\ref{tab:audio}).
+\subsection{Speech Dataset}
+Two sources were combined. The first is a random sample of 12\,000 recordings from TUX~\cite{tux}, the course's class dataset, with a single speaker. The second is the Latin American OpenSLR 72, 73, and 74 corpora~\cite{openslr} (Colombia, Peru, and Puerto Rico, CC BY-SA 4.0). Everything was converted to 16\,kHz, 16-bit mono WAV, leading and trailing silence was trimmed, and clips of 0.7 to 12\,s were kept. Transcriptions were normalized to lowercase, without punctuation, over a 34-symbol alphabet that keeps accents, \emph{ü}, and \emph{ñ}. The result is \AudioTotal{} recordings and \AudioHours{} hours (Table~\ref{tab:audio}).
 
-En OpenSLR una misma frase la leen hasta 94 personas. Se reservó un locutor por país y sexo para validación y otro para prueba, y se retiró del entrenamiento toda frase reservada, sin importar quién la leyera. Por este control y por los demás audios de los locutores reservados se descartaron \AudioLeak{} audios. En TUX la separación es por frase, y por eso sus métricas se reportan aparte: miden frases nuevas, pero no locutores nuevos.
+In OpenSLR, the same sentence is read by up to 94 people. One speaker per country and sex was held out for validation and another for testing, and every held-out sentence was removed from training, regardless of who read it. This control, together with the remaining recordings of the held-out speakers, discarded \AudioLeak{} recordings. In TUX the split is by sentence, so its metrics are reported separately: they measure new sentences, but not new speakers.
 
 \begin{table}[t]
 \centering
-\caption{Audios por partición}
+\caption{Recordings per split}
 \label{tab:audio}
 \input{generated/tab_audio}
 \end{table}
 
-\subsection{Modelos de visión y ajuste fino}
-Se compararon ResNet-50 y MobileNetV3-Large con pesos de ImageNet, la misma partición, semilla, preprocesamiento (lado corto de 256 y recorte de 224 píxeles) y presupuesto de épocas. En ambas se reemplazó la cabeza por una capa de seis salidas con dropout de 0,3. Para justificar la estrategia de ajuste se probaron cuatro:
+\subsection{Vision Models and Fine-Tuning}
+ResNet-50 and MobileNetV3-Large were compared with ImageNet weights, the same split, seed, preprocessing (short side of 256 and a 224-pixel crop), and epoch budget. In both, the head was replaced by a six-output layer with a dropout of 0.3. To justify the fine-tuning strategy, four were tested:
 \begin{itemize}
-\item \emph{solo cabeza}: extractor congelado;
-\item \emph{últimos bloques, sin aumento}: se liberan \texttt{layer3} y \texttt{layer4} en ResNet o los bloques 11 a 16 en MobileNet;
-\item \emph{últimos bloques, con aumento};
-\item \emph{red completa, con aumento}.
+\item \emph{head only}: frozen extractor;
+\item \emph{last blocks, no augmentation}: \texttt{layer3} and \texttt{layer4} are unfrozen in ResNet, or blocks 11 to 16 in MobileNet;
+\item \emph{last blocks, with augmentation};
+\item \emph{full network, with augmentation}.
 \end{itemize}
-Las tres últimas entrenan primero la cabeza durante cuatro épocas con tasa $10^{-3}$, para que gradientes aleatorios no destruyan los pesos preentrenados. Luego ajustan el extractor con una tasa menor ($1{,}5\times10^{-4}$ si es parcial, $10^{-4}$ si es completo) que la de la cabeza ($5\times10^{-4}$). Las capas congeladas mantienen fijas sus estadísticas de BatchNorm.
+The last three first train the head for four epochs at a rate of $10^{-3}$, so that random gradients do not destroy the pretrained weights. They then fine-tune the extractor at a lower rate ($1.5\times10^{-4}$ if partial, $10^{-4}$ if full) than the head ($5\times10^{-4}$). Frozen layers keep their BatchNorm statistics fixed.
 
-Se usó AdamW, descenso coseno, hasta 30 épocas con parada temprana de paciencia 8, suavizado de etiquetas de 0,05 y pesos de clase proporcionales a la raíz de la frecuencia inversa. El aumento simula una cámara: recorte aleatorio, volteos, rotación, perspectiva, luz, desenfoque y borrado parcial. La estrategia se eligió por F1 macro de validación. La confianza se calibró en validación con \emph{temperature scaling}~\cite{calibration}.
+We used AdamW, cosine decay, up to 30 epochs with early stopping (patience 8), label smoothing of 0.05, and class weights proportional to the square root of the inverse frequency. Augmentation simulates a camera: random cropping, flips, rotation, perspective, lighting, blur, and random erasing. The strategy was chosen by validation macro F1. Confidence was calibrated on validation with \emph{temperature scaling}~\cite{calibration}.
 
-\subsection{Modelo de voz}
-La entrada es un log-mel espectrograma de 80 bandas (ventana de 25\,ms, paso de 10\,ms, Fig.~\ref{fig:spectrogram}), con preénfasis y normalización por enunciado que ignora el relleno del lote. La red sigue el DeepSpeech2 de clase: dos convoluciones de $11\times41$ y $11\times21$ (tiempo por frecuencia) con 32 filtros y pasos $(2,2)$ y $(1,2)$, cinco GRU bidireccionales de 512 unidades, una capa densa y salida log-softmax, para un total de \SpeechParams{} millones de parámetros. La salida tiene 50 pasos por segundo. La implementación es en PyTorch y no en Keras porque TensorFlow no ofrece GPU en Windows nativo.
+\subsection{Speech Model}
+The input is an 80-band log-mel spectrogram (25\,ms window, 10\,ms hop, Fig.~\ref{fig:spectrogram}), with pre-emphasis and per-utterance normalization that ignores batch padding. The network follows the DeepSpeech2 seen in class: two convolutions of $11\times41$ and $11\times21$ (time by frequency) with 32 filters and strides $(2,2)$ and $(1,2)$, five bidirectional GRUs of 512 units, a dense layer, and a log-softmax output, for a total of \SpeechParams{} million parameters. The output has 50 steps per second. It is implemented in PyTorch rather than Keras because TensorFlow offers no GPU support on native Windows.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{spectrogram.pdf}
-\caption{Log-mel normalizado de un audio de prueba.}
+\caption{Normalized log-mel spectrogram of a test recording.}
 \label{fig:spectrogram}
 \end{figure}
 
-Se entrenaron cinco experimentos, todos seleccionados por CER de validación:
+Five experiments were trained, all selected by validation CER:
 \begin{enumerate}
-\item 100 audios latinoamericanos desde cero, con una red reducida (tres GRU de 256);
-\item los mismos 100 audios con aumento;
-\item preentrenamiento solo con TUX;
-\item los mismos 100 audios partiendo del preentrenamiento;
-\item modelo final: los \AudioTrain{} audios, partiendo del preentrenamiento.
+\item 100 Latin American recordings from scratch, with a reduced network (three GRUs of 256);
+\item the same 100 recordings with augmentation;
+\item pretraining on TUX only;
+\item the same 100 recordings starting from the pretrained model;
+\item final model: the \AudioTrain{} recordings, starting from the pretrained model.
 \end{enumerate}
-El aumento combina cambio de velocidad ($\pm$12\,\%), ruido con SNR de 10 a 35\,dB y SpecAugment~\cite{specaugment}. Se usó AdamW con calentamiento, meseta y descenso coseno, recorte de gradiente en 5 y precisión mixta, calculando CTC en 32 bits.
+Augmentation combines speed perturbation ($\pm$12\,\%), noise with an SNR of 10 to 35\,dB, and SpecAugment~\cite{specaugment}. We used AdamW with warm-up, plateau, and cosine decay, gradient clipping at 5, and mixed precision, computing CTC in 32 bits.
 
-El modelo de lenguaje es un 6-grama de caracteres interpolado, contado solo con textos de entrenamiento. Los valores $\alpha$ = \Alpha{} y $\beta$ = \Beta{} se eligieron en validación.
+The language model is an interpolated character 6-gram, estimated only from training texts. The values $\alpha$ = \Alpha{} and $\beta$ = \Beta{} were chosen on validation.
 
-\subsection{Aplicación}
-La Fig.~\ref{fig:architecture} resume la aplicación, hecha con Gradio~\cite{gradio}. Tiene pestañas para imagen (archivo, cámara o portapapeles), video cuadro a cuadro, cámara en vivo, audio (micrófono o archivo) y resultados. En video se clasifican todos los cuadros y solo la etiqueta mostrada se suaviza con una media móvil exponencial. Si la confianza calibrada no alcanza el umbral, la aplicación responde que no está segura. Los audios de más de 10\,s se cortan en la pausa más silenciosa cercana al límite. Los modelos se guardan en 16 bits y nada se envía a Internet.
+\subsection{Application}
+Fig.~\ref{fig:architecture} summarizes the application, built with Gradio~\cite{gradio}. It has tabs for images (file, camera, or clipboard), frame-by-frame video, live camera, audio (microphone or file), and results. In video, every frame is classified and only the displayed label is smoothed with an exponential moving average. If the calibrated confidence does not reach the threshold, the application replies that it is not sure. Recordings longer than 10\,s are split at the quietest pause near the limit. Models are stored in 16 bits and nothing is sent to the Internet.
 
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}[
   box/.style={draw, rounded corners=2pt, align=center, font=\scriptsize, minimum height=7mm, text width=22mm},
   flow/.style={-{Latex[length=1.6mm]}}, node distance=4mm]
-\node[box] (image) {Imagen};
-\node[box, right=of image] (video) {Video o cámara};
+\node[box] (image) {Image};
+\node[box, right=of image] (video) {Video or camera};
 \node[box, right=of video] (audio) {Audio};
-\node[box, below=of image] (crop) {Recorte 224 y normalización};
-\node[box, below=of video] (frames) {Cada cuadro};
-\node[box, below=of audio] (mel) {16 kHz y log-mel};
-\node[box, below=of crop, xshift=13mm, text width=35mm] (cnn) {ResNet-50 o MobileNetV3-L};
+\node[box, below=of image] (crop) {224 crop and normalization};
+\node[box, below=of video] (frames) {Each frame};
+\node[box, below=of audio] (mel) {16 kHz and log-mel};
+\node[box, below=of crop, xshift=13mm, text width=35mm] (cnn) {ResNet-50 or MobileNetV3-L};
 \node[box, below=of mel] (ds) {DeepSpeech2};
-\node[box, below=of cnn, text width=35mm] (cal) {Calibración, umbral y suavizado};
+\node[box, below=of cnn, text width=35mm] (cal) {Calibration, threshold, and smoothing};
 \node[box, below=of ds] (beam) {Beam search + LM};
-\node[box, below=of cal, text width=35mm] (class) {Clase y recipiente};
-\node[box, below=of beam] (text) {Transcripción};
+\node[box, below=of cal, text width=35mm] (class) {Class and bin};
+\node[box, below=of beam] (text) {Transcription};
 \draw[flow] (image) -- (crop);
 \draw[flow] (video) -- (frames);
 \draw[flow] (audio) -- (mel);
@@ -96,12 +96,12 @@ La Fig.~\ref{fig:architecture} resume la aplicación, hecha con Gradio~\cite{gra
 \draw[flow] (cal) -- (class);
 \draw[flow] (beam) -- (text);
 \end{tikzpicture}
-\caption{Flujo de las tres modalidades dentro de la aplicación.}
+\caption{Flow of the three modalities within the application.}
 \label{fig:architecture}
 \end{figure}
 
-\subsection{Origen de los modelos}
-Ningún modelo se usa tal como viene de Internet. En visión, el único componente externo son los pesos de ImageNet de torchvision, el punto de partida que exige el transfer learning, igual que en el notebook de la clase 11. La capa de salida de seis clases es nueva, de inicialización aleatoria, y se entrenó con nuestros datos junto con los bloques liberados (Sección~\ref{sec:metodo}-C). En ResNet-50, el resto del extractor no cambió. En voz no se usó ningún modelo preentrenado externo: DeepSpeech2 parte de pesos aleatorios y todos sus parámetros, incluido el preentrenamiento con TUX, se entrenaron en este trabajo con pérdida CTC. El modelo de lenguaje y la temperatura de calibración también se calcularon aquí, con entrenamiento y validación.
+\subsection{Origin of the Models}
+No model is used as downloaded from the Internet. In vision, the only external component is torchvision's ImageNet weights, the starting point that transfer learning requires, as in the class 11 notebook. The six-class output layer is new, randomly initialized, and was trained on our data together with the unfrozen blocks (Section~\ref{sec:metodo}-C). In ResNet-50, the rest of the extractor was unchanged. In speech, no external pretrained model was used: DeepSpeech2 starts from random weights, and all of its parameters, including the TUX pretraining, were trained in this work with the CTC loss. The language model and the calibration temperature were also computed here, from the training and validation sets.
 
-\subsection{Protocolo de evaluación y reproducibilidad}
-La prueba no interviene en entrenamiento, selección de estrategia, calibración ni ajuste del decodificador. Los intervalos de 95\,\% se obtienen con bootstrap de 2000 réplicas y los clasificadores se comparan con la prueba exacta de McNemar~\cite{mcnemar}. Se fijó la semilla 42 en Python, NumPy y PyTorch, aunque las operaciones en GPU no son deterministas bit a bit. Los manifiestos identifican cada ejemplo. La latencia se midió en el equipo de la demostración (\HwCpu{}, \HwGpu{}).
+\subsection{Evaluation Protocol and Reproducibility}
+The test set plays no role in training, strategy selection, calibration, or decoder tuning. The 95\,\% intervals are obtained with a 2000-replicate bootstrap, and classifiers are compared with the exact McNemar test~\cite{mcnemar}. Seed 42 was fixed in Python, NumPy, and PyTorch, although GPU operations are not bitwise deterministic. The manifests identify every example. Latency was measured on the demonstration machine (\HwCpu{}, \HwGpu{}).

@@ -1,4 +1,4 @@
-"""Clasificación de video cuadro a cuadro."""
+"""Frame-by-frame video classification."""
 
 from __future__ import annotations
 
@@ -10,21 +10,21 @@ from dataclasses import dataclass
 import cv2
 import numpy as np
 
-from ecovoz.config import CLASSES_ES
+from ecovoz.config import CLASS_LABELS
 from ecovoz.inference import VisionClassifier
 
-UNSURE = "no estoy seguro"
+UNSURE = "not sure"
 DISPLAY_WIDTH = 720
 
 
 @dataclass(frozen=True)
 class FrameResult:
     index: int
-    image: np.ndarray  # RGB, con la etiqueta dibujada
-    label: str  # predicción cruda de este cuadro
+    image: np.ndarray  # RGB, with the label drawn on it
+    label: str  # raw prediction for this frame
     confidence: float
-    milliseconds: float  # solo la inferencia
-    fps: float  # cuadros procesados por segundo, de punta a punta
+    milliseconds: float  # inference only
+    fps: float  # frames processed per second, end to end
 
 
 def annotate(image: np.ndarray, label: str, confidence: float, min_confidence: float, note: str = "") -> np.ndarray:
@@ -34,8 +34,8 @@ def annotate(image: np.ndarray, label: str, confidence: float, min_confidence: f
     else:
         image = image.copy()
     sure = confidence >= min_confidence
-    text = f"{CLASSES_ES[label] if sure else UNSURE}  {confidence:.0%}"
-    # Las fuentes de OpenCV no tienen tildes.
+    text = f"{CLASS_LABELS[label] if sure else UNSURE}  {confidence:.0%}"
+    # OpenCV fonts have no accented characters.
     text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
     color = (22, 110, 70) if sure else (110, 110, 110)
     cv2.rectangle(image, (0, 0), (image.shape[1], 46), color, -1)
@@ -47,7 +47,7 @@ def annotate(image: np.ndarray, label: str, confidence: float, min_confidence: f
 
 
 class Smoother:
-    """Media móvil exponencial de probabilidades, para que la etiqueta no parpadee."""
+    """Exponential moving average of the probabilities, so that the label does not flicker."""
 
     def __init__(self, momentum: float = 0.6) -> None:
         self.momentum = momentum
@@ -68,11 +68,11 @@ def classify_video(
     momentum: float = 0.6,
     paced: bool = True,
 ) -> Iterator[FrameResult]:
-    """Clasifica todos los cuadros. Con `paced` no va más rápido que el video original."""
+    """Classifies every frame. With `paced` it never runs faster than the original video."""
     capture = cv2.VideoCapture(path)
     try:
         if not capture.isOpened():
-            raise ValueError("No se pudo abrir el video")
+            raise ValueError("Could not open the video")
         source_fps = capture.get(cv2.CAP_PROP_FPS)
         source_fps = source_fps if 1 <= source_fps <= 120 else 25.0
         smoother = Smoother(momentum)
@@ -87,7 +87,7 @@ def classify_video(
             smoothed = smoother.update(result.probabilities)
             fps = (index + 1) / (time.perf_counter() - started)
             label = result.classes[int(smoothed.argmax())]
-            image = annotate(rgb, label, float(smoothed.max()), min_confidence, f"{fps:.1f} cuadros/s")
+            image = annotate(rgb, label, float(smoothed.max()), min_confidence, f"{fps:.1f} fps")
             if paced:
                 wait = started + index / source_fps - time.perf_counter()
                 if wait > 0:

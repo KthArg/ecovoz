@@ -1,3 +1,3 @@
-"""EcoVoz: clasificación de residuos en imagen y video, y voz a texto con CTC."""
+"""EcoVoz: waste classification in images and video, and speech-to-text with CTC."""
 
 __version__ = "1.0.0"

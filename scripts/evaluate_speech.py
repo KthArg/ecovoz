@@ -1,10 +1,10 @@
-"""Evalúa el reconocedor de voz.
+"""Evaluates the speech recognizer.
 
-1. Compara todos los experimentos sobre la misma validación.
-2. Ajusta alfa y beta del beam search en validación.
-3. Evalúa la prueba con el modelo final y los valores ya fijados.
+1. Compares all the experiments on the same validation split.
+2. Tunes the beam search alpha and beta on validation.
+3. Evaluates the test split with the final model and the already fixed values.
 
-Uso: python scripts/evaluate_speech.py
+Usage: python scripts/evaluate_speech.py
 """
 
 from __future__ import annotations
@@ -72,7 +72,7 @@ def score_groups(rows: list[dict], hypotheses: list[str]) -> dict:
 
 
 def confidence_interval(rows: list[dict], hypotheses: list[str]) -> dict:
-    """IC 95 % de WER y CER con bootstrap por enunciado."""
+    """95% CI of WER and CER with a per-utterance bootstrap."""
     generator = np.random.default_rng(SEED)
     samples = generator.integers(0, len(rows), (BOOTSTRAP, len(rows)))
     results = {}
@@ -108,7 +108,7 @@ def main() -> None:
         print(name, {key: comparison[name][key] for key in ("openslr", "tux")}, flush=True)
 
     lm = CharNGram.load(MODELS / "lm_es.npz")
-    # La búsqueda usa la mitad de la validación, intercalada, para acotar el tiempo.
+    # The search uses every other validation clip (half of them) to bound the time.
     tuning = list(range(0, len(val), 2))
     grid = []
     for alpha in ALPHAS:

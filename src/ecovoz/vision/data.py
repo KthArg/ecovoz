@@ -1,4 +1,4 @@
-"""Lectura del manifiesto de imágenes, preprocesamiento y aumento de datos."""
+"""Image manifest loading, preprocessing and data augmentation."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from ecovoz.utils import read_csv
 
 
 def eval_transform() -> v2.Compose:
-    """Igual en evaluación y en la aplicación: lado corto a 256 y recorte central de 224."""
+    """Same in evaluation and in the application: short side to 256 and a 224 center crop."""
     return v2.Compose(
         [
             v2.ToImage(),
@@ -25,13 +25,13 @@ def eval_transform() -> v2.Compose:
 
 
 def train_transform() -> v2.Compose:
-    """Aumento que simula una cámara: encuadre, giro, perspectiva, luz y desenfoque."""
+    """Augmentation that simulates a camera: framing, rotation, perspective, lighting and blur."""
     return v2.Compose(
         [
             v2.ToImage(),
             v2.RandomResizedCrop(IMAGE_SIZE, scale=(0.55, 1.0), ratio=(0.8, 1.25), antialias=True),
             v2.RandomHorizontalFlip(),
-            v2.RandomVerticalFlip(p=0.2),  # un residuo no tiene una orientación natural
+            v2.RandomVerticalFlip(p=0.2),  # waste has no natural orientation
             v2.RandomApply([v2.RandomRotation(20)], p=0.4),
             v2.RandomPerspective(distortion_scale=0.2, p=0.2),
             v2.RandomApply([v2.ColorJitter(0.3, 0.3, 0.25, 0.04)], p=0.8),

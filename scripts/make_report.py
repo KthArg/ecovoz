@@ -1,8 +1,8 @@
-"""Genera figuras, tablas LaTeX y el resumen a partir de los JSON de reports/.
+"""Generates figures, LaTeX tables and the summary from the JSON files in reports/.
 
-Ninguna cifra del paper se escribe a mano: salen de paper/generated/.
+No number in the paper is typed by hand: they all come from paper/generated/.
 
-Uso: python scripts/make_report.py
+Usage: python scripts/make_report.py
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ import torch
 from matplotlib.colors import LinearSegmentedColormap
 from PIL import Image
 
-from ecovoz.config import ARCHITECTURES, CLASSES, CLASSES_ES, FIGURES, MANIFESTS, PROCESSED, REPORTS, ROOT
+from ecovoz.config import ARCHITECTURES, CLASS_LABELS, CLASSES, FIGURES, MANIFESTS, PROCESSED, REPORTS, ROOT
 from ecovoz.speech.audio import load_audio
 from ecovoz.speech.features import LogMel
 from ecovoz.utils import read_csv, read_json
@@ -28,31 +28,31 @@ GENERATED = ROOT / "paper" / "generated"
 BLUE, ORANGE, AQUA, YELLOW = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
 INK, MUTED = "#0b0b0b", "#52514e"
 SEQUENTIAL = LinearSegmentedColormap.from_list("blue", ["#ffffff", "#86b6ef", "#2a78d6", "#0d366b"])
-COLUMN, WIDE = 3.45, 7.1  # anchos de una y dos columnas IEEE, en pulgadas
+COLUMN, WIDE = 3.45, 7.1  # IEEE one- and two-column widths, in inches
 
 ARCH = {"resnet50": "ResNet-50", "mobilenet_v3_large": "MobileNetV3-L"}
 STRATEGY = {
-    "head": "Solo cabeza",
-    "partial_noaug": "Últimos bloques, sin aumento",
-    "partial_aug": "Últimos bloques, con aumento",
-    "full_aug": "Red completa, con aumento",
+    "head": "Head only",
+    "partial_noaug": "Last blocks, no augmentation",
+    "partial_aug": "Last blocks, with augmentation",
+    "full_aug": "Full network, with augmentation",
 }
 EXPERIMENT = {
-    "small100": "100 audios",
-    "small100_aug": "100 audios + aumento",
-    "tux": "Solo TUX (preentr.)",
-    "small100_transfer": "100 audios + preentr.",
-    "multi": "Modelo final",
+    "small100": "100 clips",
+    "small100_aug": "100 clips + augmentation",
+    "tux": "TUX only (pretraining)",
+    "small100_transfer": "100 clips + pretraining",
+    "multi": "Final model",
 }
 GROUP = {
-    "openslr": "Locutores nuevos",
-    "tux": "Locutor TUX",
-    "all": "Todo",
-    "es_co_female": "Colombia, mujer",
-    "es_co_male": "Colombia, hombre",
-    "es_pe_female": "Perú, mujer",
-    "es_pe_male": "Perú, hombre",
-    "es_pr_female": "Puerto Rico, mujer",
+    "openslr": "Unseen speakers",
+    "tux": "TUX speaker",
+    "all": "All",
+    "es_co_female": "Colombia, female",
+    "es_co_male": "Colombia, male",
+    "es_pe_female": "Peru, female",
+    "es_pe_male": "Peru, male",
+    "es_pr_female": "Puerto Rico, female",
 }
 
 plt.rcParams.update(
@@ -83,7 +83,7 @@ def save(figure, name: str) -> None:
 
 
 def number(value: float, digits: int = 1) -> str:
-    return f"{value:.{digits}f}".replace(".", ",")
+    return f"{value:.{digits}f}"
 
 
 def percent(value: float, digits: int = 1) -> str:
@@ -112,8 +112,8 @@ def dataset_figures() -> None:
     for offset, source, color, name in ((-0.2, "trashnet", BLUE, "TrashNet"), (0.2, "realwaste", ORANGE, "RealWaste")):
         bars = axis.bar(x + offset, [count[source, label] for label in CLASSES], 0.37, color=color, label=name)
         axis.bar_label(bars, fontsize=5.5, color=MUTED)
-    axis.set_xticks(x, [CLASSES_ES[label] for label in CLASSES], rotation=20)
-    axis.set_ylabel("Imágenes")
+    axis.set_xticks(x, [CLASS_LABELS[label] for label in CLASSES], rotation=20)
+    axis.set_ylabel("Images")
     axis.legend(loc="upper left")
     save(figure, "dataset")
 
@@ -126,7 +126,7 @@ def dataset_figures() -> None:
             axis.set_yticks([])
             axis.spines[:].set_visible(False)
             if source == "trashnet":
-                axis.set_title(CLASSES_ES[label])
+                axis.set_title(CLASS_LABELS[label])
         row_axes[0].set_ylabel({"trashnet": "TrashNet", "realwaste": "RealWaste"}[source])
     figure.tight_layout(pad=0.3)
     save(figure, "dataset_examples")
@@ -140,17 +140,17 @@ def vision_figures(report: dict, runs: dict) -> None:
         for axis, key in zip(axes, ("loss", "f1"), strict=True):
             axis.plot(epochs, [item[f"train_{key}"] for item in history], "--", color=color, alpha=0.75, lw=1)
             axis.plot(epochs, [item[f"val_{key}"] for item in history], color=color, label=ARCH[arch])
-    for axis, title in zip(axes, ("Pérdida", "F1 macro"), strict=True):
+    for axis, title in zip(axes, ("Loss", "Macro F1"), strict=True):
         axis.set_title(title)
-        axis.set_xlabel("Época")
+        axis.set_xlabel("Epoch")
         axis.grid(axis="y")
     axes[0].legend(fontsize=6)
-    figure.text(0.5, -0.04, "Continua: validación. Discontinua: entrenamiento.", ha="center", fontsize=6, color=MUTED)
+    figure.text(0.5, -0.04, "Solid: validation. Dashed: training.", ha="center", fontsize=6, color=MUTED)
     figure.tight_layout(pad=0.4)
     save(figure, "vision_curves")
 
     figure, axes = plt.subplots(1, 2, figsize=(WIDE, 2.9))
-    names = [CLASSES_ES[name] for name in CLASSES]
+    names = [CLASS_LABELS[name] for name in CLASSES]
     for axis, arch in zip(axes, ARCHITECTURES, strict=True):
         matrix = np.array(report["models"][arch]["test"]["confusion"])
         share = matrix / matrix.sum(1, keepdims=True)
@@ -159,8 +159,8 @@ def vision_figures(report: dict, runs: dict) -> None:
             axis.text(j, i, value, ha="center", va="center", color="white" if share[i, j] > 0.45 else INK)
         axis.set_xticks(range(len(names)), names, rotation=30, ha="right")
         axis.set_yticks(range(len(names)), names)
-        axis.set_xlabel("Predicción")
-        axis.set_ylabel("Etiqueta real")
+        axis.set_xlabel("Predicted")
+        axis.set_ylabel("True label")
         axis.set_title(ARCH[arch])
     figure.tight_layout()
     save(figure, "confusion_matrices")
@@ -174,7 +174,7 @@ def vision_figures(report: dict, runs: dict) -> None:
     for axis, row in zip(axes.ravel(), errors, strict=False):
         axis.imshow(Image.open(PROCESSED / row["path"]).resize((256, 256)))
         share = round(100 * float(row[f"{arch}_confidence"]))
-        axis.set_title(f"{CLASSES_ES[row['label']]}\n→ {CLASSES_ES[row[arch]]} {share} %", fontsize=5.3)
+        axis.set_title(f"{CLASS_LABELS[row['label']]}\n→ {CLASS_LABELS[row[arch]]} {share} %", fontsize=5.3)
     figure.tight_layout(pad=0.2)
     save(figure, "vision_errors")
 
@@ -184,9 +184,9 @@ def speech_figures(report: dict, runs: dict) -> None:
     for axis, name in zip(axes[0], ("small100", "multi"), strict=True):
         history = runs[name]["history"]
         epochs = [item["epoch"] for item in history]
-        axis.plot(epochs, [item["train_loss"] for item in history], color=BLUE, label="Entrenamiento")
-        axis.plot(epochs, [item["val_loss"] for item in history], color=ORANGE, label="Validación")
-        axis.set_title(f"Pérdida CTC: {EXPERIMENT[name]}")
+        axis.plot(epochs, [item["train_loss"] for item in history], color=BLUE, label="Training")
+        axis.plot(epochs, [item["val_loss"] for item in history], color=ORANGE, label="Validation")
+        axis.set_title(f"CTC loss: {EXPERIMENT[name]}")
         axis.legend()
     styles = (("small100", BLUE), ("small100_aug", ORANGE), ("small100_transfer", AQUA))
     for name, color in styles:
@@ -197,14 +197,14 @@ def speech_figures(report: dict, runs: dict) -> None:
             color=color,
             label=EXPERIMENT[name],
         )
-    axes[1, 0].set_title("CER en validación con solo 100 audios")
+    axes[1, 0].set_title("Validation CER with only 100 clips")
     history = runs["multi"]["history"]
     for key, color, name in (("val_wer", BLUE, "WER"), ("val_cer", ORANGE, "CER")):
         axes[1, 1].plot([item["epoch"] for item in history], [100 * item[key] for item in history], color=color, label=name)
-    axes[1, 1].set_title("Error en validación: modelo final")
+    axes[1, 1].set_title("Validation error: final model")
     for axis in axes[1]:
         axis.set_ylabel("%")
-        axis.set_xlabel("Época")
+        axis.set_xlabel("Epoch")
         axis.legend()
     for axis in axes.ravel():
         axis.grid(axis="y")
@@ -221,22 +221,22 @@ def speech_figures(report: dict, runs: dict) -> None:
     axis.set_yticks(y, [EXPERIMENT[name] for name in names])
     axis.invert_yaxis()
     axis.set_xlim(0, 125)
-    axis.set_xlabel("Error en validación, locutores nuevos (%)")
+    axis.set_xlabel("Validation error, unseen speakers (%)")
     axis.legend(loc="lower right")
     save(figure, "speech_experiments")
 
     test = read_csv(REPORTS / "speech_predictions.csv")
     values = {
-        "Locutor TUX": [100 * float(row["wer"]) for row in test if row["source"] == "tux"],
-        "Locutores nuevos": [100 * float(row["wer"]) for row in test if row["source"] != "tux"],
+        "TUX speaker": [100 * float(row["wer"]) for row in test if row["source"] == "tux"],
+        "Unseen speakers": [100 * float(row["wer"]) for row in test if row["source"] != "tux"],
     }
     figure, axis = plt.subplots(figsize=(COLUMN, 1.8))
     for (name, data), color in zip(values.items(), (BLUE, ORANGE), strict=True):
         ordered = np.sort(data)
         axis.step(ordered, 100 * np.arange(1, len(ordered) + 1) / len(ordered), color=color, where="post", label=name)
     axis.set_xlim(0, 100)
-    axis.set_xlabel("WER del enunciado (%)")
-    axis.set_ylabel("Enunciados acumulados (%)")
+    axis.set_xlabel("Utterance WER (%)")
+    axis.set_ylabel("Cumulative utterances (%)")
     axis.grid(axis="y")
     axis.legend(loc="lower right")
     save(figure, "speech_distribution")
@@ -247,9 +247,9 @@ def speech_figures(report: dict, runs: dict) -> None:
     figure, axis = plt.subplots(figsize=(COLUMN, 1.5))
     extent = (0, audio.shape[1] / 16000, 0, features.shape[0])
     axis.imshow(features, origin="lower", aspect="auto", extent=extent, cmap=SEQUENTIAL, vmin=-1.5, vmax=2.5)
-    axis.set_xlabel("Segundos")
-    axis.set_ylabel("Banda mel")
-    axis.set_title(f"«{row['text']}»", fontsize=6.5)
+    axis.set_xlabel("Seconds")
+    axis.set_ylabel("Mel band")
+    axis.set_title(f"\"{row['text']}\"", fontsize=6.5)
     save(figure, "spectrogram")
 
 
@@ -258,17 +258,17 @@ def tables(data_images, data_audio, vision, vision_runs, speech, speech_runs, la
     rows = []
     for label in CLASSES:
         values = [splits[split][label] for split in ("train", "val", "test")]
-        rows.append([CLASSES_ES[label], *map(str, values), str(sum(values))])
+        rows.append([CLASS_LABELS[label], *map(str, values), str(sum(values))])
     totals = [sum(splits[split].values()) for split in ("train", "val", "test")]
     rows.append([r"\textbf{Total}", *map(str, totals), str(sum(totals))])
-    write_table("tab_images", "lrrrr", ["Clase", "Entren.", "Val.", "Prueba", "Total"], rows)
+    write_table("tab_images", "lrrrr", ["Class", "Train", "Val.", "Test", "Total"], rows)
 
     rows = []
-    for split, name in (("train", "Entrenamiento"), ("val", "Validación"), ("test", "Prueba")):
+    for split, name in (("train", "Training"), ("val", "Validation"), ("test", "Test")):
         info = data_audio["splits"][split]
         tux = info["per_source"]["tux"]
         rows.append([name, str(info["clips"] - tux), str(tux), str(info["speakers"]), number(info["hours"])])
-    write_table("tab_audio", "lrrrr", ["Partición", "OpenSLR", "TUX", "Locut.", "Horas"], rows)
+    write_table("tab_audio", "lrrrr", ["Split", "OpenSLR", "TUX", "Speakers", "Hours"], rows)
 
     rows = []
     for strategy, name in STRATEGY.items():
@@ -277,35 +277,35 @@ def tables(data_images, data_audio, vision, vision_runs, speech, speech_runs, la
             value = percent(vision_runs[arch, strategy]["best"]["f1"])
             row.append(rf"\textbf{{{value}}}" if vision["models"][arch]["strategy"] == strategy else value)
         rows.append(row)
-    write_table("tab_strategies", "lrr", ["Estrategia", *ARCH.values()], rows)
+    write_table("tab_strategies", "lrr", ["Strategy", *ARCH.values()], rows)
 
     models = [vision["models"][arch] for arch in ARCHITECTURES]
 
     def interval(model, key):
         low, high = model["test"][key]
-        return f"[{percent(low)}; {percent(high)}]"
+        return f"[{percent(low)}, {percent(high)}]"
 
     rows = [
         [r"Accuracy (\%)", *[percent(m["test"]["accuracy"]) for m in models]],
-        [r"\quad IC 95\,\%", *[interval(m, "accuracy_ci95") for m in models]],
-        [r"F1 macro (\%)", *[percent(m["test"]["macro_f1"]) for m in models]],
-        [r"\quad IC 95\,\%", *[interval(m, "macro_f1_ci95") for m in models]],
-        [r"Precisión macro (\%)", *[percent(m["test"]["macro_precision"]) for m in models]],
-        [r"Recall macro (\%)", *[percent(m["test"]["macro_recall"]) for m in models]],
+        [r"\quad 95\,\% CI", *[interval(m, "accuracy_ci95") for m in models]],
+        [r"Macro F1 (\%)", *[percent(m["test"]["macro_f1"]) for m in models]],
+        [r"\quad 95\,\% CI", *[interval(m, "macro_f1_ci95") for m in models]],
+        [r"Macro precision (\%)", *[percent(m["test"]["macro_precision"]) for m in models]],
+        [r"Macro recall (\%)", *[percent(m["test"]["macro_recall"]) for m in models]],
         [r"Accuracy TrashNet (\%)", *[percent(m["test_by_source"]["trashnet"]["accuracy"]) for m in models]],
         [r"Accuracy RealWaste (\%)", *[percent(m["test_by_source"]["realwaste"]["accuracy"]) for m in models]],
-        ["Parámetros (millones)", *[number(m["parameters"] / 1e6) for m in models]],
-        ["Archivo, float16 (MB)", *[number(m["file_mb"]) for m in models]],
+        ["Parameters (millions)", *[number(m["parameters"] / 1e6) for m in models]],
+        ["File, float16 (MB)", *[number(m["file_mb"]) for m in models]],
     ]
-    write_table("tab_vision", "lrr", ["Métrica", *ARCH.values()], rows)
+    write_table("tab_vision", "lrr", ["Metric", *ARCH.values()], rows)
 
     rows = []
     for label in CLASSES:
-        row = [CLASSES_ES[label]]
+        row = [CLASS_LABELS[label]]
         for model in models:
             row += [percent(model["test"]["per_class"][label][key]) for key in ("precision", "recall", "f1")]
         rows.append([*row, str(models[0]["test"]["per_class"][label]["support"])])
-    header = ["Clase", "P (ResNet)", "R (ResNet)", "F1 (ResNet)", "P (MobileNet)", "R (MobileNet)", "F1 (MobileNet)", "$n$"]
+    header = ["Class", "P (ResNet)", "R (ResNet)", "F1 (ResNet)", "P (MobileNet)", "R (MobileNet)", "F1 (MobileNet)", "$n$"]
     write_table("tab_per_class", "lrrrrrrr", header, rows)
 
     rows = []
@@ -313,56 +313,56 @@ def tables(data_images, data_audio, vision, vision_runs, speech, speech_runs, la
         scores, run = speech["experiments_val_greedy"][name], speech_runs[name]
         cells = [percent(scores[group][key]) for group in ("openslr", "tux") for key in ("wer", "cer")]
         rows.append([tex(label), str(run["train_clips"]), *cells])
-    write_table("tab_experiments", "lrrrrr", ["Experimento", "$N$", "WER nuevos", "CER nuevos", "WER TUX", "CER TUX"], rows)
+    write_table("tab_experiments", "lrrrrr", ["Experiment", "$N$", "WER unseen", "CER unseen", "WER TUX", "CER TUX"], rows)
 
     def cells(scores):
         return [percent(scores[group][key]) for group in ("openslr", "tux") for key in ("wer", "cer")]
 
     rows = [
-        ["Validación, voraz", *cells(speech["experiments_val_greedy"]["multi"])],
-        [r"Validación, beam + LM$^{*}$", *cells(speech["val_beam_lm"])],
-        [r"\midrule Prueba, voraz", *cells(speech["test"]["greedy"])],
-        ["Prueba, beam", *cells(speech["test"]["beam_no_lm"])],
-        ["Prueba, beam + LM", *cells(speech["test"]["beam_lm"])],
+        ["Validation, greedy", *cells(speech["experiments_val_greedy"]["multi"])],
+        [r"Validation, beam + LM$^{*}$", *cells(speech["val_beam_lm"])],
+        [r"\midrule Test, greedy", *cells(speech["test"]["greedy"])],
+        ["Test, beam", *cells(speech["test"]["beam_no_lm"])],
+        ["Test, beam + LM", *cells(speech["test"]["beam_lm"])],
     ]
-    write_table("tab_speech", "lrrrr", ["Partición y decodificador", "WER nuevos", "CER nuevos", "WER TUX", "CER TUX"], rows)
+    write_table("tab_speech", "lrrrr", ["Split and decoder", "WER unseen", "CER unseen", "WER TUX", "CER TUX"], rows)
 
     rows = []
     for key, scores in speech["test"]["beam_lm"].items():
         if key != "all":
             cells = [percent(scores[measure]) for measure in ("wer", "cer", "exact")]
             rows.append([GROUP[key], str(scores["n"]), *cells])
-    write_table("tab_speakers", "lrrrr", ["Grupo", "$n$", "WER", "CER", "Exactas"], rows)
+    write_table("tab_speakers", "lrrrr", ["Group", "$n$", "WER", "CER", "Exact"], rows)
 
     test = [row for row in read_csv(REPORTS / "speech_predictions.csv") if row["source"] != "tux"]
     test.sort(key=lambda row: (float(row["wer"]), -len(row["text"]), row["path"]))
     rows = []
-    # Posiciones fijas del ranking, del mejor al peor, para no escoger ejemplos a mano.
+    # Fixed ranking positions, from best to worst, so examples are not picked by hand.
     for position in (0, 0.15, 0.4, 0.65, 0.85, 0.98):
         row = test[min(len(test) - 1, int(position * len(test)))]
-        rows.append([tex(row["text"]), tex(row["beam_lm"]) or "(vacío)", percent(float(row["wer"]), 0)])
+        rows.append([tex(row["text"]), tex(row["beam_lm"]) or "(empty)", percent(float(row["wer"]), 0)])
     paragraph = r">{\raggedright\arraybackslash}p{0.44\textwidth}"
-    write_table("tab_examples", f"{paragraph}{paragraph}r", ["Referencia", "Transcripción", "WER"], rows)
+    write_table("tab_examples", f"{paragraph}{paragraph}r", ["Reference", "Transcription", "WER"], rows)
 
     rows = []
     for device, result in latency["devices"].items():
         label = "GPU" if device == "cuda" else "CPU"
         for arch, name in ARCH.items():
             image = result["image_ms"][arch]
-            rows.append([f"Imagen, {name}", label, f"{number(image['p50'])} / {number(image['p95'])} ms"])
+            rows.append([f"Image, {name}", label, f"{number(image['p50'])} / {number(image['p95'])} ms"])
         for arch, name in ARCH.items():
-            rows.append([f"Video 720p, {name}", label, f"{number(result['video'][arch]['fps'])} cuadros/s"])
+            rows.append([f"Video 720p, {name}", label, f"{number(result['video'][arch]['fps'])} fps"])
         for seconds in ("5", "10"):
             audio = result["audio_ms_by_length"][seconds]
             value = f"{number(audio['p50'] / 1000, 2)} / {number(audio['p95'] / 1000, 2)} s"
-            rows.append([f"Audio de {seconds} s", label, value])
-    write_table("tab_latency", "llr", ["Tarea", "Equipo", "Mediana / p95"], rows)
+            rows.append([f"{seconds} s audio", label, value])
+    write_table("tab_latency", "llr", ["Task", "Hardware", "Median / p95"], rows)
 
 
 def own_video_macros() -> dict:
-    """Exactitud por cuadro en los videos grabados por el equipo (scripts/evaluate_video.py)."""
+    """Per-frame accuracy on the videos recorded by the team (scripts/evaluate_video.py)."""
     values = {}
-    for video, name in (("propio_botella", "Bottle"), ("propio_cuaderno", "Notebook")):
+    for video, name in (("own_bottle", "Bottle"), ("own_notebook", "Notebook")):
         for arch, short in (("mobilenet_v3_large", "Mob"), ("resnet50", "Res")):
             result = read_json(REPORTS / "own_video" / f"{video}_{arch}.json")
             values[f"Own{name}{short}"] = percent(result["frame_accuracy"])
@@ -394,7 +394,7 @@ def macros(data_images, data_audio, vision, speech, speech_runs, latency) -> Non
         "EceAfter": percent(best["ece_after"]),
         "RejectCoverage": percent(best["rejection"][2]["coverage"]),
         "RejectAcc": percent(best["rejection"][2]["accuracy"]),
-        "McP": "< 0,001" if p_value < 0.001 else "= " + number(p_value, 3),
+        "McP": "< 0.001" if p_value < 0.001 else "= " + number(p_value, 3),
         "McA": str(vision["mcnemar"]["only_resnet50_right"]),
         "McB": str(vision["mcnemar"]["only_mobilenet_right"]),
         "ValSlrWer": percent(speech["val_beam_lm"]["openslr"]["wer"]),
@@ -417,14 +417,14 @@ def macros(data_images, data_audio, vision, speech, speech_runs, latency) -> Non
         "AudioLat": number(fast["audio_ms"]["p95"] / 1000, 2),
         "AudioLatCpu": number(slow["audio_ms"]["p95"] / 1000, 2),
         "HwCpu": tex(latency["hardware"]["cpu"].strip()),
-        "HwGpu": tex(latency["hardware"]["gpu"] or "sin GPU"),
+        "HwGpu": tex(latency["hardware"]["gpu"] or "no GPU"),
     }
     prefixes = ("Scratch", "Aug", "Tux", "Transfer", "Multi")
     for name, key in zip(prefixes, EXPERIMENT, strict=True):
         scores = speech["experiments_val_greedy"][key]["openslr"]
         for key_name, metric in ((f"Exp{name}Wer", "wer"), (f"Exp{name}Cer", "cer")):
             if key_name in values:
-                raise ValueError(f"Macro repetida: {key_name}")
+                raise ValueError(f"Duplicate macro: {key_name}")
             values[key_name] = percent(scores[metric])
     text = "".join(f"\\newcommand{{\\{name}}}{{{value}}}\n" for name, value in values.items())
     (GENERATED / "numbers.tex").write_text(text, encoding="utf-8")
@@ -432,24 +432,24 @@ def macros(data_images, data_audio, vision, speech, speech_runs, latency) -> Non
 
 def summary(vision, speech, latency) -> None:
     lines = [
-        "## Visión (partición de prueba)",
+        "## Vision (test split)",
         "",
-        "| Modelo | Accuracy | F1 macro |",
+        "| Model | Accuracy | Macro F1 |",
         "|---|---:|---:|",
     ]
     for arch in ARCHITECTURES:
         test = vision["models"][arch]["test"]
         lines.append(f"| {ARCH[arch]} | {percent(test['accuracy'])} % | {percent(test['macro_f1'])} % |")
-    lines += ["", "## Voz (partición de prueba)", "", "| Grupo | Decodificador | WER | CER |", "|---|---|---:|---:|"]
+    lines += ["", "## Speech (test split)", "", "| Group | Decoder | WER | CER |", "|---|---|---:|---:|"]
     for group in ("openslr", "tux"):
-        for decoder, name in (("greedy", "voraz"), ("beam_lm", "beam + LM")):
+        for decoder, name in (("greedy", "greedy"), ("beam_lm", "beam + LM")):
             scores = speech["test"][decoder][group]
             lines.append(f"| {GROUP[group]} | {name} | {percent(scores['wer'])} % | {percent(scores['cer'])} % |")
     lines += [
         "",
-        "## Latencia en el equipo de la demostración",
+        "## Latency on the demonstration machine",
         "",
-        "| Equipo | Modelo | Imagen (ms, mediana) | Video (cuadros/s) | Audio (s, p95) |",
+        "| Hardware | Model | Image (ms, median) | Video (fps) | Audio (s, p95) |",
         "|---|---|---:|---:|---:|",
     ]
     for device, result in latency["devices"].items():
@@ -463,7 +463,7 @@ def summary(vision, speech, latency) -> None:
             ]
             lines.append(f"| {' | '.join(cells)} |")
     hardware = latency["hardware"]
-    lines += ["", f"Equipo: {hardware['cpu'].strip()}; {hardware['gpu']}.", ""]
+    lines += ["", f"Machine: {hardware['cpu'].strip()}; {hardware['gpu']}.", ""]
     (REPORTS / "summary.md").write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -483,7 +483,7 @@ def main() -> None:
     tables(data_images, data_audio, vision, vision_runs, speech, speech_runs, latency)
     macros(data_images, data_audio, vision, speech, speech_runs, latency)
     summary(vision, speech, latency)
-    print("Figuras, tablas y resumen generados")
+    print("Figures, tables and summary generated")
 
 
 if __name__ == "__main__":

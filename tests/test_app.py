@@ -1,4 +1,4 @@
-"""Pruebas de los manejadores de la aplicación con los modelos reales, en CPU."""
+"""Tests of the application handlers with the real models, on CPU."""
 
 import importlib.util
 
@@ -26,7 +26,7 @@ def test_image_handler(handlers):
 
 
 def test_video_handler_yields_every_frame(handlers):
-    path = str(SAMPLES / "video" / "montaje_prueba.mp4")
+    path = str(SAMPLES / "video" / "test_montage.mp4")
     frames = handlers["play_video"](path, "mobilenet_v3_large", 0.5, 0.6)
     first, second = next(frames), next(frames)
     assert first[0].shape[1] == 720
@@ -38,11 +38,11 @@ def test_live_handler_keeps_its_state_between_frames(handlers):
     image = np.zeros((480, 640, 3), dtype=np.uint8)
     _, first_note, state = live(image, "mobilenet_v3_large", 0.5, None)
     _, second_note, following = live(image, "mobilenet_v3_large", 0.5, state)
-    assert "cuadros/s" not in first_note
-    assert "cuadros/s" in second_note
+    assert "fps" not in first_note
+    assert "fps" in second_note
     assert following[1] is state[1]
     if not (MODELS / "resnet50.pt").exists():
-        return  # el ZIP de entrega no trae ResNet-50
+        return  # the delivery ZIP does not include ResNet-50
     _, _, changed = live(image, "resnet50", 0.5, following)
     assert changed[1] is not state[1]
 
@@ -56,4 +56,4 @@ def test_audio_handler(handlers):
 
 def test_silence_returns_no_speech(handlers):
     text, _, _ = handlers["transcribe"]((16000, np.zeros(16000, dtype=np.int16)), "beam")
-    assert "no se detectó voz" in text
+    assert "no speech detected" in text

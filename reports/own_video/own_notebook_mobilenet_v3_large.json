@@ -1,13 +1,13 @@
 {
-  "video": "propio_cuaderno.mp4",
+  "video": "own_notebook.mp4",
   "model": "mobilenet_v3_large",
   "device": "cuda",
   "frames": 217,
   "fps": 117.07339600788404,
   "inference_ms_mean": 6.884561750494922,
   "predicted": {
-    "papel": 147,
-    "cartón": 70
+    "paper": 147,
+    "cardboard": 70
   },
   "frame_accuracy": 0.6774193548387096,
   "frames_with_label": 217

@@ -1,5 +1,5 @@
-% Paper de EcoVoz. Las cifras, tablas y figuras salen de scripts/make_report.py.
-% Compilar:  tectonic main.tex   (o subir la carpeta a Overleaf junto con ../reports/figures)
+% EcoVoz paper. Numbers, tables and figures come from scripts/make_report.py.
+% Build:  tectonic main.tex   (or upload the folder to Overleaf together with ../reports/figures)
 \documentclass[conference]{IEEEtran}
 \usepackage{iftex}
 \ifPDFTeX
@@ -10,7 +10,7 @@
   \setmainfont{texgyretermes}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
     ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
 \fi
-\usepackage[spanish,es-tabla,es-noshorthands]{babel}
+\usepackage[english]{babel}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{array}
@@ -24,22 +24,21 @@
 \graphicspath{{../reports/figures/}{figures/}}
 \input{generated/numbers}
 
-% Carnés: se definen en carnes.tex, que no se publica en el repositorio.
+% Student IDs (carnés): defined in carnes.tex, which is not published in the repository.
 \newcommand{\carneA}{}
 \newcommand{\carneB}{}
 \newcommand{\carneC}{}
 \IfFileExists{carnes.tex}{\input{carnes}}{}
 
 \begin{document}
-\renewcommand{\IEEEkeywordsname}{Palabras clave}
 
-\title{EcoVoz: clasificación visual de residuos y reconocimiento de voz en español con CTC en una aplicación multimodal}
+\title{EcoVoz: Visual Waste Classification and CTC-Based Spanish Speech Recognition in a Multimodal Application}
 
 \author{
 \IEEEauthorblockN{Anthony Jafeth Arias Robleto\carneA, Randy Espinoza Downing\carneB,\\ Kenneth Jhoan Araya Arguedas\carneC}
-\IEEEauthorblockA{Escuela de Ingeniería en Computación, Instituto Tecnológico de Costa Rica\\
-Campus Tecnológico Local San Carlos\\
-IC-6200 Inteligencia Artificial, II Semestre 2026. Prof. Ing. Efrén Jiménez Delgado}}
+\IEEEauthorblockA{School of Computer Engineering, Instituto Tecnológico de Costa Rica\\
+San Carlos Local Technological Campus\\
+IC-6200 Artificial Intelligence, Second Semester 2026. Prof. Ing. Efrén Jiménez Delgado}}
 
 \maketitle
 

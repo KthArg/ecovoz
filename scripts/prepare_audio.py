@@ -1,12 +1,12 @@
-"""Prepara el corpus de voz: WAV mono de 16 kHz y transcripciones normalizadas.
+"""Prepares the speech corpus: 16 kHz mono WAV and normalized transcriptions.
 
-Particiones:
-- OpenSLR 72/73/74: los locutores de validación y prueba no aparecen en
-  entrenamiento, y sus frases tampoco, aunque las lea otra persona.
-- TUX (dataset de la clase 12, un locutor): se divide por frase.
-- Ninguna frase normalizada aparece en dos particiones.
+Splits:
+- OpenSLR 72/73/74: the validation and test speakers do not appear in
+  training, and neither do their sentences, even when read by someone else.
+- TUX (class 12 dataset, a single speaker): split by sentence.
+- No normalized sentence appears in two splits.
 
-Uso: python scripts/prepare_audio.py
+Usage: python scripts/prepare_audio.py
 """
 
 from __future__ import annotations
@@ -56,7 +56,7 @@ def tux_entries() -> list[dict]:
 
 
 def assign_splits(entries: list[dict]) -> list[dict]:
-    """Devuelve solo los ejemplos que se pueden usar sin fuga de datos."""
+    """Returns only the examples that can be used without data leakage."""
     generator = random.Random(SEED)
     frequency = Counter(entry["text"] for entry in entries)
     speakers = defaultdict(set)
@@ -86,7 +86,7 @@ def assign_splits(entries: list[dict]) -> list[dict]:
     for speaker, split in held_out.items():
         own = [entry for entry in entries if entry["speaker"] == speaker]
         generator.shuffle(own)
-        # Se prefieren las frases menos repetidas: así se descartan menos audios de entrenamiento.
+        # Prefer the least repeated sentences: that way fewer training clips are discarded.
         own.sort(key=lambda entry: frequency[entry["text"]])
         reserve(own, split, CLIPS_PER_HELD_OUT_SPEAKER)
 
@@ -119,7 +119,7 @@ def convert(entries: list[dict]) -> list[dict]:
             seconds = len(audio) / SAMPLE_RATE
             if not MIN_SECONDS <= seconds <= MAX_SECONDS:
                 return None
-            # La salida de la red tiene 50 pasos por segundo: si no alcanzan, CTC no puede alinear.
+            # The network outputs 50 steps per second: if they are not enough, CTC cannot align.
             if len(entry["text"]) * 1.2 > seconds * 50:
                 return None
             relative = f"audio/{entry['split']}/{entry['id']}.wav"
@@ -129,7 +129,7 @@ def convert(entries: list[dict]) -> list[dict]:
             return {"path": relative, **entry, "seconds": f"{seconds:.3f}"}
 
         with ThreadPoolExecutor(6) as pool:
-            # Por lotes, para no cargar los .zip completos en memoria.
+            # In batches, so the whole .zip files are not loaded into memory.
             for start in range(0, len(group), 256):
                 jobs = []
                 for entry in group[start : start + 256]:
@@ -141,7 +141,7 @@ def convert(entries: list[dict]) -> list[dict]:
                 kept += [row for row in pool.map(process, jobs) if row]
         if bundle:
             bundle.close()
-        print(f"{source}: listo", flush=True)
+        print(f"{source}: done", flush=True)
     return kept
 
 

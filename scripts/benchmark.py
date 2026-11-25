@@ -1,10 +1,10 @@
-"""Mide latencia y velocidad en el equipo de la demostración, en GPU y en CPU.
+"""Measures latency and speed on the demo machine, on GPU and on CPU.
 
-- Imagen: preprocesamiento más inferencia, una imagen a la vez.
-- Video: decodificar, preprocesar, inferir y dibujar, cuadro a cuadro.
-- Audio: remuestreo, espectrograma, red y beam search.
+- Image: preprocessing plus inference, one image at a time.
+- Video: decode, preprocess, infer and draw, frame by frame.
+- Audio: resampling, spectrogram, network and beam search.
 
-Uso: python scripts/benchmark.py
+Usage: python scripts/benchmark.py
 """
 
 from __future__ import annotations
@@ -64,7 +64,7 @@ def main() -> None:
     picked = generator.choice(len(speech), 60, replace=False)
     clips = [load_audio(PROCESSED / speech[index]["path"]) for index in picked]
     joined = np.concatenate(clips)
-    video = SAMPLES / "video" / "montaje_prueba.mp4"
+    video = SAMPLES / "video" / "test_montage.mp4"
     truth = read_json(video.with_suffix(".json"))
 
     devices = ["cuda", "cpu"] if torch.cuda.is_available() else ["cpu"]
@@ -77,7 +77,7 @@ def main() -> None:
 
             started = time.perf_counter()
             stamps, correct, total = [], 0, 0
-            # Sin suavizado y sin esperar: mide lo que el equipo puede dar.
+            # No smoothing and no waiting: measures what the machine can deliver.
             for frame in classify_video(str(video), classifier, 0.5, 0.0, paced=False):
                 stamps.append(time.perf_counter())
                 for segment in truth:

@@ -1,1 +1,1 @@
-"""Clasificación de residuos con transfer learning."""
+"""Waste classification with transfer learning."""

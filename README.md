@@ -1,18 +1,20 @@
 # EcoVoz
 
-Proyecto final de IC-6200 Inteligencia Artificial (TEC, II Semestre 2026): una aplicación multimodal de deep learning que
+Final project for IC-6200 Artificial Intelligence (TEC, second semester 2026): a multimodal deep learning application that
 
-- clasifica **imágenes** de residuos en seis clases, con ResNet-50 y MobileNetV3-Large (transfer learning);
-- clasifica **video** y cámara en vivo, cuadro a cuadro;
-- transcribe **audio** en español con un DeepSpeech2 entrenado con **CTC**.
+- classifies waste **images** into six classes, with ResNet-50 and MobileNetV3-Large (transfer learning);
+- classifies **video** and the live camera, frame by frame;
+- transcribes Spanish **audio** with a DeepSpeech2 model trained with **CTC**.
 
-Equipo: Anthony Jafeth Arias Robleto, Randy Espinoza Downing y Kenneth Jhoan Araya Arguedas.
+The app interface and the documentation are in English; the speech model recognizes and transcribes **Spanish** speech.
 
-Resultados: [reports/summary.md](reports/summary.md). Paper: [paper/EcoVoz_paper.pdf](paper/EcoVoz_paper.pdf). Presentación: [presentation/EcoVoz.pptx](presentation/EcoVoz.pptx).
+Team: Anthony Jafeth Arias Robleto, Randy Espinoza Downing and Kenneth Jhoan Araya Arguedas.
 
-## Ejecutar la aplicación
+Results: [reports/summary.md](reports/summary.md). Paper: [paper/EcoVoz_paper.pdf](paper/EcoVoz_paper.pdf). Presentation: [presentation/EcoVoz.pptx](presentation/EcoVoz.pptx).
 
-Los modelos entrenados vienen en el repositorio: no hace falta descargar datos ni entrenar. Se necesita Python 3.11 o superior.
+## Running the application
+
+The trained models are included in the repository: there is no need to download data or train. Python 3.11 or later is required.
 
 ```powershell
 git clone https://github.com/KthArg/ecovoz.git
@@ -23,90 +25,90 @@ python -m venv .venv
 .venv\Scripts\python app.py --open
 ```
 
-Abre <http://127.0.0.1:7860>. En Windows también sirve hacer doble clic en `iniciar.bat`, que hace todo lo anterior.
+It opens <http://127.0.0.1:7860>. On Windows you can also double-click `start.bat`, which does all of the above.
 
-Para usar una GPU NVIDIA, instale PyTorch con CUDA **antes** de `requirements.txt`:
+To use an NVIDIA GPU, install PyTorch with CUDA **before** `requirements.txt`:
 
 ```powershell
 .venv\Scripts\python -m pip install torch==2.14.1 torchvision==0.29.1 --index-url https://download.pytorch.org/whl/cu130
 ```
 
-La aplicación también funciona solo con CPU (`--device cpu`). Las latencias de ambos casos están en el resumen de resultados.
+The application also runs on CPU only (`--device cpu`). Latencies for both cases are in the results summary.
 
-| Pestaña | Qué hace |
+| Tab | What it does |
 |---|---|
-| Imagen | cargar, capturar o pegar una imagen: clase, recipiente, probabilidades y milisegundos |
-| Video | reproducir un video clasificado cuadro a cuadro, con cuadros por segundo |
-| Cámara en vivo | clasificar la cámara web |
-| Audio | grabar o cargar audio: transcripción, salida CTC sin corregir y latencia |
-| Resultados | métricas y figuras de la evaluación |
+| Image | upload, capture or paste an image: class, bin, probabilities and milliseconds |
+| Video | play a video classified frame by frame, with frames per second |
+| Live camera | classify the webcam feed |
+| Audio | record or upload audio: transcription, raw CTC output and latency |
+| Results | evaluation metrics and figures |
 
-En `samples/` hay imágenes, audios, un video de prueba generado y dos videos grabados por el equipo.
+`samples/` contains images, audio clips, a generated test video and two videos recorded by the team.
 
-## Qué se entrenó en este proyecto
+## What was trained in this project
 
-| Modelo | Punto de partida | Qué entrenamos |
+| Model | Starting point | What we trained |
 |---|---|---|
-| ResNet-50 | pesos de ImageNet (torchvision) | cabeza nueva de 6 clases + `layer3` y `layer4` |
-| MobileNetV3-Large | pesos de ImageNet (torchvision) | cabeza nueva de 6 clases + toda la red |
-| DeepSpeech2 (CTC) | pesos aleatorios | todo: preentrenamiento con TUX y luego todo el corpus |
-| Modelo de lenguaje | nada | 6-grama contado con los textos de entrenamiento |
+| ResNet-50 | ImageNet weights (torchvision) | new 6-class head + `layer3` and `layer4` |
+| MobileNetV3-Large | ImageNet weights (torchvision) | new 6-class head + the whole network |
+| DeepSpeech2 (CTC) | random weights | everything: pretraining on TUX, then the full corpus |
+| Language model | nothing | character 6-gram counted from the training texts |
 
-No se usa ningún modelo de voz externo. Los pesos de ImageNet son el punto de partida que exige el transfer learning.
+No external speech model is used. The ImageNet weights are the starting point that transfer learning requires.
 
-## Reproducir el trabajo
+## Reproducing the work
 
 ```powershell
 .venv\Scripts\python -m pip install -r requirements-dev.txt
-.venv\Scripts\python scripts\download_data.py      # ~7 GB, necesita git
+.venv\Scripts\python scripts\download_data.py      # ~7 GB, requires git
 .venv\Scripts\python scripts\prepare_images.py
 .venv\Scripts\python scripts\prepare_audio.py
-.venv\Scripts\python scripts\train_vision.py       # 8 configuraciones
-.venv\Scripts\python scripts\train_speech.py       # 5 experimentos, varias horas con GPU
+.venv\Scripts\python scripts\train_vision.py       # 8 configurations
+.venv\Scripts\python scripts\train_speech.py       # 5 experiments, several hours on GPU
 .venv\Scripts\python scripts\evaluate_vision.py
 .venv\Scripts\python scripts\evaluate_speech.py
-.venv\Scripts\python scripts\build_samples.py      # necesita ffmpeg
+.venv\Scripts\python scripts\build_samples.py      # requires ffmpeg
 .venv\Scripts\python scripts\benchmark.py
 .venv\Scripts\python scripts\make_report.py
 cd paper; tectonic main.tex
 ```
 
-La semilla es 42 en todos los pasos. En GPU el resultado puede variar levemente porque algunas operaciones de CUDA no son deterministas.
+The seed is 42 in every step. On GPU the results may vary slightly because some CUDA operations are not deterministic.
 
-## Pruebas
+## Tests
 
 ```powershell
 .venv\Scripts\python -m pytest
 .venv\Scripts\python -m ruff check .
 ```
 
-Cubren la normalización, WER y CER (contra `jiwer`), el beam search (contra la suma exhaustiva de alineamientos), el espectrograma, el modelo y la ausencia de fuga entre particiones.
+They cover text normalization, WER and CER (against `jiwer`), beam search (against the exhaustive sum over alignments), the spectrogram, the model and the absence of leakage between splits.
 
-## Organización
+## Layout
 
 ```
-app.py                 aplicación Gradio
+app.py                 Gradio application
 src/ecovoz/
-  config.py            rutas y constantes
-  inference.py         inferencia de imagen y voz
-  video.py             clasificación cuadro a cuadro
-  vision/              modelos, datos y aumento
-  speech/              texto, audio, log-mel, DeepSpeech2, decodificadores, WER/CER
-scripts/               descarga, preparación, entrenamiento, evaluación, latencia, reportes
-tests/                 pruebas
-data/README.md         fuentes, licencias, etiquetado y preprocesamiento
-data/manifests/        cada ejemplo con su partición
-data/subset/           240 imágenes y 100 audios preprocesados
-models/                pesos entrenados (float16)
-reports/               métricas, historiales, predicciones y figuras
-paper/                 artículo IEEE
-presentation/          presentación
-docs/GUIA_DEFENSA.md   explicación de cada parte y preguntas probables
+  config.py            paths and constants
+  inference.py         image and speech inference
+  video.py             frame-by-frame classification
+  vision/              models, data and augmentation
+  speech/              text, audio, log-mel, DeepSpeech2, decoders, WER/CER
+scripts/               download, preparation, training, evaluation, latency, reports
+tests/                 tests
+data/README.md         sources, licenses, labeling and preprocessing
+data/manifests/        every example with its split
+data/subset/           240 images and 100 preprocessed audio clips
+models/                trained weights (float16)
+reports/               metrics, histories, predictions and figures
+paper/                 IEEE paper
+presentation/          presentation
+docs/DEFENSE_GUIDE.md  explanation of each part and likely questions
 ```
 
-## Licencias y autoría
+## Licenses and authorship
 
-- **Datos:** TrashNet (MIT), RealWaste (CC BY-NC-SA 4.0), OpenSLR 72/73/74 (CC BY-SA 4.0) y TUX del curso (sin licencia declarada, sus audios no se redistribuyen). Detalle en [data/README.md](data/README.md).
-- **Modelos base:** ResNet-50 y MobileNetV3-Large de torchvision (BSD-3) con pesos de ImageNet. La arquitectura de voz se basa en el [ejemplo CTC de Keras](https://keras.io/examples/audio/ctc_asr/) (Apache-2.0) visto en clase, reescrito en PyTorch.
-- **Pesos de visión:** derivan de RealWaste, por lo que son solo para uso no comercial.
-- **IA generativa:** el proyecto se desarrolló con apoyo de Claude (Anthropic) mediante Claude Code. El equipo definió los requisitos y la metodología del curso, grabó los videos propios y revisó los resultados; la herramienta generó el diseño, el código, los experimentos y el análisis, y con ella también se redactaron el paper y la presentación. Detalle en la declaración del paper.
+- **Data:** TrashNet (MIT), RealWaste (CC BY-NC-SA 4.0), OpenSLR 72/73/74 (CC BY-SA 4.0) and the course's TUX dataset (no declared license; its audio is not redistributed). Details in [data/README.md](data/README.md).
+- **Base models:** ResNet-50 and MobileNetV3-Large from torchvision (BSD-3) with ImageNet weights. The speech architecture is based on the [Keras CTC example](https://keras.io/examples/audio/ctc_asr/) (Apache-2.0) covered in class, rewritten in PyTorch.
+- **Vision weights:** derived from RealWaste, so they are for non-commercial use only.
+- **Generative AI:** the project was developed with the support of Claude (Anthropic) through Claude Code. The team defined the requirements and the course methodology and recorded the own videos; the tool generated the design, code, experiments and analysis, and drafted the paper and the presentation, which the team reviewed, checking the results and requesting corrections. Details in the paper's declaration.

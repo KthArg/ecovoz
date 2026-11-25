@@ -1,14 +1,14 @@
-\section{Introducción}
+\section{Introduction}
 
-Separar los residuos en la fuente exige una decisión pequeña que se repite muchas veces: en cuál recipiente va cada objeto. Un asistente que observe el objeto y escuche a la persona puede apoyar esa decisión, pero necesita modelos de dos dominios distintos. La visión por computador dispone de extractores preentrenados que se adaptan con pocas imágenes. El reconocimiento de voz debe, además, resolver la alineación entre una señal larga y un texto corto, cuya correspondencia temporal no se conoce.
+Sorting waste at the source requires a small decision that is repeated many times: which bin each object goes into. An assistant that sees the object and listens to the person can support that decision, but it needs models from two different domains. Computer vision has pretrained feature extractors that can be adapted with few images. Speech recognition must, in addition, solve the alignment between a long signal and a short text whose temporal correspondence is unknown.
 
-Este trabajo presenta \emph{EcoVoz}, una aplicación local que integra tres modalidades: imagen, video clasificado cuadro a cuadro y audio transcrito a texto. Se plantean tres preguntas:
+This work presents \emph{EcoVoz}, a local application that integrates three modalities: images, video classified frame by frame, and audio transcribed to text. We address three questions:
 \begin{enumerate}
-\item ¿cuánto aporta cada nivel de ajuste fino en transfer learning, y se justifica una red grande (ResNet-50) frente a una móvil (MobileNetV3-Large)?
-\item ¿qué puede aprender un modelo CTC con solo 100 audios, y cuánto ayudan el aumento de datos y el preentrenamiento?
-\item ¿alcanza un equipo de escritorio para responder en tiempo casi real con las tres modalidades?
+\item how much does each level of fine-tuning contribute in transfer learning, and is a large network (ResNet-50) justified over a mobile one (MobileNetV3-Large)?
+\item what can a CTC model learn from only 100 recordings, and how much do data augmentation and pretraining help?
+\item is a desktop computer enough to respond in near real time across the three modalities?
 \end{enumerate}
 
-Los aportes son una comparación de ocho configuraciones de visión sobre una misma partición agrupada por objeto, una serie de cinco experimentos de voz evaluados sobre los mismos locutores no vistos, una medición de latencia de punta a punta en GPU y CPU, y un repositorio con el código que genera cada cifra de este documento.
+The contributions are a comparison of eight vision configurations on a single object-grouped split, a series of five speech experiments evaluated on the same unseen speakers, an end-to-end latency measurement on GPU and CPU, and a repository with the code that produces every figure in this paper.
 
-El resto del artículo se organiza así: la Sección~\ref{sec:teoria} resume el marco teórico, la Sección~\ref{sec:metodo} describe datos, modelos, entrenamiento y aplicación, la Sección~\ref{sec:resultados} analiza los resultados y la Sección~\ref{sec:conclusiones} concluye.
+The rest of the paper is organized as follows: Section~\ref{sec:teoria} summarizes the theoretical background, Section~\ref{sec:metodo} describes the data, models, training, and application, Section~\ref{sec:resultados} analyzes the results, and Section~\ref{sec:conclusiones} concludes.

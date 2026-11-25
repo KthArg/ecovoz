@@ -1,4 +1,4 @@
-"""Verifica sobre los manifiestos que no haya fuga de datos entre particiones."""
+"""Checks on the manifests that there is no data leakage between splits."""
 
 from collections import Counter, defaultdict
 

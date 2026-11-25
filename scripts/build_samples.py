@@ -1,13 +1,13 @@
-"""Crea los ejemplos de la demostración, el video de prueba y el subconjunto entregable.
+"""Builds the demo samples, the test video and the deliverable data subset.
 
-- samples/images y samples/audio: ejemplos al azar (semilla fija) de la partición
-  de prueba, sin escoger por el resultado del modelo.
-- samples/video/montaje_prueba.mp4: montaje propio con fotos de prueba en movimiento
-  y la verdad de cada tramo, para medir exactitud por cuadro y velocidad.
-- data/subset: 240 imágenes y los 100 audios del experimento `small100`, ya
-  preprocesados, con sus etiquetas.
+- samples/images and samples/audio: random examples (fixed seed) from the test
+  split, not picked by the model's result.
+- samples/video/test_montage.mp4: our own montage of moving test photos, with the
+  ground truth of each segment, to measure per-frame accuracy and speed.
+- data/subset: 240 images and the 100 clips of the `small100` experiment, already
+  preprocessed, with their labels.
 
-Uso: python scripts/build_samples.py  (necesita ffmpeg para el video)
+Usage: python scripts/build_samples.py  (needs ffmpeg for the video)
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ SUBSET_PER_CELL = {"train": 28, "val": 6, "test": 6}
 def render_video(chosen: list[dict]) -> None:
     folder = SAMPLES / "video"
     folder.mkdir(parents=True, exist_ok=True)
-    target = folder / "montaje_prueba.mp4"
+    target = folder / "test_montage.mp4"
     command = [
         "ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "bgr24",
         "-s", f"{WIDTH}x{HEIGHT}", "-r", str(FPS), "-i", "-", "-c:v", "libx264",
@@ -47,7 +47,7 @@ def render_video(chosen: list[dict]) -> None:
         background = cv2.GaussianBlur(background, (0, 0), 28)
         for step in range(count):
             progress = step / count
-            # Cámara simulada: acercamiento, paneo, giro y cambio de luz.
+            # Simulated camera: zoom, pan, rotation and lighting change.
             scale = HEIGHT / height * (1.0 + 0.18 * progress)
             angle = 4 * np.sin(2 * np.pi * progress + number)
             matrix = cv2.getRotationMatrix2D((width / 2, height / 2), angle, scale)
@@ -69,8 +69,8 @@ def render_video(chosen: list[dict]) -> None:
         )
     encoder.stdin.close()
     if encoder.wait():
-        raise SystemExit("ffmpeg no pudo crear el video")
-    write_json(folder / "montaje_prueba.json", truth)
+        raise SystemExit("ffmpeg could not create the video")
+    write_json(folder / "test_montage.json", truth)
 
 
 def main() -> None:
@@ -99,7 +99,7 @@ def main() -> None:
         name = f"{corpus}.wav"
         shutil.copyfile(PROCESSED / row["path"], SAMPLES / "audio" / name)
         credits.append({"file": name, "id": row["id"], "text": row["text"], "license": "CC BY-SA 4.0"})
-    write_csv(SAMPLES / "audio" / "transcripciones.csv", credits)
+    write_csv(SAMPLES / "audio" / "transcriptions.csv", credits)
 
     subset = DATA / "subset"
     image_rows = []
@@ -107,7 +107,7 @@ def main() -> None:
         for split, count in SUBSET_PER_CELL.items():
             options = [row for row in images if row["label"] == label and row["split"] == split]
             image_rows += generator.sample(options, count)
-    # La misma selección que hace train_speech.py para small100.
+    # The same selection that train_speech.py makes for small100.
     speech = [row for row in clips if row["split"] == "train" and row["source"] != "tux"]
     audio_rows = random.Random(SEED).sample(speech, 100)
     for rows, name in ((image_rows, "images.csv"), (audio_rows, "audio.csv")):
@@ -116,7 +116,7 @@ def main() -> None:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(PROCESSED / row["path"], target)
         write_csv(subset / name, rows)
-    print(f"{len(image_rows)} imágenes y {len(audio_rows)} audios en {subset}")
+    print(f"{len(image_rows)} images and {len(audio_rows)} clips in {subset}")
 
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
-"""Prepara las imágenes y las particiona 70/15/15 sin fuga de datos.
+"""Prepares the images and splits them 70/15/15 without data leakage.
 
-1. Une TrashNet y las clases equivalentes de RealWaste.
-2. Elimina los duplicados exactos, comparando los píxeles decodificados.
-3. Agrupa las fotos casi idénticas (el mismo objeto fotografiado varias veces)
-   con la similitud coseno de ResNet-50 preentrenada.
-4. Asigna grupos completos a una sola partición, estratificando por clase y fuente.
+1. Merges TrashNet with the equivalent RealWaste classes.
+2. Removes exact duplicates by comparing the decoded pixels.
+3. Groups near-identical photos (the same object photographed several times)
+   using the cosine similarity of a pretrained ResNet-50.
+4. Assigns whole groups to a single split, stratified by class and source.
 
-Uso: python scripts/prepare_images.py [--threshold T] [--inspect]
+Usage: python scripts/prepare_images.py [--threshold T] [--inspect]
 """
 
 from __future__ import annotations
@@ -58,7 +58,7 @@ RATIOS = {"train": 0.70, "val": 0.15, "test": 0.15}
 
 
 def normalize_images() -> tuple[list[dict], dict]:
-    """Guarda cada imagen como JPEG RGB con lado corto de 256 px."""
+    """Saves every image as an RGB JPEG with a short side of 256 px."""
     seen: dict[str, dict] = {}
     conflicts: set[str] = set()
     duplicates = 0
@@ -116,7 +116,7 @@ def embed(rows: list[dict], device: torch.device) -> np.ndarray:
 
 
 def find_groups(rows: list[dict], similarity: np.ndarray, threshold: float) -> list[int]:
-    """Componentes conexas de los pares de una misma fuente por encima del umbral."""
+    """Connected components of same-source pairs above the threshold."""
     parent = list(range(len(rows)))
 
     def root(node: int) -> int:
@@ -132,7 +132,7 @@ def find_groups(rows: list[dict], similarity: np.ndarray, threshold: float) -> l
 
 
 def split_groups(rows: list[dict], groups: list[int]) -> list[str]:
-    """Reparte los grupos, de mayor a menor, a la partición más lejos de su cuota."""
+    """Assigns the groups, largest first, to the split furthest below its quota."""
     members = defaultdict(list)
     for index, group in enumerate(groups):
         members[group].append(index)
@@ -160,7 +160,7 @@ def split_groups(rows: list[dict], groups: list[int]) -> list[str]:
 
 
 def save_inspection(rows: list[dict], similarity: np.ndarray) -> None:
-    """Pares de muestra por rango de similitud, para elegir el umbral mirando las fotos."""
+    """Sample pairs per similarity range, to choose the threshold by looking at the photos."""
     import matplotlib.pyplot as plt
 
     levels = (0.98, 0.96, 0.94, 0.92, 0.90, 0.88, 0.85)
@@ -183,7 +183,7 @@ def save_inspection(rows: list[dict], similarity: np.ndarray) -> None:
 
     for level in levels:
         sizes = Counter(find_groups(rows, similarity, level)).values()
-        print(f"umbral {level}: {len(sizes)} grupos, el mayor de {max(sizes)}")
+        print(f"threshold {level}: {len(sizes)} groups, the largest has {max(sizes)}")
 
 
 def main() -> None:

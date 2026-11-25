@@ -1,8 +1,8 @@
-\section{Resultados y análisis}\label{sec:resultados}
+\section{Results and Analysis}\label{sec:resultados}
 
 \begin{table}[t]
 \centering
-\caption{F1 macro de validación por estrategia (\%). En negrita, la elegida}
+\caption{Validation macro F1 by strategy (\%). The chosen one is in bold}
 \label{tab:strategies}
 \input{generated/tab_strategies}
 \end{table}
@@ -10,33 +10,33 @@
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.66\textwidth]{confusion_matrices.pdf}
-\caption{Matrices de confusión en prueba. El color indica la proporción respecto a la clase real.}
+\caption{Test confusion matrices. Color indicates the proportion relative to the true class.}
 \label{fig:confusion}
 \end{figure*}
 
 \begin{table*}[t]
 \centering
-\caption{Precisión (P), recall (R) y F1 por clase en prueba (\%)}
+\caption{Per-class test precision (P), recall (R), and F1 (\%)}
 \label{tab:perclass}
 \input{generated/tab_per_class}
 \end{table*}
 
-\subsection{Estrategias de transfer learning}
+\subsection{Transfer Learning Strategies}
 
-La Tabla~\ref{tab:strategies} muestra que congelar todo el extractor es la peor opción en ambas redes. Las características de ImageNet no bastan para materiales que se distinguen por brillo, transparencia o textura, y ajustar el extractor mejora el F1 macro entre 3,8 y 8,8 puntos. Las tres estrategias con ajuste quedan muy cerca entre sí. El efecto del aumento depende de la arquitectura: en MobileNet mejora el resultado, mientras que en ResNet-50 el ajuste parcial sin aumento quedó arriba. Se respetó esa elección porque el criterio se fijó de antemano. La consecuencia es que el ResNet elegido probablemente tolere menos los cambios de cámara.
+Table~\ref{tab:strategies} shows that freezing the entire extractor is the worst option for both networks. ImageNet features are not enough for materials distinguished by gloss, transparency, or texture, and fine-tuning the extractor improves macro F1 by 3.8 to 8.8 points. The three fine-tuning strategies are very close to one another. The effect of augmentation depends on the architecture: in MobileNet it improves the result, whereas in ResNet-50 partial fine-tuning without augmentation came out on top. That choice was kept because the criterion had been fixed in advance. As a consequence, the chosen ResNet is probably less tolerant of camera changes.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{vision_curves.pdf}
-\caption{Curvas de la estrategia elegida para cada arquitectura.}
+\caption{Curves of the chosen strategy for each architecture.}
 \label{fig:vision-curves}
 \end{figure}
 
-En la Fig.~\ref{fig:vision-curves} el salto de la época 5 corresponde al inicio del ajuste fino. El ResNet sin aumento llega a un F1 de 1 en entrenamiento en pocas épocas, aunque su validación se mantiene estable. Con aumento, la brecha de MobileNet es menor.
+In Fig.~\ref{fig:vision-curves}, the jump at epoch 5 marks the start of fine-tuning. The ResNet without augmentation reaches a training F1 of 1 within a few epochs, although its validation score remains stable. With augmentation, MobileNet's gap is smaller.
 
 \begin{table}[t]
 \centering
-\caption{Clasificadores en la partición de prueba}
+\caption{Classifiers on the test split}
 \label{tab:vision}
 \input{generated/tab_vision}
 \end{table}
@@ -44,87 +44,87 @@ En la Fig.~\ref{fig:vision-curves} el salto de la época 5 corresponde al inicio
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.74\textwidth]{speech_curves.pdf}
-\caption{Entrenamiento CTC. Arriba: pérdida con 100 audios y del modelo final. Abajo: error en validación.}
+\caption{CTC training. Top: loss with 100 recordings and for the final model. Bottom: validation error.}
 \label{fig:speech-curves}
 \end{figure*}
 
 \begin{table*}[t]
 \centering
-\caption{Experimentos CTC sobre la misma validación, con decodificación voraz (\%). $N$: audios de entrenamiento}
+\caption{CTC experiments on the same validation set, with greedy decoding (\%). $N$: training recordings}
 \label{tab:experiments}
 \input{generated/tab_experiments}
 \end{table*}
 
-\subsection{Comparación de modelos en prueba}
+\subsection{Model Comparison on the Test Set}
 
-MobileNetV3-Large acertó \MobAcc\,\% y ResNet-50 \ResAcc\,\% (Tabla~\ref{tab:vision}). De los desacuerdos, en \McA{} imágenes solo acertó ResNet y en \McB{} solo MobileNet. La prueba de McNemar da $p$ \McP, así que \emph{no se puede afirmar que una red sea más precisa que la otra}. Se eligió MobileNet para la aplicación por su mejor F1 en validación, su tamaño y su latencia en CPU. Ambas rinden algo menos en RealWaste, donde los objetos están sucios o deformados, pero la brecha con TrashNet es de pocos puntos.
+MobileNetV3-Large achieved \MobAcc\,\% and ResNet-50 \ResAcc\,\% (Table~\ref{tab:vision}). Among the disagreements, only ResNet was correct on \McA{} images and only MobileNet on \McB{}. McNemar's test gives $p$ \McP, so \emph{neither network can be claimed to be more accurate than the other}. MobileNet was chosen for the application because of its better validation F1, its size, and its CPU latency. Both perform somewhat worse on RealWaste, where objects are dirty or deformed, but the gap with TrashNet is only a few points.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.78\columnwidth]{vision_errors.pdf}
-\caption{Errores de MobileNetV3-L con mayor confianza (real $\to$ predicción).}
+\caption{Highest-confidence errors of MobileNetV3-L (true $\to$ predicted).}
 \label{fig:errors}
 \end{figure}
 
 \begin{table*}[t]
 \centering
-\caption{Aciertos y fallos con locutores nuevos, tomados de posiciones fijas del ranking por WER (\%)}
+\caption{Successes and failures on unseen speakers, taken from fixed positions of the WER ranking (\%)}
 \label{tab:examples}
 \small
 \input{generated/tab_examples}
 \end{table*}
 
-\subsection{Análisis de errores visuales}
-Según la Tabla~\ref{tab:perclass} y la Fig.~\ref{fig:confusion}, la clase más difícil para MobileNet es el plástico, por su recall: se confunde con metal (superficies brillantes), vidrio (transparencia), papel (empaques blancos arrugados) y cartón (envases impresos). En ResNet, la clase no reciclable tiene el menor recall. Es la menos numerosa y la más heterogénea, pues se define por exclusión y no por un material.
+\subsection{Visual Error Analysis}
+According to Table~\ref{tab:perclass} and Fig.~\ref{fig:confusion}, the hardest class for MobileNet is plastic, by recall: it is confused with metal (shiny surfaces), glass (transparency), paper (crumpled white packaging), and cardboard (printed containers). In ResNet, the trash (non-recyclable) class has the lowest recall. It is the smallest and most heterogeneous class, since it is defined by exclusion rather than by a material.
 
-La Fig.~\ref{fig:errors} muestra los errores de mayor confianza. Varios son ambiguos incluso para una persona: envases de material mixto, tapas metálicas dentro de la clase plástico o plástico verde transparente que parece vidrio. Un umbral de confianza no elimina estos casos, pero sí ayuda. La calibración, con temperatura \BestTemp{}, redujo el error esperado de calibración de \EceBefore\,\% a \EceAfter\,\%. Con un umbral de 0,7 el modelo responde en el \RejectCoverage\,\% de las imágenes de prueba y acierta el \RejectAcc\,\% de ellas.
+Fig.~\ref{fig:errors} shows the highest-confidence errors. Several are ambiguous even for a person: mixed-material containers, metal lids within the plastic class, or transparent green plastic that looks like glass. A confidence threshold does not eliminate these cases, but it does help. Calibration, with a temperature of \BestTemp{}, reduced the expected calibration error from \EceBefore\,\% to \EceAfter\,\%. With a threshold of 0.7, the model answers on \RejectCoverage\,\% of the test images and is correct on \RejectAcc\,\% of them.
 
 \begin{table}[t]
 \centering
-\caption{Modelo final en validación y prueba (\%). $^{*}$\,$\alpha$ y $\beta$ se ajustaron con la mitad de la validación}
+\caption{Final model on validation and test (\%). $^{*}$\,$\alpha$ and $\beta$ were tuned on half of the validation set}
 \label{tab:speech}
 \resizebox{\columnwidth}{!}{\input{generated/tab_speech}}
 \end{table}
 
 \begin{table}[t]
 \centering
-\caption{Prueba por grupo, con beam search y modelo de lenguaje (\%)}
+\caption{Test results by group, with beam search and language model (\%)}
 \label{tab:speakers}
 \input{generated/tab_speakers}
 \end{table}
 
-\subsection{Voz: qué se logra con 100 audios}
+\subsection{Speech: What 100 Recordings Can Achieve}
 
-Desde cero, los 100 audios producen memorización: la pérdida de entrenamiento cae por debajo de 0,001 y la de validación sube desde su mínimo (Fig.~\ref{fig:speech-curves}). El CER se estanca en \ExpScratchCer\,\% y el WER en \ExpScratchWer\,\%, que supera el 100\,\% por las inserciones (Tabla~\ref{tab:experiments}). La curva también muestra la fase inicial típica de CTC: durante unas 20 épocas la red solo emite blancos y el CER es de 100\,\%.
+From scratch, the 100 recordings lead to memorization: the training loss drops below 0.001 while the validation loss rises from its minimum (Fig.~\ref{fig:speech-curves}). The CER stalls at \ExpScratchCer\,\% and the WER at \ExpScratchWer\,\%, which exceeds 100\,\% because of insertions (Table~\ref{tab:experiments}). The curve also shows the initial phase typical of CTC: for about 20 epochs the network emits only blanks and the CER is 100\,\%.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.70\columnwidth]{speech_distribution.pdf}
-\caption{Distribución acumulada del WER por enunciado en prueba.}
+\caption{Cumulative distribution of per-utterance test WER.}
 \label{fig:distribution}
 \end{figure}
 
-El aumento de datos retrasa la salida de esa fase y frena la memorización, pero \emph{no} mejora el CER (\ExpAugCer\,\%). Con tan pocos ejemplos falta variedad de palabras y voces, y deformar los mismos audios no la crea. El preentrenamiento sí cambia el resultado. El modelo de TUX, por sí solo, falla con voces nuevas (CER de \ExpTuxCer\,\%), pero al ajustarlo con los mismos 100 audios el CER baja a \ExpTransferCer\,\%: la red ya conoce la relación entre sonidos y letras del español y solo debe adaptarse a las voces. Con todo el corpus baja a \ExpMultiCer\,\%.
+Data augmentation delays the exit from that phase and slows memorization, but it does \emph{not} improve the CER (\ExpAugCer\,\%). With so few examples, there is not enough variety of words and voices, and distorting the same recordings does not create it. Pretraining, in contrast, does change the outcome. The TUX model on its own fails on new voices (CER of \ExpTuxCer\,\%), but fine-tuning it on the same 100 recordings lowers the CER to \ExpTransferCer\,\%: the network already knows the mapping between Spanish sounds and letters and only needs to adapt to the voices. With the full corpus, it drops to \ExpMultiCer\,\%.
 
 \begin{table}[t]
 \centering
-\caption{Latencia de punta a punta en el equipo de la demostración}
+\caption{End-to-end latency on the demonstration machine}
 \label{tab:latency}
 \input{generated/tab_latency}
 \end{table}
 
-\subsection{Modelo de voz final}
+\subsection{Final Speech Model}
 
-En validación, que no se usó para entrenar, el modelo final obtiene con locutores nuevos un WER de \ValSlrWer\,\% y un CER de \ValSlrCer\,\% (Tabla~\ref{tab:speech}). Esta cifra es algo optimista porque alfa y beta se eligieron con la mitad de ese conjunto. En prueba, con locutores y frases no vistos, el WER es de \SlrWer\,\% (IC 95\,\%: \SlrWerLow{} a \SlrWerHigh) y el CER de \SlrCer\,\%. La búsqueda por haz sin modelo de lenguaje casi no cambia la salida voraz, porque la red concentra la probabilidad en un camino. Al agregar el modelo de lenguaje, el WER baja desde \SlrWerGreedy\,\% (Tabla~\ref{tab:speech}). La mejora es mayor en WER que en CER: el n-grama corrige letras y espacios sueltos que bastan para arruinar una palabra.
+On validation, which was not used for training, the final model obtains a WER of \ValSlrWer\,\% and a CER of \ValSlrCer\,\% on unseen speakers (Table~\ref{tab:speech}). This figure is somewhat optimistic because alpha and beta were chosen on half of that set. On the test set, with unseen speakers and sentences, the WER is \SlrWer\,\% (95\,\% CI: \SlrWerLow{} to \SlrWerHigh) and the CER \SlrCer\,\%. Beam search without a language model barely changes the greedy output, because the network concentrates probability on a single path. Adding the language model lowers the WER from \SlrWerGreedy\,\% (Table~\ref{tab:speech}). The improvement is larger in WER than in CER: the n-gram corrects isolated letters and spaces that are enough to ruin a word.
 
-Con el locutor de TUX el WER es de \TuxWer\,\%. La diferencia con los locutores nuevos confirma que reportar solo una partición por frase habría dado una imagen demasiado optimista. También hay diferencias marcadas entre voces (Tabla~\ref{tab:speakers}), pero cada grupo tiene un único locutor de prueba, por lo que reflejan a esa persona y no a un país o sexo. La Fig.~\ref{fig:distribution} muestra la distribución completa del error.
+With the TUX speaker, the WER is \TuxWer\,\%. The gap with respect to unseen speakers confirms that reporting only a sentence-level split would have given an overly optimistic picture. There are also marked differences between voices (Table~\ref{tab:speakers}), but each group has a single test speaker, so they reflect that person rather than a country or sex. Fig.~\ref{fig:distribution} shows the full error distribution.
 
-En la Tabla~\ref{tab:examples} los fallos son en su mayoría fonéticamente plausibles. Los errores de carácter más frecuentes son espacios omitidos o insertados, la \emph{s} omitida (se aspira en parte del español latinoamericano), la \emph{h} muda, las confusiones entre \emph{b} y \emph{v}, que suenan igual, y las tildes. Los peores casos unen varias palabras cuando el habla es rápida. Los extranjerismos, como ``facebook'', fallan porque su escritura no sigue la pronunciación del español.
+In Table~\ref{tab:examples}, most failures are phonetically plausible. The most frequent character errors are missing or inserted spaces, a dropped \emph{s} (aspirated in parts of Latin American Spanish), the silent \emph{h}, confusions between \emph{b} and \emph{v}, which sound the same, and accent marks. The worst cases merge several words when speech is fast. Loanwords such as ``facebook'' fail because their spelling does not follow Spanish pronunciation.
 
-\subsection{Video y tiempo casi real}
+\subsection{Video and Near Real Time}
 
-La latencia incluye preprocesamiento, inferencia y, según el caso, decodificación del video, dibujo o beam search (Tabla~\ref{tab:latency}). Todas las combinaciones superan los umbrales de 5 cuadros por segundo y 5\,s por audio, incluso sin GPU. El percentil 95 de audio es de \AudioLat\,s en GPU y \AudioLatCpu\,s en CPU. En GPU ambas redes se parecen porque domina el preprocesamiento. En CPU, MobileNet es más de tres veces más rápida por imagen. Estas cifras no incluyen el envío de cada cuadro al navegador.
+Latency includes preprocessing, inference, and, depending on the case, video decoding, drawing, or beam search (Table~\ref{tab:latency}). All combinations exceed the thresholds of 5 frames per second and 5\,s per recording, even without a GPU. The 95th-percentile audio latency is \AudioLat\,s on GPU and \AudioLatCpu\,s on CPU. On GPU both networks are similar because preprocessing dominates. On CPU, MobileNet is more than three times faster per image. These figures do not include sending each frame to the browser.
 
-El video de prueba es un montaje propio de doce fotos de prueba con movimiento, giro y cambios de luz simulados, 62 cuadros por foto. MobileNet acertó el \VideoAcc\,\% de los cuadros. Los fallos se concentran en tres fotos que el modelo ya clasificaba mal como imagen fija. El movimiento cambió poco: corrigió parte de los cuadros de una de ellas y agregó algún parpadeo, que el suavizado reduce en la pantalla. Con doce objetos esta cifra es una demostración y no una estimación de desempeño.
+The test video is our own montage of twelve test photos with simulated motion, rotation, and lighting changes, 62 frames per photo. MobileNet was correct on \VideoAcc\,\% of the frames. Failures concentrate on three photos that the model already misclassified as still images. Motion changed little: it corrected some frames of one of them and added some flicker, which smoothing reduces on screen. With twelve objects, this figure is a demonstration and not a performance estimate.
 
-Además grabamos con un celular dos videos propios (480$\times$864 píxeles, 30 cuadros por segundo): una botella plástica de agua (\OwnBottleFrames{} cuadros) y un cuaderno (\OwnNotebookFrames{} cuadros), sobre un electrodoméstico blanco, en una habitación y con luz artificial. Ninguno de los dos se usó para entrenar ni para ajustar nada. MobileNetV3-L clasificó bien el \OwnBottleMob\,\% de los cuadros de la botella y el \OwnNotebookMob\,\% de los del cuaderno; en los demás lo confundió con cartón. ResNet-50 acertó solo el \OwnBottleRes\,\% y el \OwnNotebookRes\,\%: vio vidrio en la botella transparente y cartón en el cuaderno. En la prueba ambas redes no se distinguían, pero con una cámara real y fuera de los dos conjuntos de datos la diferencia es enorme. Es la evidencia más clara a favor del aumento de datos, que el ResNet elegido no usó, y de la elección de MobileNet para la aplicación. Con dos videos sigue siendo una observación y no una medición de desempeño.
+We also recorded two videos of our own with a phone (480$\times$864 pixels, 30 frames per second): a plastic water bottle (\OwnBottleFrames{} frames) and a notebook (\OwnNotebookFrames{} frames), on a white appliance, indoors under artificial light. Neither was used for training or tuning anything. MobileNetV3-L correctly classified \OwnBottleMob\,\% of the bottle frames and \OwnNotebookMob\,\% of the notebook frames; in the rest it confused the notebook with cardboard. ResNet-50 was correct on only \OwnBottleRes\,\% and \OwnNotebookRes\,\%: it saw glass in the transparent bottle and cardboard in the notebook. On the test set the two networks were indistinguishable, but with a real camera and outside both datasets the difference is huge. This is the clearest evidence in favor of data augmentation, which the chosen ResNet did not use, and of choosing MobileNet for the application. With two videos, it remains an observation and not a performance measurement.

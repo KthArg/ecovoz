@@ -1,13 +1,13 @@
 {
-  "video": "propio_botella.mp4",
+  "video": "own_bottle.mp4",
   "model": "resnet50",
   "device": "cuda",
   "frames": 184,
   "fps": 113.61774778390166,
   "inference_ms_mean": 7.2462298950362625,
   "predicted": {
-    "vidrio": 174,
-    "plástico": 10
+    "glass": 174,
+    "plastic": 10
   },
   "frame_accuracy": 0.05434782608695652,
   "frames_with_label": 184

@@ -1,4 +1,4 @@
-"""Inferencia de imagen y de voz para la aplicación y la medición de latencia."""
+"""Image and speech inference for the application and the latency benchmark."""
 
 from __future__ import annotations
 
@@ -47,11 +47,11 @@ class Transcription:
 
 
 class VisionClassifier:
-    """Clasifica una imagen RGB (uint8) con probabilidades calibradas en validación."""
+    """Classifies an RGB (uint8) image with probabilities calibrated on validation."""
 
     def __init__(self, arch: str, device: str | torch.device = "auto", models_dir: Path = MODELS) -> None:
         if arch not in ARCHITECTURES:
-            raise ValueError(f"Arquitectura desconocida: {arch}")
+            raise ValueError(f"Unknown architecture: {arch}")
         self.arch = arch
         self.device = get_device(str(device))
         checkpoint = load_checkpoint(models_dir / f"{arch}.pt")
@@ -63,7 +63,7 @@ class VisionClassifier:
         settings_path = models_dir / "vision.json"
         settings = read_json(settings_path) if settings_path.exists() else {}
         self.temperature = settings.get("temperature", {}).get(arch, 1.0)
-        # La primera pasada inicializa CUDA y tarda mucho más que las siguientes.
+        # The first pass initializes CUDA and takes much longer than the following ones.
         for _ in range(3):
             self.predict(np.zeros((256, 256, 3), dtype=np.uint8))
 
@@ -77,7 +77,7 @@ class VisionClassifier:
 
 
 def split_on_pauses(audio: np.ndarray, max_seconds: float = MAX_SEGMENT_SECONDS) -> list[np.ndarray]:
-    """Corta los audios largos en el punto más silencioso cercano al límite."""
+    """Splits long audio at the quietest point near the limit."""
     limit = int(max_seconds * SAMPLE_RATE)
     window = int(0.2 * SAMPLE_RATE)
     pieces = []
@@ -92,7 +92,7 @@ def split_on_pauses(audio: np.ndarray, max_seconds: float = MAX_SEGMENT_SECONDS)
 
 
 class Transcriber:
-    """Convierte audio en texto con DeepSpeech2 y beam search con modelo de lenguaje."""
+    """Converts audio to text with DeepSpeech2 and beam search with a language model."""
 
     def __init__(self, device: str | torch.device = "auto", models_dir: Path = MODELS) -> None:
         self.device = get_device(str(device))

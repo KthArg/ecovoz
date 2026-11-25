@@ -1,30 +1,30 @@
-\section{Marco teórico}\label{sec:teoria}
+\section{Background}\label{sec:teoria}
 
-\subsection{Transfer learning}
-Las primeras capas de una red convolucional aprenden bordes y texturas útiles para casi cualquier tarea visual, y las últimas se especializan en las clases de origen~\cite{yosinski}. Por eso es posible reutilizar una red entrenada con ImageNet~\cite{imagenet}, reemplazar su cabeza y entrenar solo una parte. Congelar más capas reduce el sobreajuste con pocos datos, y descongelarlas permite adaptar las características al dominio nuevo.
+\subsection{Transfer Learning}
+The first layers of a convolutional network learn edges and textures that are useful for almost any visual task, while the last layers specialize in the source classes~\cite{yosinski}. It is therefore possible to reuse a network trained on ImageNet~\cite{imagenet}, replace its head, and train only part of it. Freezing more layers reduces overfitting when data are scarce, and unfreezing them allows the features to adapt to the new domain.
 
-ResNet-50~\cite{resnet} aprende residuos $\mathcal{F}(x)$ y produce $\mathcal{F}(x)+x$, lo que permite entrenar redes profundas sin que el gradiente se degrade. MobileNetV3~\cite{mobilenet} usa convoluciones separables en profundidad, bloques residuales invertidos y atención por canal para reducir operaciones y parámetros.
+ResNet-50~\cite{resnet} learns residuals $\mathcal{F}(x)$ and outputs $\mathcal{F}(x)+x$, which makes it possible to train deep networks without gradient degradation. MobileNetV3~\cite{mobilenet} uses depthwise separable convolutions, inverted residual blocks, and channel attention to reduce operations and parameters.
 
 \subsection{Connectionist Temporal Classification}
-Sea $y^t_k$ la probabilidad del símbolo $k$ en el paso $t$, con un alfabeto ampliado con el blanco $\epsilon$. Un camino $\pi$ asigna un símbolo a cada paso, y la función $\mathcal{B}$ lo reduce a texto uniendo repeticiones y eliminando blancos. CTC~\cite{ctc} define la probabilidad de una transcripción $\ell$ como la suma sobre todos sus caminos:
+Let $y^t_k$ be the probability of symbol $k$ at step $t$, over an alphabet extended with the blank $\epsilon$. A path $\pi$ assigns one symbol to each step, and the function $\mathcal{B}$ reduces it to text by merging repetitions and removing blanks. CTC~\cite{ctc} defines the probability of a transcription $\ell$ as the sum over all of its paths:
 \begin{equation}
 p(\ell\mid x)=\sum_{\pi:\,\mathcal{B}(\pi)=\ell}\ \prod_{t=1}^{T} y^t_{\pi_t}.
 \end{equation}
-La suma se calcula con programación dinámica en $O(T|\ell|)$ y la pérdida es $-\ln p(\ell\mid x)$. Así se entrena sin etiquetar en qué instante suena cada letra. El blanco permite representar letras dobles: para producir ``ll'' hace falta al menos un $\epsilon$ entre ambas.
+The sum is computed by dynamic programming in $O(T|\ell|)$, and the loss is $-\ln p(\ell\mid x)$. Training thus requires no labels for when each letter is spoken. The blank makes it possible to represent double letters: producing ``ll'' requires at least one $\epsilon$ between them.
 
-\subsection{Decodificación}
-La decodificación voraz toma el símbolo más probable de cada paso. Es rápida, pero ignora que varios caminos suman para un mismo texto. La búsqueda por haz sobre prefijos~\cite{beam} suma esos caminos y admite un modelo de lenguaje, con el criterio
+\subsection{Decoding}
+Greedy decoding takes the most probable symbol at each step. It is fast, but it ignores that several paths add up to the same text. Prefix beam search~\cite{beam} sums those paths and admits a language model, with the criterion
 \begin{equation}
 \hat{\ell}=\arg\max_{\ell}\ \ln p(\ell\mid x)+\alpha\ln p_{LM}(\ell)+\beta|\ell|,
 \end{equation}
-donde $\alpha$ pondera el lenguaje y $\beta$ compensa su preferencia por textos cortos.
+where $\alpha$ weights the language model and $\beta$ offsets its preference for short texts.
 
 \subsection{DeepSpeech2}
-DeepSpeech2~\cite{ds2} convierte un espectrograma en probabilidades de caracteres con convoluciones 2D, que capturan patrones locales de tiempo y frecuencia y reducen la resolución, seguidas de capas recurrentes bidireccionales, que aportan contexto en ambos sentidos. Es la arquitectura estudiada en el curso~\cite{keras-ctc}.
+DeepSpeech2~\cite{ds2} maps a spectrogram to character probabilities using 2D convolutions, which capture local time--frequency patterns and reduce resolution, followed by bidirectional recurrent layers, which provide context in both directions. It is the architecture studied in the course~\cite{keras-ctc}.
 
-\subsection{Métricas}
-En clasificación se usan accuracy, precisión, recall y F1. El F1 macro promedia las clases sin ponderar, de modo que una clase minoritaria pesa igual que las demás. En voz se usa la distancia de edición entre referencia e hipótesis:
+\subsection{Metrics}
+Classification uses accuracy, precision, recall, and F1. Macro F1 averages the classes without weighting, so a minority class counts as much as the others. Speech uses the edit distance between reference and hypothesis:
 \begin{equation}
 \mathrm{WER}=\frac{S+D+I}{N},
 \end{equation}
-donde $S$, $D$ e $I$ son sustituciones, borrados e inserciones de palabras y $N$ las palabras de referencia. El CER es equivalente sobre caracteres. WER castiga una palabra completa por una sola letra equivocada, por lo que suele ser bastante mayor.
+where $S$, $D$, and $I$ are word substitutions, deletions, and insertions, and $N$ is the number of reference words. CER is the equivalent over characters. WER penalizes an entire word for a single wrong letter, so it is usually considerably higher.

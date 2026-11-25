@@ -1,4 +1,4 @@
-"""Decodificación CTC: voraz y beam search por prefijos con modelo de lenguaje de caracteres."""
+"""CTC decoding: greedy and prefix beam search with a character language model."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ _NEG_INF = float("-inf")
 
 
 def greedy_decode(log_probs: np.ndarray) -> str:
-    """Máximo por paso, colapso de repetidos y eliminación de blancos."""
+    """Best symbol per step, collapse repeats and remove blanks."""
     best = log_probs.argmax(-1)
     keep = np.concatenate([[True], best[1:] != best[:-1]])
     return decode(best[keep].tolist()).strip()
@@ -29,7 +29,7 @@ def _add(a: float, b: float) -> float:
 
 
 class CharNGram:
-    """N-gramas de caracteres con interpolación, contados solo con textos de entrenamiento."""
+    """Interpolated character n-grams, counted on training transcripts only."""
 
     def __init__(self, order: int, counts: dict[str, int]) -> None:
         self.order = order
@@ -56,7 +56,7 @@ class CharNGram:
             prefix = context[len(context) - size :]
             total = self.totals.get(prefix, 0)
             if total:
-                # Cuantos más conteos tiene el contexto, menos pesa el orden inferior.
+                # The more counts the context has, the less weight the lower order gets.
                 count = self.counts.get(prefix + char, 0)
                 probability = (count + 5.0 * probability) / (total + 5.0)
         return math.log(probability)
@@ -85,12 +85,12 @@ def beam_search(
     beam_width: int = 24,
     prune: float = -7.0,
 ) -> str:
-    """Beam search por prefijos (Hannun et al., 2014).
+    """Prefix beam search (Hannun et al., 2014).
 
-    Cada prefijo guarda la probabilidad de terminar en blanco y la de terminar en
-    carácter. `alpha` pondera el modelo de lenguaje y `beta` premia cada carácter.
+    Each prefix keeps the probability of ending in a blank and of ending in a
+    character. `alpha` weights the language model and `beta` rewards each character.
     """
-    # prefijo -> (termina en blanco, termina en carácter, puntaje del lenguaje)
+    # prefix -> (ends in blank, ends in character, language model score)
     beams = {"": (0.0, _NEG_INF, 0.0)}
     for step in log_probs:
         candidates = np.flatnonzero(step > prune).tolist() or [int(step.argmax())]
@@ -111,7 +111,7 @@ def beam_search(
                     entry[1] = _add(entry[1], char_end + p)
                 if char == " ":
                     if not prefix:
-                        # Un espacio inicial es silencio: cuenta como blanco.
+                        # A leading space is silence: it counts as a blank.
                         entry = following.setdefault(prefix, [_NEG_INF, _NEG_INF, bonus])
                         entry[0] = _add(entry[0], either + p)
                         continue

@@ -1,9 +1,9 @@
-"""Evalúa los dos clasificadores finales.
+"""Evaluates the two final classifiers.
 
-La validación se usa para calibrar la confianza (temperature scaling) y elegir el
-modelo por defecto. La prueba se usa solo para reportar.
+The validation split is used to calibrate the confidence (temperature scaling) and
+to choose the default model. The test split is used only for reporting.
 
-Uso: python scripts/evaluate_vision.py
+Usage: python scripts/evaluate_vision.py
 """
 
 from __future__ import annotations

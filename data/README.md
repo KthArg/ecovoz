@@ -1,6 +1,6 @@
-# Documentación de los datos
+# Data documentation
 
-`data/manifests/` enumera **cada** ejemplo usado, con su origen, etiqueta y partición. Los datos completos se reconstruyen con:
+`data/manifests/` lists **every** example used, with its source, label and split. The full data can be rebuilt with:
 
 ```
 python scripts/download_data.py
@@ -8,68 +8,68 @@ python scripts/prepare_images.py
 python scripts/prepare_audio.py
 ```
 
-`data/subset/` es el conjunto mínimo entregable, ya preprocesado: 240 imágenes (40 por clase, con su partición) y los 100 audios, con transcripción, del experimento de 100 audios.
+`data/subset/` is the minimal deliverable set, already preprocessed: 240 images (40 per class, with their split) and the 100 transcribed audio clips used in the 100-clip experiment.
 
-## Imágenes
+## Images
 
 | | TrashNet | RealWaste |
 |---|---|---|
-| Autores | Yang y Thung, 2016 | Single, Iranmanesh y Raad, 2023 |
-| Fuente | <https://github.com/garythung/trashnet> | <https://archive.ics.uci.edu/dataset/908/realwaste> |
-| Archivo | `dataset-resized.zip` | `realwaste.zip` |
-| Licencia | MIT | CC BY-NC-SA 4.0, según el README del archivo |
-| Captura | objetos sobre cartulina blanca | residuos recibidos en un centro de recuperación en Wollongong, Australia |
-| Etiquetado | manual, por los autores | manual, por los autores |
+| Authors | Yang and Thung, 2016 | Single, Iranmanesh and Raad, 2023 |
+| Source | <https://github.com/garythung/trashnet> | <https://archive.ics.uci.edu/dataset/908/realwaste> |
+| File | `dataset-resized.zip` | `realwaste.zip` |
+| License | MIT | CC BY-NC-SA 4.0, according to the archive's README |
+| Capture | objects on white poster board | waste received at a material recovery facility in Wollongong, Australia |
+| Labeling | manual, by the authors | manual, by the authors |
 
-**Clases.** Se usan seis: cartón, vidrio, metal, papel, plástico y no reciclable. `Miscellaneous Trash` de RealWaste equivale a `trash`. `Food Organics`, `Textile Trash` y `Vegetation` se excluyen porque no tienen equivalente en TrashNet. No se reetiquetó ninguna imagen.
+**Classes.** Six are used: cardboard, glass, metal, paper, plastic and non-recyclable (trash). RealWaste's `Miscellaneous Trash` maps to `trash`. `Food Organics`, `Textile Trash` and `Vegetation` are excluded because they have no TrashNet counterpart. No image was relabeled.
 
-**Preprocesamiento.**
+**Preprocessing.**
 
-1. Decodificación a RGB, respetando la orientación EXIF.
-2. Eliminación de duplicados exactos por SHA-256 de los píxeles. Si un duplicado tenía dos etiquetas, se descartaron ambas copias.
-3. Reescalado bicúbico del lado corto a 256 px y guardado como JPEG de calidad 92.
-4. Al entrenar o inferir: recorte de 224 x 224 y normalización de ImageNet.
+1. Decoding to RGB, honoring the EXIF orientation.
+2. Removal of exact duplicates by SHA-256 of the pixels. If a duplicate had two labels, both copies were discarded.
+3. Bicubic resizing of the short side to 256 px, saved as JPEG at quality 92.
+4. At training or inference time: 224 x 224 crop and ImageNet normalization.
 
-**Partición 70/15/15 sin fuga.** Ambos conjuntos tienen varias fotos del mismo objeto. Se calculó la similitud coseno entre embeddings de ResNet-50 (ImageNet) y se unieron las fotos de una misma fuente con similitud de 0,88 o más. Cada grupo queda completo en una sola partición, estratificando por clase y fuente. El umbral se eligió revisando pares reales (`reports/figures/near_duplicates.png`). Reduce la fuga, pero no garantiza detectar el mismo objeto visto desde ángulos muy distintos.
+**Leak-free 70/15/15 split.** Both datasets contain several photos of the same object. We computed the cosine similarity between ResNet-50 (ImageNet) embeddings and merged photos from the same source with a similarity of 0.88 or more. Each group stays whole in a single split, stratified by class and source. The threshold was chosen by inspecting real pairs (`reports/figures/near_duplicates.png`). It reduces leakage, but it is not guaranteed to catch the same object seen from very different angles.
 
-Los conteos por clase y partición están en `reports/data_images.json`.
+Counts per class and split are in `reports/data_images.json`.
 
 ## Audio
 
-| | TUX | OpenSLR 72, 73 y 74 |
+| | TUX | OpenSLR 72, 73 and 74 |
 |---|---|---|
-| Fuente | <https://gitlab.com/ejimenezdelgado/tux-100h>, dataset de la clase 12 | <https://www.openslr.org/72/>, [73](https://www.openslr.org/73/) y [74](https://www.openslr.org/74/) |
-| Contenido | un locutor leyendo libros en español | voluntarios de Colombia, Perú y Puerto Rico leyendo frases |
-| Selección | 12 000 de 39 658 audios, al azar con semilla 42 | todos los audios (solo hay voces de mujer en Puerto Rico) |
-| Licencia | el repositorio no declara licencia; se usa como material del curso y **sus audios no se redistribuyen aquí** (el manifiesto solo conserva identificadores y transcripciones) | CC BY-SA 4.0, Google LLC (Guevara-Rukoz et al., 2020) |
-| Etiquetado | transcripción incluida en `metadata.csv` | transcripción incluida en `line_index` |
+| Source | <https://gitlab.com/ejimenezdelgado/tux-100h>, the dataset from class 12 | <https://www.openslr.org/72/>, [73](https://www.openslr.org/73/) and [74](https://www.openslr.org/74/) |
+| Content | a single speaker reading books in Spanish | volunteers from Colombia, Peru and Puerto Rico reading sentences |
+| Selection | 12,000 of 39,658 clips, at random with seed 42 | all clips (Puerto Rico has female voices only) |
+| License | the repository declares no license; it is used as course material and **its audio is not redistributed here** (the manifest keeps only identifiers and transcriptions) | CC BY-SA 4.0, Google LLC (Guevara-Rukoz et al., 2020) |
+| Labeling | transcription included in `metadata.csv` | transcription included in `line_index` |
 
-**Preprocesamiento.**
+**Preprocessing.**
 
-1. Conversión a mono, 16 kHz, WAV PCM de 16 bits.
-2. Recorte del silencio inicial y final (40 dB bajo el máximo, con margen de 150 ms).
-3. Se conservan los audios de 0,7 a 12 s con pasos suficientes para alinear con CTC.
-4. Transcripciones en NFC y minúsculas, sin puntuación, con alfabeto de 34 símbolos (espacio, a-z, vocales con tilde, ü, ñ).
+1. Conversion to mono, 16 kHz, 16-bit PCM WAV.
+2. Trimming of leading and trailing silence (40 dB below the peak, with a 150 ms margin).
+3. Clips from 0.7 to 12 s with enough frames for CTC alignment are kept.
+4. Transcriptions in NFC and lowercase, without punctuation, with a 34-symbol alphabet (space, a-z, accented vowels, ü, ñ).
 
-**Partición sin fuga.** En OpenSLR una misma frase la leen hasta 94 personas, así que una división al azar filtraría el texto. Por eso:
+**Leak-free split.** In OpenSLR the same sentence is read by up to 94 people, so a random split would leak the text. Therefore:
 
-- de cada corpus (país y sexo) se reservan un locutor para validación y otro para prueba;
-- las frases reservadas se eliminan del entrenamiento, las lea quien las lea;
-- en TUX, que es de un solo locutor, la validación y la prueba usan frases no vistas;
-- las métricas de "locutores nuevos" y "locutor TUX" se reportan por separado.
+- from each corpus (country and sex), one speaker is held out for validation and another for test;
+- held-out sentences are removed from training, no matter who reads them;
+- in TUX, which has a single speaker, validation and test use unseen sentences;
+- metrics for "new speakers" and "TUX speaker" are reported separately.
 
-Los conteos están en `reports/data_audio.json`.
+Counts are in `reports/data_audio.json`.
 
 ## Video
 
-`samples/video/montaje_prueba.mp4` lo generamos con `scripts/build_samples.py`: doce fotos de la **partición de prueba** (seis clases por dos fuentes) con movimiento de cámara, giro y cambios de luz simulados. Su archivo `.json` trae la etiqueta de cada tramo, lo que permite medir la exactitud por cuadro. Es un montaje y no una grabación con cámara. No sustituye al conjunto de imágenes.
+`samples/video/test_montage.mp4` was generated with `scripts/build_samples.py`: twelve photos from the **test split** (six classes times two sources) with simulated camera motion, rotation and lighting changes. Its `.json` file holds the label of each segment, which allows measuring per-frame accuracy. It is a montage, not a camera recording, and it does not replace the image test set.
 
-`samples/video/propio_botella.mp4` y `samples/video/propio_cuaderno.mp4` los grabó el equipo con un celular (480x864, 30 cuadros/s, sin audio y sin personas): una botella plástica y un cuaderno, etiquetados como `plastic` y `paper`. No se usaron para entrenar ni para ajustar. Sus resultados están en `reports/own_video/` y se reproducen con `scripts/evaluate_video.py`.
+`samples/video/own_bottle.mp4` and `samples/video/own_notebook.mp4` were recorded by the team with a phone (480x864, 30 frames/s, no audio and no people): a plastic bottle and a notebook, labeled `plastic` and `paper`. They were not used for training or tuning. Their results are in `reports/own_video/` and can be reproduced with `scripts/evaluate_video.py`.
 
-## Personas y consentimiento
+## People and consent
 
-No se recolectaron datos propios de personas. Las voces vienen de corpus públicos, y los identificadores de locutor de OpenSLR son anónimos. La aplicación procesa la cámara y el micrófono localmente y no envía nada a Internet.
+No personal data was collected. The voices come from public corpora, and the OpenSLR speaker identifiers are anonymous. The application processes the camera and microphone locally and sends nothing to the Internet.
 
-## Redistribución
+## Redistribution
 
-`data/subset/` y `samples/` conservan las licencias de origen. Lo derivado de RealWaste, incluidos los pesos de visión de este repositorio, es solo para uso no comercial.
+`data/subset/` and `samples/` keep their original licenses. Anything derived from RealWaste, including the vision weights in this repository, is for non-commercial use only.

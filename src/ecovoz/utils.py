@@ -1,4 +1,4 @@
-"""Semillas, dispositivo y lectura/escritura de archivos."""
+"""Seeds, device selection and file reading/writing."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import torch
 
 
 def set_seed(seed: int) -> None:
-    """Fija las semillas de Python, NumPy y PyTorch (CPU y GPU)."""
+    """Sets the Python, NumPy and PyTorch (CPU and GPU) seeds."""
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -57,7 +57,7 @@ def sha256(path: Path) -> str:
 
 
 def save_half_precision(payload: dict, path: Path) -> None:
-    """Guarda un checkpoint con los pesos en float16, para que quepa en el repositorio."""
+    """Saves a checkpoint with float16 weights so that it fits in the repository."""
     state = {
         key: value.detach().cpu().half() if value.is_floating_point() else value.detach().cpu()
         for key, value in payload["state"].items()
@@ -67,7 +67,7 @@ def save_half_precision(payload: dict, path: Path) -> None:
 
 
 def load_checkpoint(path: Path) -> dict:
-    """Carga un checkpoint sin ejecutar código (weights_only) y lo devuelve en float32."""
+    """Loads a checkpoint without executing code (weights_only) and returns it in float32."""
     payload = torch.load(path, map_location="cpu", weights_only=True)
     payload["state"] = {
         key: value.float() if value.is_floating_point() else value

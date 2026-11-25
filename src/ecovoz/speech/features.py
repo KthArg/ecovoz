@@ -1,4 +1,4 @@
-"""Log-mel espectrograma y aumento de datos, calculados por lotes en el dispositivo."""
+"""Log-mel spectrogram and data augmentation, computed in batches on the device."""
 
 from __future__ import annotations
 
@@ -20,9 +20,9 @@ def mel_filterbank() -> torch.Tensor:
 
 
 class LogMel(nn.Module):
-    """Audio (B, N) a log-mel normalizado por enunciado (B, MELS, T).
+    """Audio (B, N) to per-utterance normalized log-mel (B, MELS, T).
 
-    La media y la desviación usan solo las tramas reales, nunca el relleno del lote.
+    The mean and deviation use only the real frames, never the batch padding.
     """
 
     def __init__(self) -> None:
@@ -31,7 +31,7 @@ class LogMel(nn.Module):
         self.register_buffer("filters", mel_filterbank(), persistent=False)
 
     def forward(self, audio: torch.Tensor, lengths: torch.Tensor):
-        audio = torch.cat([audio[:, :1], audio[:, 1:] - 0.97 * audio[:, :-1]], dim=1)  # preénfasis
+        audio = torch.cat([audio[:, :1], audio[:, 1:] - 0.97 * audio[:, :-1]], dim=1)  # pre-emphasis
         inside = torch.arange(audio.shape[1], device=audio.device)[None] < lengths[:, None]
         spectrum = torch.stft(
             audio * inside,
@@ -53,7 +53,7 @@ class LogMel(nn.Module):
 
 
 def augment_waveform(audio: torch.Tensor, lengths: torch.Tensor):
-    """Cambio de velocidad y ruido gaussiano con SNR entre 10 y 35 dB."""
+    """Speed change and Gaussian noise with an SNR between 10 and 35 dB."""
     if torch.rand(1).item() < 0.5:
         speed = float(torch.empty(1).uniform_(0.88, 1.12))
         size = int(audio.shape[1] / speed)
@@ -74,7 +74,7 @@ def spec_augment(
     time_masks: int = 5,
     max_time: float = 0.05,
 ) -> torch.Tensor:
-    """SpecAugment (Park et al., 2019): franjas enmascaradas en frecuencia y tiempo."""
+    """SpecAugment (Park et al., 2019): masked bands in frequency and time."""
     batch, mels, steps = features.shape
     device = features.device
     mask = torch.zeros_like(features, dtype=torch.bool)

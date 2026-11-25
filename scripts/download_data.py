@@ -1,9 +1,9 @@
-"""Descarga los datos y los pesos preentrenados desde sus fuentes oficiales.
+"""Downloads the data and the pretrained weights from their official sources.
 
-Uso: python scripts/download_data.py [--only imagenes|voz|pesos]
+Usage: python scripts/download_data.py [--only images|speech|weights]
 
-Los archivos quedan en data/downloads. Se leen sin ejecutarse ni extraerse, y se
-comprueba su SHA-256 cuando se conoce. Las licencias están en data/README.md.
+The files are saved in data/downloads. They are read without being executed or
+extracted, and their SHA-256 is checked when known. The licenses are listed in data/README.md.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ PYTORCH = "https://download.pytorch.org/models"
 OPENSLR = "https://www.openslr.org/resources"
 
 FILES = {
-    "imagenes": {
+    "images": {
         "dataset-resized.zip": (
             "https://huggingface.co/datasets/garythung/trashnet/resolve/main/dataset-resized.zip",
             "c060e8abfe5d6de0578ca15be1ed8ad0794a865d333c3473d53d1d9ad6e38b8c",
@@ -31,7 +31,7 @@ FILES = {
             "1ede08b32358ee62065bcc1c8cb47a2ece04e8dff5b1fb53342bb8750895b2f3",
         ),
     },
-    "pesos": {
+    "weights": {
         "resnet50-11ad3fa6.pth": (
             f"{PYTORCH}/resnet50-11ad3fa6.pth",
             "11ad3fa62ca79e40addfd354a8ec4b7c75143b3038b8d2a807fbc68deab379ca",
@@ -41,7 +41,7 @@ FILES = {
             "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
         ),
     },
-    "voz": {},
+    "speech": {},
 }
 for number, corpus in (
     (74, "es_pr_female"),
@@ -51,8 +51,8 @@ for number, corpus in (
     (73, "es_pe_male"),
 ):
     gender = corpus.rsplit("_", 1)[1]
-    FILES["voz"][f"{corpus}.zip"] = (f"{OPENSLR}/{number}/{corpus}.zip", None)
-    FILES["voz"][f"{corpus}_index.tsv"] = (f"{OPENSLR}/{number}/line_index_{gender}.tsv", None)
+    FILES["speech"][f"{corpus}.zip"] = (f"{OPENSLR}/{number}/{corpus}.zip", None)
+    FILES["speech"][f"{corpus}_index.tsv"] = (f"{OPENSLR}/{number}/line_index_{gender}.tsv", None)
 
 TUX_REPO = "https://gitlab.com/ejimenezdelgado/tux-100h.git"
 TUX_COMMIT = "87bc547599f101e4144b9e837a0cccd99a407f78"
@@ -63,13 +63,13 @@ TUX_BATCH = 500
 def fetch(name: str, url: str, expected: str | None) -> None:
     target = DOWNLOADS / name
     if not target.exists():
-        print(f"descargando {name}", flush=True)
+        print(f"downloading {name}", flush=True)
         partial = target.with_name(target.name + ".part")
         urllib.request.urlretrieve(url, partial)
         partial.replace(target)
     if expected and sha256(target) != expected:
-        raise SystemExit(f"SHA-256 incorrecto en {target}; bórrelo y vuelva a descargar")
-    print(f"listo {name}", flush=True)
+        raise SystemExit(f"Wrong SHA-256 for {target}; delete it and download it again")
+    print(f"done {name}", flush=True)
 
 
 def git(*arguments: str, stdin: str | None = None) -> str:
@@ -79,10 +79,10 @@ def git(*arguments: str, stdin: str | None = None) -> str:
 
 
 def fetch_tux() -> None:
-    """Trae un subconjunto reproducible del dataset de clase (39 658 audios en total).
+    """Fetches a reproducible subset of the class dataset (39,658 clips in total).
 
-    El .tar de GitLab se corta en descargas grandes, por eso se usa un clon parcial:
-    primero se traen los audios por lotes y después se extraen.
+    GitLab's .tar breaks off on large downloads, so a partial clone is used instead:
+    the clips are first fetched in batches and then checked out.
     """
     target = DOWNLOADS / "tux"
     if not target.exists():
@@ -111,7 +111,7 @@ def fetch_tux() -> None:
         paths = "".join(f"{name}\n" for name in batch)
         git(*repo, "restore", f"--source={TUX_COMMIT}", "--worktree", "--pathspec-from-file=-", stdin=paths)
         print(f"tux {start + len(batch)}/{len(selected)}", flush=True)
-    print("listo tux")
+    print("done tux")
 
 
 def main() -> None:
@@ -122,7 +122,7 @@ def main() -> None:
     for group in [args.only] if args.only else FILES:
         for name, (url, expected) in FILES[group].items():
             fetch(name, url, expected)
-        if group == "voz":
+        if group == "speech":
             fetch_tux()
 
 
